@@ -25,6 +25,8 @@ namespace Game.Player
         public float CurrentHp => Health.Current;
         public float MaxHp => Health.Max;
         public bool IsDead => Health.IsDead;
+        /// <summary>디버그 무적 (F2, 시연·측정용). 켜져 있으면 데미지를 받지 않는다.</summary>
+        public bool Invincible { get; set; }
 
         Health Health => health ??= new Health(data.maxHp);
 
@@ -37,7 +39,7 @@ namespace Game.Player
         public bool TakeDamage(float amount)
         {
             // 일시정지(LevelUp·Pause·GameOver) 중에는 전투가 멈춘 상태이므로 데미지도 받지 않는다.
-            if (Time.timeScale <= 0f)
+            if (Time.timeScale <= 0f || Invincible)
                 return false;
             if (!Health.TryDamage(amount, out bool justDied))
                 return false;

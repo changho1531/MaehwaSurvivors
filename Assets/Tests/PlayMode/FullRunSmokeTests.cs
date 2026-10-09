@@ -52,10 +52,18 @@ namespace Game.Tests.PlayMode
             float firstLevelUpAt = -1f;
             float firstHitAt = -1f;
             var picks = new System.Text.StringBuilder();
+            bool xpGranted = false;
 
             while (GameManager.Instance.CurrentState != GameState.GameOver && stats.Elapsed < MaxGameSeconds)
             {
                 var state = GameManager.Instance.CurrentState;
+                // 제자리에 선 봇은 멀리서 죽은 적의 구슬을 줍지 못해, 스폰 곡선에 따라 레벨업 전에 죽을 수 있다.
+                // 이 테스트는 밸런스가 아니라 흐름(레벨업 카드 포함)을 보므로 레벨업 1회분을 직접 준다. 밸런스는 SpawnBalanceTests.
+                if (!xpGranted && state == GameState.Play && stats.Elapsed >= 10f)
+                {
+                    xpGranted = true;
+                    level.AddXp(level.RequiredXp);
+                }
                 if (state == GameState.Play && Time.timeScale != Speed)
                     Time.timeScale = Speed;
 

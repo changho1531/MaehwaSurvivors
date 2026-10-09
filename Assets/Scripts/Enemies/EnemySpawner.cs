@@ -15,8 +15,10 @@ namespace Game.Enemies
         [Tooltip("지정하면 이 카메라 시야 바로 바깥을 스폰 링으로 쓴다")]
         [SerializeField] Camera viewCamera;
 
+        [Tooltip("경과 시간 → 스폰 간격 곡선 (7-D절). 없으면 1초 고정")]
+        [SerializeField] SpawnCurve spawnCurve;
+
         [Header("※ 예시값")]
-        [SerializeField, Min(0.05f)] float spawnInterval = 1f;
         [Tooltip("카메라가 없을 때 쓰는 최소 반경")]
         [SerializeField, Min(0f)] float fallbackSpawnRadius = 14f;
         [Tooltip("화면 대각선 밖으로 얼마나 더 떨어져 스폰할지")]
@@ -30,6 +32,11 @@ namespace Game.Enemies
         float timer;
 
         public ComponentPool<Enemy> Pool => pool;
+        /// <summary>게임 시간 기준 경과 초 (일시정지 중 멈춤). 곡선 조회용.</summary>
+        public float Elapsed { get; private set; }
+        /// <summary>켜면 곡선 대신 곡선의 하한(가장 빠른 간격)으로 스폰 (디버그 F5).</summary>
+        public bool ForceFastest { get; set; }
+        public float CurrentInterval => spawnCurve == null ? 1f : ForceFastest ? spawnCurve.Fastest : spawnCurve.GetInterval(Elapsed);
         public Transform Target => target;
         public float MinSpawnRadius => viewCamera != null && viewCamera.orthographic ? HalfViewDiagonal(viewCamera) + spawnMargin : fallbackSpawnRadius;
         public float MaxSpawnRadius => MinSpawnRadius + ringThickness;
@@ -49,10 +56,12 @@ namespace Game.Enemies
 
         void Update()
         {
+            Elapsed += Time.deltaTime;
             timer += Time.deltaTime;
-            while (timer >= spawnInterval)
+            float interval = CurrentInterval;
+            while (timer >= interval)
             {
-                timer -= spawnInterval;
+                timer -= interval;
                 Spawn();
             }
         }

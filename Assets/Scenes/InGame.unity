@@ -2142,7 +2142,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 3083572570979652168, guid: 42f1f5bd697fced478227f4b1bca8673, type: 3}
   target: {fileID: 169767282}
   viewCamera: {fileID: 1650031349}
-  spawnInterval: 1
+  spawnCurve: {fileID: 11400000, guid: 7b9fa3760be88864a9567b70feaddecf, type: 2}
   fallbackSpawnRadius: 14
   spawnMargin: 1
   ringThickness: 2
