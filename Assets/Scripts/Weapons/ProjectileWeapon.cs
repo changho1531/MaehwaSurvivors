@@ -43,7 +43,7 @@ namespace Game.Weapons
 
             float speed = Data.GetProjectileSpeed(Level);
             var projectile = pool.Get(origin);
-            projectile.Launch(direction, speed, Data.GetDamage(Level), Data.maxTravelDistance / speed, pool.Release);
+            projectile.Launch(direction, speed, Data.GetDamage(Level), Data.maxTravelDistance / speed, Data.GetPierce(Level), pool.Release);
             Fired?.Invoke(projectile, target);
             return true;
         }

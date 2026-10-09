@@ -47,12 +47,14 @@ namespace Game.Weapons
 
             if (IsAttacking)
             {
-                if (TickAttack(dt))
-                    FinishAttack();
-                return;
+                if (!TickAttack(dt))
+                    return;
+                FinishAttack();
+                // 쿨타임 0(최대 레벨 연속 발동)이면 같은 프레임에 다음 공격을 시작해 이펙트가 끊기지 않게 한다
+                if (cooldownRemaining > 0f)
+                    return;
             }
-
-            if (cooldownRemaining > 0f)
+            else if (cooldownRemaining > 0f)
             {
                 cooldownRemaining -= dt;
                 return;

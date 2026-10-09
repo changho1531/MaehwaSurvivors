@@ -81,8 +81,21 @@ namespace Game.Tests.PlayMode
             for (int i = 0; i < visible.Count; i++)
             {
                 Assert.AreEqual(cards[i].Weapon.displayName, visible[i].NameLabel);
-                bool owned = scene.Inventory.Find(cards[i].Weapon) != null;
-                StringAssert.Contains(owned ? "강화" : "신규 획득", visible[i].KindLabel, "보유 무기는 강화, 미보유는 신규 획득으로 표기");
+                var weapon = cards[i].Weapon;
+                int level = scene.Inventory.GetLevel(weapon);
+                if (level == 0)
+                {
+                    StringAssert.Contains("신규", visible[i].KindLabel, "미보유는 신규로 표기");
+                    Assert.AreEqual(weapon.description, visible[i].DescriptionLabel, "신규는 한 줄 설명");
+                }
+                else
+                {
+                    StringAssert.Contains($"Lv {level} → {level + 1}", visible[i].KindLabel, "보유 무기는 Lv a → b");
+                    var lines = new List<string>();
+                    weapon.DescribeUpgrade(level, lines);
+                    Assert.IsNotEmpty(lines);
+                    Assert.AreEqual(string.Join("\n", lines), visible[i].DescriptionLabel, "강화는 수치표에서 계산한 변화 목록");
+                }
             }
             if (cards.Count == 2)
                 Assert.AreNotSame(cards[0].Weapon, cards[1].Weapon, "같은 무기가 두 장 나오지 않는다");

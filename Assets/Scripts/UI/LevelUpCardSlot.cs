@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Progression;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,15 +13,28 @@ namespace Game.UI
         [SerializeField] Text kindText;
         [SerializeField] Text descriptionText;
 
+        readonly List<string> lines = new();
+
         public Button Button => button;
         public string NameLabel => nameText.text;
         public string KindLabel => kindText.text;
+        public string DescriptionLabel => descriptionText.text;
 
         public void Show(LevelUpCard card)
         {
             nameText.text = card.Weapon.displayName;
-            kindText.text = card.IsNew ? "신규 획득" : $"강화  Lv{card.NextLevel - 1} → Lv{card.NextLevel}";
-            descriptionText.text = card.Weapon.description;
+            // 신규: 한 줄 설명 / 강화: 수치표에서 계산한 변화 목록 (7-D절)
+            if (card.IsNew)
+            {
+                kindText.text = "신규";
+                descriptionText.text = card.Weapon.description;
+            }
+            else
+            {
+                kindText.text = $"강화  Lv {card.NextLevel - 1} → {card.NextLevel}";
+                card.Weapon.DescribeUpgrade(card.NextLevel - 1, lines);
+                descriptionText.text = string.Join("\n", lines);
+            }
             gameObject.SetActive(true);
         }
 

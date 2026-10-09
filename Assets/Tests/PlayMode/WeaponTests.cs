@@ -234,5 +234,30 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(0, scene.Weapon.Pool.CountActive, "수명이 다한 투사체는 풀로 반환");
             Assert.IsTrue(enemy.IsAlive);
         }
+
+        [UnityTest]
+        public IEnumerator M5_MaxLevel_PiercesEveryEnemyOnPath()
+        {
+            var data = scene.Weapon.Data;
+            while (scene.Inventory.Upgrade(data)) { }
+            Assert.AreEqual(-1, data.GetPierce(scene.Weapon.Level), "최대 레벨 관통 무제한 (수치표)");
+            scene.Weapon.Pool.ReleaseAll();
+            shots.Clear();
+
+            var line = new[]
+            {
+                scene.SpawnAt(new Vector2(2f, 0f), chase: false),
+                scene.SpawnAt(new Vector2(4f, 0f), chase: false),
+                scene.SpawnAt(new Vector2(6f, 0f), chase: false),
+            };
+            yield return WaitUntil(() => shots.Count > 0, 1.5f);
+            Assert.IsNotEmpty(shots);
+
+            // 다음 발사(쿨타임 0.8초) 전에 한 발로 셋 다 맞아야 한다
+            yield return Wait(0.6f);
+            Assert.AreEqual(1, shots.Count);
+            foreach (var enemy in line)
+                Assert.IsFalse(enemy.IsAlive, "경로의 모든 적이 맞는다");
+        }
     }
 }

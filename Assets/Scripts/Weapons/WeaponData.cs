@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Weapons
@@ -29,7 +30,10 @@ namespace Game.Weapons
     public abstract class WeaponData : ScriptableObject
     {
         public string displayName = "무기";
+        [Tooltip("신규 획득 카드에 쓰는 한 줄 설명")]
         [TextArea] public string description;
+        [Tooltip("최대 레벨이 되는 강화 카드에 덧붙는 한 줄 (예: \"최대 레벨: 관통 무제한\"). 비우면 생략")]
+        [TextArea] public string maxLevelEffect;
         public Sprite icon;
         public SynergyTag tags;
         [Min(1)] public int maxLevel = 5;
@@ -40,7 +44,28 @@ namespace Game.Weapons
         public float[] cooldownPerLevel = { 1f };
 
         public float GetDamage(int level) => LevelTable.Get(damagePerLevel, level);
-        public float GetCooldown(int level) => Mathf.Max(0.05f, LevelTable.Get(cooldownPerLevel, level));
+        // 쿨타임 0 = 공격이 끝나자마자 다음 공격 (화산십이검 최대 레벨 연속 발동, 7절 규칙 6).
+        // 즉발형 무기는 0이면 매 프레임 공격하게 되므로 하위 클래스에서 하한을 둔다.
+        public virtual float GetCooldown(int level) => Mathf.Max(0f, LevelTable.Get(cooldownPerLevel, level));
+
+        /// <summary>
+        /// 강화 카드 문구 (7-D절): from → from+1 레벨에서 값이 바뀌는 항목만, 최대 레벨이 되면 특수 효과 한 줄을 덧붙인다.
+        /// 문구를 손으로 쓰지 않고 수치표에서 계산하므로, 표를 고치면 카드도 따라 바뀐다.
+        /// </summary>
+        public void DescribeUpgrade(int from, List<string> lines)
+        {
+            lines.Clear();
+            AppendStatChanges(from, from + 1, lines);
+            if (from + 1 >= maxLevel && !string.IsNullOrWhiteSpace(maxLevelEffect))
+                lines.Add(maxLevelEffect);
+        }
+
+        /// <summary>유형별 수치가 있는 하위 클래스는 override해서 항목을 덧붙인다.</summary>
+        protected virtual void AppendStatChanges(int from, int to, List<string> lines)
+        {
+            StatChange.Append(lines, "공격력", LevelTable.Get(damagePerLevel, from), LevelTable.Get(damagePerLevel, to));
+            StatChange.Append(lines, "쿨타임", LevelTable.Get(cooldownPerLevel, from), LevelTable.Get(cooldownPerLevel, to), "초");
+        }
 
         /// <summary>
         /// 이 데이터에 맞는 무기 컴포넌트를 owner에 붙인다. 무기 유형 추가 = 데이터 하위 클래스 + 무기 하위 클래스 한 쌍,
@@ -57,6 +82,18 @@ namespace Game.Weapons
             if (table == null || table.Length == 0)
                 return 0f;
             return table[Mathf.Clamp(level - 1, 0, table.Length - 1)];
+        }
+    }
+
+    /// <summary>수치 변화 한 줄 ("공격력 +2", "쿨타임 -0.05초"). 값이 같으면 줄을 만들지 않는다.</summary>
+    public static class StatChange
+    {
+        public static void Append(List<string> lines, string label, float from, float to, string unit = "")
+        {
+            float delta = to - from;
+            if (Mathf.Abs(delta) < 0.0001f)
+                return;
+            lines.Add($"{label} {(delta > 0f ? "+" : "-")}{Mathf.Abs(delta):0.##}{unit}");
         }
     }
 }

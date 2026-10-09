@@ -187,5 +187,25 @@ namespace Game.Tests.PlayMode
             yield return Wait(data.comboDuration + 0.1f);
             Assert.IsFalse(sweep.Effect.gameObject.activeInHierarchy, "콤보가 끝나면 숨김");
         }
+
+        [UnityTest]
+        public IEnumerator S8_MaxLevel_CombosChainWithoutGap()
+        {
+            Acquire();
+            while (scene.Inventory.Upgrade(data)) { }
+            Assert.AreEqual(0f, data.GetCooldown(sweep.Level), "최대 레벨 쿨타임 0 (수치표)");
+
+            // 첫 콤보는 Lv1로 시작했으므로 끝날 때까지 기다린 뒤, 콤보 경계를 넘는 동안 이펙트가 한 프레임도 꺼지지 않아야 한다
+            yield return WaitUntil(() => strikes.Count >= data.hitCount, data.comboDuration + 0.5f);
+            int combosToWatch = 2;
+            float end = Time.time + data.comboDuration * combosToWatch;
+            while (Time.time < end)
+            {
+                Assert.IsTrue(sweep.IsAttacking, "쉬지 않고 계속 작동");
+                Assert.IsTrue(sweep.Effect.gameObject.activeInHierarchy, "콤보 사이에 이펙트가 끊기지 않는다");
+                yield return null;
+            }
+            Assert.GreaterOrEqual(strikes.Count, data.hitCount * (1 + combosToWatch) - 1);
+        }
     }
 }
