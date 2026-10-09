@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Runtime::Game.Weapons.WeaponCatalog
   weapons:
   - {fileID: 11400000, guid: 4258ae6dae402544d816ed381eab96de, type: 2}
+  - {fileID: 11400000, guid: 658882b9ee6ce4a4fb6cf3a5fbc5abc7, type: 2}
