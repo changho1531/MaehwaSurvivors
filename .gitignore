@@ -18,3 +18,6 @@
 *.apk
 *.aab
 *.unitypackage
+
+# 원본 아트 (대용량, 저장소에 넣지 않음. 축소본만 Assets/Art에 커밋)
+ArtSource/
