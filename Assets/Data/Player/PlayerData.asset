@@ -13,5 +13,3 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: Game.Runtime::Game.Player.PlayerData
   maxHp: 100
-  invulnerabilitySeconds: 0.5
-  hitFlashColor: {r: 1, g: 0.45, b: 0.45, a: 1}

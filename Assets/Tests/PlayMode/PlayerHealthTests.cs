@@ -7,7 +7,10 @@ using UnityEngine.TestTools;
 
 namespace Game.Tests.PlayMode
 {
-    /// <summary>[적 접촉 데미지 → 플레이어 HP → GameOver] 접촉 시 피해, 무적 시간, HP 0 → GameOver, 레벨업과 겹치면 GameOver 우선, 일시정지 중 무피해.</summary>
+    /// <summary>
+    /// [7-B절] 접촉 중 초당 데미지(무적 없음, 마리 수 합산), HP 0 → GameOver·시간 정지·Died 1회,
+    /// 레벨업과 겹치면 GameOver 우선, 일시정지 중 무피해, 피격 연출(틴트·복귀).
+    /// </summary>
     public class PlayerHealthTests
     {
         readonly InGameScene scene = new();
@@ -38,66 +41,68 @@ namespace Game.Tests.PlayMode
                 yield return null;
         }
 
-        static IEnumerator Wait(float seconds)
+        static IEnumerator WaitFixed(float seconds)
         {
-            float end = Time.time + seconds;
-            while (Time.time < end)
-                yield return null;
+            int steps = Mathf.CeilToInt(seconds / Time.fixedDeltaTime);
+            for (int i = 0; i < steps; i++)
+                yield return new WaitForFixedUpdate();
         }
 
+        // 플레이어 콜라이더(발 위치) 옆에 두고 추적시켜 계속 밀고 들어오게 한다 → 접촉이 유지된다
+        Game.Enemies.Enemy SpawnTouching(Vector2 side) => scene.SpawnAt(side * 0.9f, chase: true);
+
         [UnityTest]
-        public IEnumerator H1_EnemyContact_DamagesPlayer_ThenInvulnerable()
+        public IEnumerator H1_Contact_DrainsHpPerSecond_NoInvulnerability()
         {
             Assert.AreEqual(health.Data.maxHp, health.CurrentHp, "시작 HP = 최대");
-            var enemy = scene.SpawnAt(new Vector2(0.6f, 0.45f), chase: true); // 몸통 콜라이더 옆에서 붙는다
-            float damage = enemy.Data.contactDamage;
+            var enemy = SpawnTouching(Vector2.right);
+            float dps = enemy.Data.contactDps;
+            yield return WaitUntil(() => health.CurrentHp < health.MaxHp, 2f);
 
-            yield return WaitUntil(() => health.CurrentHp < health.Data.maxHp, 2f);
-            Assert.AreEqual(health.Data.maxHp - damage, health.CurrentHp, 0.001f, "접촉 1회 데미지");
-            Assert.IsTrue(health.IsInvulnerable);
-
-            yield return Wait(health.Data.invulnerabilitySeconds * 0.6f);
-            Assert.AreEqual(health.Data.maxHp - damage, health.CurrentHp, 0.001f, "무적 시간 중에는 계속 닿아 있어도 추가 피해 없음");
-
-            yield return Wait(health.Data.invulnerabilitySeconds * 0.8f);
-            Assert.AreEqual(health.Data.maxHp - damage * 2f, health.CurrentHp, 0.001f, "무적이 끝나면 다시 피해");
+            float start = health.CurrentHp;
+            yield return WaitFixed(1f);
+            float lost = start - health.CurrentHp;
+            Assert.That(lost, Is.EqualTo(dps).Within(dps * 0.2f), "1초 접촉 ≈ contactDps (무적 시간 없이 계속 깎임)");
         }
 
         [UnityTest]
-        public IEnumerator H2_HpZero_GoesToGameOver_AndStopsTime()
+        public IEnumerator H2_MultipleEnemies_DamageAddsUp()
         {
-            bool died = false;
-            health.Died += () => died = true;
+            var a = SpawnTouching(Vector2.right);
+            SpawnTouching(Vector2.left); // 적 콜라이더가 1칸 상자라 플레이어 둘레에 동시에 붙을 수 있는 수가 제한된다 → 맞은편 2마리로 검증
+            float dps = a.Data.contactDps;
+            yield return WaitUntil(() => health.CurrentHp < health.MaxHp, 2f);
+            yield return WaitFixed(0.2f); // 두 마리 모두 접촉이 잡히도록
 
-            // 무적 시간을 기다리며 최대 HP만큼 데미지를 넣는다
-            // (사망하면 게임 시간이 멈추므로 사망 직후에는 게임 시간 기준으로 기다리지 않는다)
-            int guard = 100;
-            while (guard-- > 0)
-            {
-                health.TakeDamage(health.Data.maxHp * 0.5f);
-                if (health.IsDead)
-                    break;
-                yield return Wait(health.Data.invulnerabilitySeconds + 0.05f);
-            }
+            float start = health.CurrentHp;
+            yield return WaitFixed(1f);
+            float lost = start - health.CurrentHp;
+            Assert.That(lost, Is.EqualTo(dps * 2f).Within(dps * 2f * 0.2f), "마리 수만큼 합산");
+        }
+
+        [UnityTest]
+        public IEnumerator H3_HpZero_GameOver_StopsTime_DiedOnce()
+        {
+            int died = 0;
+            health.Died += () => died++;
+
+            health.TakeDamage(health.MaxHp - 1f);
+            Assert.IsFalse(health.IsDead);
+            // 같은 프레임에 여러 적이 마지막 데미지를 주는 상황 (Pause 전이 전에 연속 호출)
+            health.TakeDamage(5f);
+            health.TakeDamage(5f);
             yield return null;
 
             Assert.IsTrue(health.IsDead);
-            Assert.IsTrue(died, "Died 이벤트");
+            Assert.AreEqual(1, died, "Died 1회만");
             Assert.AreEqual(GameState.GameOver, GameManager.Instance.CurrentState, "HP 0 → GameOver");
             Assert.AreEqual(0f, Time.timeScale, "GameOver 중 게임 시간 정지");
-            Assert.IsFalse(health.TakeDamage(10f), "사망 후 추가 피해 없음");
         }
 
         [UnityTest]
-        public IEnumerator H3_DeathAndLevelUpSameFrame_GameOverWins_NoCards()
+        public IEnumerator H4_DeathAndLevelUpSameFrame_GameOverWins_NoCards()
         {
-            // 한 방에 죽을 만큼 HP를 깎아 둔다
-            while (health.CurrentHp > 1f)
-            {
-                health.TakeDamage(health.CurrentHp - 1f);
-                yield return Wait(health.Data.invulnerabilitySeconds + 0.05f);
-            }
-
+            health.TakeDamage(health.MaxHp - 1f);
             // 같은 프레임: 접촉 사망 → 레벨업 XP 습득 (물리가 Update보다 먼저 도는 실제 순서)
             health.TakeDamage(10f);
             scene.Level.AddXp(scene.Level.RequiredXp);
@@ -108,14 +113,36 @@ namespace Game.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator H4_DuringLevelUpPause_NoDamage()
+        public IEnumerator H5_DuringLevelUpPause_NoDamage()
         {
             scene.Level.AddXp(scene.Level.RequiredXp);
             yield return null;
             Assert.AreEqual(GameState.LevelUp, GameManager.Instance.CurrentState);
 
             Assert.IsFalse(health.TakeDamage(10f), "일시정지 중 피해 없음");
-            Assert.AreEqual(health.Data.maxHp, health.CurrentHp);
+            Assert.AreEqual(health.MaxHp, health.CurrentHp);
+        }
+
+        [UnityTest]
+        public IEnumerator H6_Feedback_RedTintWhileHit_RecoversAfter()
+        {
+            var feedback = scene.Player.GetComponent<DamageFeedback>();
+            Assert.IsNotNull(feedback, "DamageFeedback 없음");
+            yield return null;
+            Assert.AreEqual(Color.white, feedback.CurrentTint, "평소에는 원래 색");
+
+            var enemy = SpawnTouching(Vector2.right);
+            yield return WaitUntil(() => feedback.IsBeingHit, 2f);
+            yield return null;
+            Assert.IsTrue(feedback.IsBeingHit);
+            Assert.Less(feedback.CurrentTint.g, 0.6f, "맞는 동안 빨간 틴트");
+
+            scene.Spawner.Pool.Release(enemy); // 데미지 중단
+            float end = Time.time + 0.6f;
+            while (Time.time < end)
+                yield return null;
+            Assert.IsFalse(feedback.IsBeingHit);
+            Assert.AreEqual(1f, feedback.CurrentTint.g, 0.01f, "데미지가 멈추면 원래 색으로 복귀");
         }
     }
 }

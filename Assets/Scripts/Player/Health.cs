@@ -3,38 +3,33 @@ using System;
 namespace Game.Player
 {
     /// <summary>
-    /// HP + 피격 후 무적 시간 규칙만 담은 순수 클래스 (Unity 의존 없음 → EditMode 테스트).
-    /// 시간은 호출자가 넘겨 주므로, 일시정지(게임 시간 정지) 중에는 무적 시간도 흐르지 않는다.
+    /// HP 규칙만 담은 순수 클래스 (Unity 의존 없음 → EditMode 테스트). 설계서 7-B절.
+    /// 무적 시간 없음: 맞는 족족 깎인다 (포위당하면 빠르게 무너지는 긴장감이 의도). 회복 수단 없음.
     /// </summary>
     public class Health
     {
-        float invulnerableUntil = float.NegativeInfinity;
-
         public float Max { get; }
         public float Current { get; private set; }
-        public float InvulnerabilitySeconds { get; }
         public bool IsDead => Current <= 0f;
 
-        public Health(float max, float invulnerabilitySeconds)
+        public Health(float max)
         {
             Max = Math.Max(1f, max);
             Current = Max;
-            InvulnerabilitySeconds = Math.Max(0f, invulnerabilitySeconds);
         }
 
-        public bool IsInvulnerable(float now) => now < invulnerableUntil;
-
         /// <summary>
-        /// 데미지 적용. 죽었거나 무적 중이면 무시하고 false.
-        /// 맞으면 무적 시간 시작 → 적 여러 마리에 둘러싸여도 매 물리 스텝마다 깎이지 않는다.
+        /// 데미지 적용. 이미 죽었거나 0 이하 데미지면 무시하고 false.
+        /// justDied는 이번 호출로 처음 0이 되었을 때만 true → 같은 프레임에 여러 적이 마지막 데미지를 줘도 사망 처리는 1회.
         /// </summary>
-        public bool TryDamage(float amount, float now)
+        public bool TryDamage(float amount, out bool justDied)
         {
-            if (IsDead || amount <= 0f || IsInvulnerable(now))
+            justDied = false;
+            if (IsDead || amount <= 0f)
                 return false;
 
             Current = Math.Max(0f, Current - amount);
-            invulnerableUntil = now + InvulnerabilitySeconds;
+            justDied = IsDead;
             return true;
         }
     }

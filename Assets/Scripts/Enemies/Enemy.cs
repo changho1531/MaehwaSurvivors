@@ -62,14 +62,15 @@ namespace Game.Enemies
             body.linearVelocity = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized * data.moveSpeed : Vector2.zero;
         }
 
-        // 접촉 데미지: 데미지 양은 공격하는 쪽(적 데이터)이, 무적·사망·GameOver 판정은 맞는 쪽(PlayerHealth)이 정한다.
-        // 닿아 있는 동안 매 물리 스텝 호출되지만 플레이어 무적 시간 동안은 무시된다.
+        // 접촉 데미지 (7-B 규칙 1): 닿아 있는 물리 스텝마다 contactDps × 스텝 시간만큼 깎는다.
+        // 적마다 따로 호출되므로 여러 마리에게 둘러싸이면 마리 수만큼 자연히 합산된다 (상한 없음, 무적 시간 없음).
+        // 데미지 양은 공격하는 쪽(적 데이터)이, 사망·GameOver 판정은 맞는 쪽(PlayerHealth)이 정한다.
         void OnCollisionStay2D(Collision2D collision)
         {
-            if (data == null || data.contactDamage <= 0f || !IsAlive)
+            if (data == null || data.contactDps <= 0f || !IsAlive)
                 return;
             if (collision.gameObject.TryGetComponent(out PlayerHealth player))
-                player.TakeDamage(data.contactDamage);
+                player.TakeDamage(data.contactDps * Time.fixedDeltaTime);
         }
 
         public void TakeDamage(float amount)
