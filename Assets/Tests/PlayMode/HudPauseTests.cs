@@ -1,6 +1,7 @@
 using System.Collections;
 using Game.Core;
 using Game.Player;
+using Game.Progression;
 using Game.UI;
 using NUnit.Framework;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace Game.Tests.PlayMode
         Keyboard keyboard;
         PauseMenuView pauseMenu;
         HudView hud;
-        RunClock clock;
+        RunStats stats;
 
         IEnumerator Prepare()
         {
@@ -27,10 +28,10 @@ namespace Game.Tests.PlayMode
             scene.Weapon.Pool?.ReleaseAll();
             pauseMenu = Object.FindFirstObjectByType<PauseMenuView>();
             hud = Object.FindFirstObjectByType<HudView>();
-            clock = Object.FindFirstObjectByType<RunClock>();
+            stats = Object.FindFirstObjectByType<RunStats>();
             Assert.IsNotNull(pauseMenu, "일시정지 화면 없음");
             Assert.IsNotNull(hud, "HUD 없음");
-            Assert.IsNotNull(clock, "RunClock 없음");
+            Assert.IsNotNull(stats, "RunStats 없음");
             keyboard = InputSystem.AddDevice<Keyboard>();
             yield return null;
         }
@@ -111,14 +112,14 @@ namespace Game.Tests.PlayMode
             float end = Time.time + 1.1f;
             while (Time.time < end)
                 yield return null;
-            Assert.That(clock.Elapsed, Is.GreaterThanOrEqualTo(1f));
-            Assert.AreEqual(RunClock.Format(clock.Elapsed), hud.TimeText.text, "우측 상단 생존 시간 mm:ss");
+            Assert.That(stats.Elapsed, Is.GreaterThanOrEqualTo(1f));
+            Assert.AreEqual(RunStats.Format(stats.Elapsed), hud.TimeText.text, "우측 상단 생존 시간 mm:ss");
             StringAssert.StartsWith("00:0", hud.TimeText.text);
 
             yield return PressEsc();
-            float paused = clock.Elapsed;
+            float paused = stats.Elapsed;
             yield return new WaitForSecondsRealtime(0.5f);
-            Assert.AreEqual(paused, clock.Elapsed, "일시정지 중 생존 시간 정지");
+            Assert.AreEqual(paused, stats.Elapsed, "일시정지 중 생존 시간 정지");
         }
 
         [UnityTest]

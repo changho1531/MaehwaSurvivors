@@ -1,10 +1,10 @@
-using Game.Core;
+using Game.Progression;
 using NUnit.Framework;
 
 namespace Game.Tests.EditMode
 {
     /// <summary>[HUD] 생존 시간 표기 mm:ss.</summary>
-    public class RunClockTests
+    public class RunStatsTests
     {
         [TestCase(0f, "00:00")]
         [TestCase(5.9f, "00:05")]
@@ -14,7 +14,7 @@ namespace Game.Tests.EditMode
         [TestCase(-3f, "00:00")]
         public void Format(float seconds, string expected)
         {
-            Assert.AreEqual(expected, RunClock.Format(seconds));
+            Assert.AreEqual(expected, RunStats.Format(seconds));
         }
     }
 }

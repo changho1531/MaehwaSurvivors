@@ -1,7 +1,7 @@
-using Game.Core;
 using Game.Player;
 using Game.Progression;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Game.UI
@@ -9,13 +9,13 @@ namespace Game.UI
     /// <summary>
     /// 최소 플레이 HUD (MU-B-001): 상단 HP·XP 바, 레벨, 우측 상단 생존 시간.
     /// HP·XP는 PlayerHealth/PlayerLevel 이벤트를 구독해 바뀔 때만 갱신하고 (Observer),
-    /// 시간은 RunClock 값을 초가 바뀔 때만 다시 쓴다.
+    /// 시간은 RunStats 값을 초가 바뀔 때만 다시 쓴다.
     /// </summary>
     public class HudView : MonoBehaviour
     {
         [SerializeField] PlayerHealth health;
         [SerializeField] PlayerLevel level;
-        [SerializeField] RunClock clock;
+        [SerializeField, FormerlySerializedAs("clock")] RunStats stats;
         [SerializeField] UiBar hpBar;
         [SerializeField] UiBar xpBar;
         [SerializeField] Text levelText;
@@ -51,11 +51,11 @@ namespace Game.UI
 
         void Update()
         {
-            int second = Mathf.FloorToInt(clock.Elapsed);
+            int second = Mathf.FloorToInt(stats.Elapsed);
             if (second == shownSecond)
                 return;
             shownSecond = second;
-            timeText.text = RunClock.Format(clock.Elapsed);
+            timeText.text = RunStats.Format(stats.Elapsed);
         }
 
         void OnHealthChanged(float current, float max) => hpBar.Set(current, max);
