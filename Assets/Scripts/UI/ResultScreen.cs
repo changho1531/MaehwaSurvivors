@@ -20,8 +20,8 @@ namespace Game.UI
         [SerializeField] Text killsText;
         [SerializeField] Button retryButton;
         [SerializeField] Button titleButton;
-        [Tooltip("※ 예시값. 페이드인 시간(실시간 초)")]
-        [SerializeField, Min(0.01f)] float fadeSeconds = 0.75f;
+        [Tooltip("일시정지 화면과 같은 페이드 설정 (7-C 규칙 1)")]
+        [SerializeField] UiSettings settings;
 
         float fadeElapsed;
         bool choiceMade;
@@ -32,7 +32,7 @@ namespace Game.UI
         public Text KillsText => killsText;
         public Button RetryButton => retryButton;
         public Button TitleButton => titleButton;
-        public float FadeSeconds => fadeSeconds;
+        public float FadeSeconds => settings.fadeSeconds;
 
         void Awake()
         {
@@ -72,7 +72,7 @@ namespace Game.UI
             if (!panel.activeSelf || group.alpha >= 1f)
                 return;
             fadeElapsed += Time.unscaledDeltaTime;
-            group.alpha = Mathf.Clamp01(fadeElapsed / fadeSeconds);
+            group.alpha = Mathf.Clamp01(fadeElapsed / settings.fadeSeconds);
         }
 
         void Choose(GameState next)

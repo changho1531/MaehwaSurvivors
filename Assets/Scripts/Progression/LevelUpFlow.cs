@@ -49,7 +49,9 @@ namespace Game.Progression
 
         public IReadOnlyList<LevelUpCard> CurrentCards => cards;
         public bool IsAwaitingChoice { get; private set; }
-        public bool CanAcceptChoice => IsAwaitingChoice && Time.unscaledTime >= inputUnlockTime;
+        // 카드 위에 일시정지 화면이 덮여 있으면(Pause) 카드를 고를 수 없다 (7-C 규칙 3). 화면 가림과 별개로 로직에서도 막는다.
+        public bool CanAcceptChoice => IsAwaitingChoice && Time.unscaledTime >= inputUnlockTime
+            && GameManager.Instance.CurrentState == GameState.LevelUp;
 
         void OnEnable()
         {

@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 namespace Game.Tests.PlayMode
 {
-    /// <summary>[기능 1~4] 타이틀 씬: 제목 UI, 하단 버튼 2개, 나가기(비어 있음), 게임 시작 → InGame.</summary>
+    /// <summary>[기능 1~4] 타이틀 씬: 제목 UI, 하단 버튼 2개, 나가기(확인창 후 종료), 게임 시작 → InGame.</summary>
     public class TitleSceneTests
     {
         TitleMenu menu;
@@ -94,14 +94,35 @@ namespace Game.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator F3_ExitButton_DoesNothingYet()
+        public IEnumerator F3_ExitButton_AsksConfirm_CancelStays_ConfirmQuits()
         {
-            menu.ExitButton.onClick.Invoke();
-            for (int i = 0; i < 5; i++)
-                yield return null;
+            // 7-C 규칙 5: [나가기] → 확인창 → [확인]이면 종료, [취소]면 타이틀 유지.
+            // 실제 종료는 에디터 플레이 모드를 끄므로, 종료 요청이 갔는지만 확인한다.
+            int quitRequests = 0;
+            var originalQuit = TitleMenu.QuitHandler;
+            TitleMenu.QuitHandler = () => quitRequests++;
+            try
+            {
+                menu.ExitButton.onClick.Invoke();
+                Assert.IsTrue(menu.Confirm.IsOpen, "확인창");
+                Assert.AreEqual("게임을 종료하시겠습니까?", menu.Confirm.MessageText.text);
 
-            Assert.AreEqual(SceneNames.Title, SceneManager.GetActiveScene().name);
-            LogAssert.NoUnexpectedReceived();
+                menu.Confirm.CancelButton.onClick.Invoke();
+                yield return null;
+                Assert.IsFalse(menu.Confirm.IsOpen);
+                Assert.AreEqual(0, quitRequests, "[취소] → 종료 안 함");
+                Assert.AreEqual(SceneNames.Title, SceneManager.GetActiveScene().name);
+
+                menu.ExitButton.onClick.Invoke();
+                menu.Confirm.ConfirmButton.onClick.Invoke();
+                menu.Confirm.ConfirmButton.onClick.Invoke(); // 연타
+                Assert.AreEqual(1, quitRequests, "[확인] → 종료 요청 1회");
+                LogAssert.NoUnexpectedReceived();
+            }
+            finally
+            {
+                TitleMenu.QuitHandler = originalQuit;
+            }
         }
 
         [UnityTest]
