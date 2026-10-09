@@ -31,7 +31,6 @@ namespace Game.Enemies
 
         public ComponentPool<Enemy> Pool => pool;
         public Transform Target => target;
-        public float SpawnInterval => spawnInterval;
         public float MinSpawnRadius => viewCamera != null && viewCamera.orthographic ? HalfViewDiagonal(viewCamera) + spawnMargin : fallbackSpawnRadius;
         public float MaxSpawnRadius => MinSpawnRadius + ringThickness;
 

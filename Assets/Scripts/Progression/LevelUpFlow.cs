@@ -62,10 +62,8 @@ namespace Game.Progression
         void OnDisable()
         {
             playerLevel.LeveledUp -= OnLeveledUp;
-            // 씬 종료 순서상 GameManager가 먼저 사라졌을 수 있어 Instance로 새로 만들지 않게 확인한다.
-            var manager = FindFirstObjectByType<GameManager>();
-            if (manager != null && manager.StateMachine != null)
-                manager.StateMachine.StateChanged -= OnStateChanged;
+            if (GameManager.Current != null)
+                GameManager.Current.StateMachine.StateChanged -= OnStateChanged;
         }
 
         void OnStateChanged(GameState previous, GameState next)

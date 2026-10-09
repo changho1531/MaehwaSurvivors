@@ -11,6 +11,9 @@ namespace Game.Core
     {
         static GameManager instance;
 
+        /// <summary>이미 있는 GameManager. 없으면 null (Instance와 달리 새로 만들지 않음 — 씬 종료 중 구독 해제용).</summary>
+        public static GameManager Current => instance;
+
         public static GameManager Instance
         {
             get

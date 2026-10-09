@@ -47,10 +47,8 @@ namespace Game.UI
 
         void OnDisable()
         {
-            // 씬 종료 순서상 GameManager가 먼저 사라졌을 수 있어 Instance로 새로 만들지 않게 확인한다.
-            var manager = Object.FindFirstObjectByType<GameManager>();
-            if (manager != null && manager.StateMachine != null)
-                manager.StateMachine.StateChanged -= OnStateChanged;
+            if (GameManager.Current != null)
+                GameManager.Current.StateMachine.StateChanged -= OnStateChanged;
         }
 
         void Update()
