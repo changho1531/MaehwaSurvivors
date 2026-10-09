@@ -8,6 +8,8 @@ namespace Game.Enemies
     {
         [Min(1f)] public float maxHp = 10f;
         [Min(0f)] public float moveSpeed = 2f;
+        [Tooltip("플레이어와 닿았을 때 주는 데미지. 연속 피해는 플레이어 무적 시간으로 제한된다")]
+        [Min(0f)] public float contactDamage = 10f;
 
         [Header("경험치 구슬 (설계서 6-A절)")]
         [Tooltip("많은 순: 보스 > 저주술사 > 궁수 > 근거리 적")]

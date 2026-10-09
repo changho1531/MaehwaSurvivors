@@ -1,4 +1,5 @@
 using System;
+using Game.Player;
 using UnityEngine;
 
 namespace Game.Enemies
@@ -59,6 +60,16 @@ namespace Game.Enemies
 
             var toTarget = (Vector2)target.position - body.position;
             body.linearVelocity = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized * data.moveSpeed : Vector2.zero;
+        }
+
+        // 접촉 데미지: 데미지 양은 공격하는 쪽(적 데이터)이, 무적·사망·GameOver 판정은 맞는 쪽(PlayerHealth)이 정한다.
+        // 닿아 있는 동안 매 물리 스텝 호출되지만 플레이어 무적 시간 동안은 무시된다.
+        void OnCollisionStay2D(Collision2D collision)
+        {
+            if (data == null || data.contactDamage <= 0f || !IsAlive)
+                return;
+            if (collision.gameObject.TryGetComponent(out PlayerHealth player))
+                player.TakeDamage(data.contactDamage);
         }
 
         public void TakeDamage(float amount)
