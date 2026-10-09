@@ -26,7 +26,6 @@ namespace Game.Tests.PlayMode
             scene.StopSpawningAndClear();
             if (scene.Weapon != null)
                 scene.Weapon.enabled = false;
-            scene.LevelUpFlow.AutoChooseForPrototype = true;
 
             // 기준선: 구슬 없이 같은 경로를 돌 때의 프레임 시간
             var baseline = new FrameStats();

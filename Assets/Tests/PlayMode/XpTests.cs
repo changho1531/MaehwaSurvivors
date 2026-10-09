@@ -25,7 +25,7 @@ namespace Game.Tests.PlayMode
             scene.StopSpawningAndClear();
             if (scene.Weapon != null)
                 scene.Weapon.enabled = false;
-            scene.LevelUpFlow.AutoChooseForPrototype = false; // 선택 시점을 테스트가 직접 제어한다
+
         }
 
         [UnityTearDown]
@@ -146,7 +146,7 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(1, scene.XpDropper.PendingCount, "생성 대기 타이머도 정지");
             Assert.AreEqual(orbsBefore, ActiveOrbs().Count);
 
-            Assert.IsTrue(scene.LevelUpFlow.CompleteChoice());
+            Assert.IsTrue(scene.LevelUpFlow.Choose(0));
             Assert.AreEqual(GameState.Play, State, "대기 0 → Play 복귀");
             Assert.AreEqual(1f, Time.timeScale);
             Assert.AreEqual(0, scene.Level.PendingLevelUps);
@@ -164,10 +164,10 @@ namespace Game.Tests.PlayMode
             var transitions = new List<(GameState, GameState)>();
             void OnChanged(GameState a, GameState b) => transitions.Add((a, b));
             int cardRequests = 0;
-            void OnCards() => cardRequests++;
+            void OnCards(IReadOnlyList<LevelUpCard> _) => cardRequests++;
 
             GameManager.Instance.StateMachine.StateChanged += OnChanged;
-            scene.LevelUpFlow.CardsRequested += OnCards;
+            scene.LevelUpFlow.CardsShown += OnCards;
             try
             {
                 scene.Level.AddXp(scene.Level.RequiredXp);
@@ -176,12 +176,12 @@ namespace Game.Tests.PlayMode
                 Assert.AreEqual(1, cardRequests);
 
                 yield return new WaitForSecondsRealtime(Settings.cardInputLockSeconds + 0.05f);
-                Assert.IsTrue(scene.LevelUpFlow.CompleteChoice());
+                Assert.IsTrue(scene.LevelUpFlow.Choose(0));
                 Assert.AreEqual(GameState.LevelUp, State, "대기가 남아 있으면 Play로 나가지 않는다");
                 Assert.AreEqual(2, cardRequests, "다음 카드를 바로 요청");
 
                 yield return new WaitForSecondsRealtime(Settings.cardInputLockSeconds + 0.05f);
-                Assert.IsTrue(scene.LevelUpFlow.CompleteChoice());
+                Assert.IsTrue(scene.LevelUpFlow.Choose(0));
                 Assert.AreEqual(GameState.Play, State);
 
                 CollectionAssert.AreEqual(new[] { (GameState.Play, GameState.LevelUp), (GameState.LevelUp, GameState.Play) }, transitions,
@@ -190,7 +190,7 @@ namespace Game.Tests.PlayMode
             finally
             {
                 GameManager.Instance.StateMachine.StateChanged -= OnChanged;
-                scene.LevelUpFlow.CardsRequested -= OnCards;
+                scene.LevelUpFlow.CardsShown -= OnCards;
             }
         }
 
@@ -198,14 +198,14 @@ namespace Game.Tests.PlayMode
         public IEnumerator X6_NewCards_IgnoreInput_ForLockTime()
         {
             scene.Level.AddXp(scene.Level.RequiredXp);
-            Assert.IsFalse(scene.LevelUpFlow.CompleteChoice(), "카드가 뜬 직후 클릭은 무시");
+            Assert.IsFalse(scene.LevelUpFlow.Choose(0), "카드가 뜬 직후 클릭은 무시");
 
             yield return new WaitForSecondsRealtime(Settings.cardInputLockSeconds * 0.4f);
-            Assert.IsFalse(scene.LevelUpFlow.CompleteChoice(), "잠금 시간 동안 계속 무시");
+            Assert.IsFalse(scene.LevelUpFlow.Choose(0), "잠금 시간 동안 계속 무시");
             Assert.AreEqual(GameState.LevelUp, State);
 
             yield return new WaitForSecondsRealtime(Settings.cardInputLockSeconds * 0.6f + 0.05f);
-            Assert.IsTrue(scene.LevelUpFlow.CompleteChoice(), "잠금 해제 후에는 선택 가능 (일시정지 중에도 실시간으로 풀림)");
+            Assert.IsTrue(scene.LevelUpFlow.Choose(0), "잠금 해제 후에는 선택 가능 (일시정지 중에도 실시간으로 풀림)");
         }
 
         [UnityTest]
