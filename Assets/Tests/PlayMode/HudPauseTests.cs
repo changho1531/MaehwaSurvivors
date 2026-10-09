@@ -110,6 +110,9 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(GameState.LevelUp, State);
             var cards = Object.FindFirstObjectByType<LevelUpCardView>();
             Assert.IsTrue(cards.Panel.activeSelf);
+            var shownBefore = new System.Collections.Generic.List<Game.Weapons.WeaponData>();
+            foreach (var card in scene.LevelUpFlow.CurrentCards)
+                shownBefore.Add(card.Weapon);
 
             yield return PressEsc();
             Assert.AreEqual(GameState.Pause, State, "카드 선택 중에도 일시정지");
@@ -121,7 +124,14 @@ namespace Game.Tests.PlayMode
             yield return PressEsc();
             Assert.AreEqual(GameState.LevelUp, State, "재개 → 카드 선택으로 복귀");
             Assert.AreEqual(0f, Time.timeScale, "LevelUp이라 게임은 여전히 정지");
-            Assert.IsTrue(scene.LevelUpFlow.Choose(0), "카드 선택 이어감");
+            var shownAfter = new System.Collections.Generic.List<Game.Weapons.WeaponData>();
+            foreach (var card in scene.LevelUpFlow.CurrentCards)
+                shownAfter.Add(card.Weapon);
+            CollectionAssert.AreEqual(shownBefore, shownAfter, "같은 카드 유지 (다시 뽑지 않음)");
+            Assert.IsFalse(scene.LevelUpFlow.Choose(0), "복귀 직후 클릭은 입력 보호로 무시");
+
+            yield return WaitRealtime(0.3f);
+            Assert.IsTrue(scene.LevelUpFlow.Choose(0), "입력 보호가 풀리면 카드 선택 이어감");
         }
 
         [UnityTest]

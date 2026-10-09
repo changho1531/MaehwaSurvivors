@@ -56,12 +56,27 @@ namespace Game.Progression
         void OnEnable()
         {
             playerLevel.LeveledUp += OnLeveledUp;
+            GameManager.Instance.StateMachine.StateChanged += OnStateChanged;
         }
 
         void OnDisable()
         {
             playerLevel.LeveledUp -= OnLeveledUp;
+            // 씬 종료 순서상 GameManager가 먼저 사라졌을 수 있어 Instance로 새로 만들지 않게 확인한다.
+            var manager = FindFirstObjectByType<GameManager>();
+            if (manager != null && manager.StateMachine != null)
+                manager.StateMachine.StateChanged -= OnStateChanged;
         }
+
+        void OnStateChanged(GameState previous, GameState next)
+        {
+            // 카드 선택 중 일시정지 → 재개: 카드는 다시 뽑지 않고 그대로 두되(꼼수 방지), 재개 버튼을 누른 클릭이
+            // 그 자리의 카드를 고르지 않도록 카드가 처음 뜰 때와 같은 입력 잠금을 다시 건다 (7-C 예외).
+            if (previous == GameState.Pause && next == GameState.LevelUp && IsAwaitingChoice)
+                LockInput();
+        }
+
+        void LockInput() => inputUnlockTime = Time.unscaledTime + settings.cardInputLockSeconds;
 
         void OnLeveledUp(int gained)
         {
@@ -93,7 +108,7 @@ namespace Game.Progression
             }
 
             IsAwaitingChoice = true;
-            inputUnlockTime = Time.unscaledTime + settings.cardInputLockSeconds;
+            LockInput();
             CardsShown?.Invoke(cards);
         }
 
