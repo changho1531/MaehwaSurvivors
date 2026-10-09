@@ -134,7 +134,10 @@ namespace Game.Tests.PlayMode
             yield return Hold(0.5f);
             Release(keyboard.dKey);
             Release(keyboard.wKey);
-            yield return null;
+            // 카메라는 LateUpdate에서 따라가므로, 마지막 물리 이동이 끝나고 LateUpdate까지 지난 프레임 끝에서 비교한다.
+            // (yield null은 LateUpdate 이전에 재개되어, 그 프레임 물리 이동만큼 간헐적으로 어긋난다)
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
 
             var cam = scene.Camera.transform.position;
             var player = scene.Player.transform.position;
