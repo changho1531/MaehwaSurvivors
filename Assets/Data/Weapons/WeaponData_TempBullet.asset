@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33902fca0de048544a568166daa97555, type: 3}
+  m_Name: WeaponData_TempBullet
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.WeaponData
+  displayName: "\uC784\uC2DC \uD0C4\uD658"
+  damage: 10
+  cooldown: 1
+  range: 9
+  projectileSpeed: 12
+  projectileLifetime: 2
+  projectilePrefab: {fileID: 3094863193851177424, guid: 15a15749fa5679f4a960ee24e3be142b, type: 3}
+  prewarmCount: 10
