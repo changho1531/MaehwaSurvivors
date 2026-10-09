@@ -8,7 +8,7 @@ using UnityEngine.TestTools;
 
 namespace Game.Tests.PlayMode
 {
-    /// <summary>[기능 10~11] 1초마다 가장 가까운 적에게 투사체 발사, 맞은 적은 Dead.</summary>
+    /// <summary>[기능 10~11 + 매화검기(설계서 7절)] 가장 가까운 적(사거리 무제한) 또는 바라보는 방향으로 발사, 비행 거리 제한, 맞은 적은 Dead.</summary>
     public class WeaponTests
     {
         readonly InGameScene scene = new();
@@ -55,31 +55,90 @@ namespace Game.Tests.PlayMode
             var data = scene.Weapon.Data;
             Assert.IsNotNull(data, "WeaponData(SO) 연결 누락");
             Assert.IsNotNull(data.projectilePrefab, "투사체 프리팹 연결 누락");
-            Assert.AreEqual(1f, data.cooldown, 0.0001f, "요구사항: 1초마다 발사");
+            Assert.AreEqual(1, scene.Weapon.Level, "기본 무기는 Lv1로 시작");
+            Assert.AreEqual(1f, data.GetCooldown(1), 0.0001f, "Lv1: 1초마다 발사");
             Assert.Greater(scene.Weapon.Pool.TotalCreated, 0, "투사체도 풀을 미리 채워 두어야 한다");
         }
 
         [UnityTest]
-        public IEnumerator F10_NoEnemyInRange_DoesNotFire()
+        public IEnumerator M1_FarEnemy_IsTargeted_NoRangeLimit()
         {
-            scene.SpawnAt(new Vector2(scene.Weapon.Data.range + 2f, 0f), chase: false);
-            yield return Wait(1.5f);
+            var far = scene.SpawnAt(new Vector2(25f, 0f), chase: false);
+            yield return WaitUntil(() => shots.Count > 0, 1.5f);
 
-            Assert.IsEmpty(shots, "사거리 밖 적에게는 쏘지 않는다");
-            Assert.AreEqual(0, scene.Weapon.Pool.CountActive);
+            Assert.IsNotEmpty(shots);
+            Assert.AreSame(far, shots[0].target, "사거리 제한 없이 맵 전체에서 가장 가까운 적을 조준");
+            Assert.Greater(Vector2.Dot(shots[0].projectile.Direction, Vector2.right), 0.99f);
+        }
+
+        [UnityTest]
+        public IEnumerator M2_NoEnemies_FiresInFacingDirection()
+        {
+            yield return WaitUntil(() => shots.Count > 0, 1.5f);
+
+            Assert.IsNotEmpty(shots, "적이 없어도 쿨타임마다 발사");
+            Assert.IsNull(shots[0].target);
+            Assert.AreEqual(Vector2.up, scene.Facing.Direction, "시작 시 바라보는 방향은 위쪽");
+            Assert.Greater(Vector2.Dot(shots[0].projectile.Direction, scene.Facing.Direction), 0.99f, "바라보는 방향으로 발사");
+        }
+
+        [UnityTest]
+        public IEnumerator M3_ProjectileDisappears_AfterMaxTravelDistance()
+        {
+            yield return WaitUntil(() => shots.Count > 0, 1.5f);
+            scene.Weapon.enabled = false;
+            var projectile = shots[0].projectile;
+            var start = (Vector2)scene.Player.transform.position;
+            float maxDistance = scene.Weapon.Data.maxTravelDistance;
+
+            float farthest = 0f;
+            float end = Time.time + maxDistance / scene.Weapon.Data.GetProjectileSpeed(1) + 0.3f;
+            while (Time.time < end)
+            {
+                if (projectile.IsLive)
+                    farthest = Mathf.Max(farthest, Vector2.Distance(start, projectile.transform.position));
+                yield return null;
+            }
+
+            Assert.IsFalse(projectile.IsLive, "최대 비행 거리에 닿으면 사라진다");
+            Assert.That(farthest, Is.EqualTo(maxDistance).Within(maxDistance * 0.15f), $"비행 거리 {farthest}, 최대 {maxDistance}");
+        }
+
+        [UnityTest]
+        public IEnumerator M4_Upgrade_UsesNextLevelStats()
+        {
+            yield return null;
+            var data = scene.Weapon.Data;
+            Assert.IsTrue(scene.Inventory.Upgrade(data));
+            Assert.AreEqual(2, scene.Weapon.Level);
+            Assert.Greater(data.GetDamage(2), data.GetDamage(1), "레벨이 오르면 데미지 증가");
+            Assert.Less(data.GetCooldown(2), data.GetCooldown(1), "쿨타임 감소");
+            Assert.Greater(data.GetProjectileSpeed(2), data.GetProjectileSpeed(1), "탄속 증가");
+
+            shots.Clear();
+            yield return WaitUntil(() => shots.Count > 0, 1.5f);
+            Assert.IsNotEmpty(shots);
+            var projectile = shots[0].projectile;
+            yield return new WaitForFixedUpdate();
+            var p0 = (Vector2)projectile.transform.position;
+            for (int i = 0; i < 5; i++)
+                yield return new WaitForFixedUpdate();
+            float speed = Vector2.Distance(p0, projectile.transform.position) / (5f * Time.fixedDeltaTime);
+            Assert.That(speed, Is.EqualTo(data.GetProjectileSpeed(2)).Within(0.5f), "강화된 탄속으로 발사");
         }
 
         [UnityTest]
         public IEnumerator F10_FiresTowardNearestEnemy()
         {
             var far = scene.SpawnAt(new Vector2(-7f, 0f), chase: false);
-            var near = scene.SpawnAt(new Vector2(0f, 4f), chase: false);
+            // 아래쪽에 둔다: 시작 직후 위쪽(초기 바라보는 방향)으로 나간 검기에 맞지 않게.
+            var near = scene.SpawnAt(new Vector2(0f, -4f), chase: false);
 
             yield return WaitUntil(() => shots.Count > 0, 1.5f);
 
-            Assert.IsNotEmpty(shots, "사거리 안에 적이 있으면 발사해야 한다");
+            Assert.IsNotEmpty(shots, "적이 있으면 발사해야 한다");
             Assert.AreSame(near, shots[0].target, "가장 가까운 적을 조준해야 한다");
-            Assert.Greater(Vector2.Dot(shots[0].projectile.Direction, Vector2.up), 0.99f, "투사체가 가까운 적 방향으로 날아가야 한다");
+            Assert.Greater(Vector2.Dot(shots[0].projectile.Direction, Vector2.down), 0.99f, "투사체가 가까운 적 방향으로 날아가야 한다");
             Assert.IsTrue(far.IsAlive);
         }
 
@@ -169,7 +228,7 @@ namespace Game.Tests.PlayMode
             enemy.transform.position = away;
             scene.Weapon.enabled = false;
 
-            yield return Wait(scene.Weapon.Data.projectileLifetime + 0.2f);
+            yield return Wait(scene.Weapon.Data.maxTravelDistance / scene.Weapon.Data.GetProjectileSpeed(scene.Weapon.Level) + 0.2f);
 
             Assert.IsFalse(shots[0].projectile.IsLive);
             Assert.AreEqual(0, scene.Weapon.Pool.CountActive, "수명이 다한 투사체는 풀로 반환");

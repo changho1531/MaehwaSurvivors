@@ -132,9 +132,10 @@ GameObject:
   - component: {fileID: 169767280}
   - component: {fileID: 169767279}
   - component: {fileID: 169767278}
-  - component: {fileID: 169767283}
   - component: {fileID: 169767284}
   - component: {fileID: 169767285}
+  - component: {fileID: 169767287}
+  - component: {fileID: 169767286}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -292,19 +293,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &169767283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169767277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cc1efa9b38c036428a8f7b10233e098, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.AutoWeapon
-  data: {fileID: 11400000, guid: 4258ae6dae402544d816ed381eab96de, type: 2}
 --- !u!114 &169767284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,6 +319,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Progression.PlayerMagnet
   settings: {fileID: 11400000, guid: e18bd5a5a14109f45af9c4c40c183a32, type: 2}
+--- !u!114 &169767286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169767277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a63993ae43785474d8679d11980618a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.WeaponInventory
+  catalog: {fileID: 11400000, guid: 7d6e4106102d12b45991a88f13aa3dba, type: 2}
+  startingWeapon: {fileID: 11400000, guid: 4258ae6dae402544d816ed381eab96de, type: 2}
+--- !u!114 &169767287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169767277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a108d1f04e6184a9a54895cab7a640, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Player.PlayerFacing
 --- !u!1 &869184455
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,6 +515,7 @@ GameObject:
   - component: {fileID: 1897601223}
   - component: {fileID: 1897601222}
   - component: {fileID: 1897601221}
+  - component: {fileID: 1897601224}
   m_Layer: 0
   m_Name: Progression
   m_TagString: Untagged
@@ -551,6 +566,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1897601224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897601220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b4e72f91bc5fb48a29a7d39e145dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Progression.GrowthCompletion
+  inventory: {fileID: 169767286}
+  dropper: {fileID: 1897601222}
+  playerLevel: {fileID: 169767284}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -22,6 +22,8 @@ namespace Game.Tests.PlayMode
         public PlayerMagnet Magnet { get; private set; }
         public PlayerLevel Level { get; private set; }
         public LevelUpFlow LevelUpFlow { get; private set; }
+        public WeaponInventory Inventory { get; private set; }
+        public PlayerFacing Facing { get; private set; }
 
         public IEnumerator Load()
         {
@@ -42,6 +44,8 @@ namespace Game.Tests.PlayMode
             Magnet = Object.FindFirstObjectByType<PlayerMagnet>();
             Level = Object.FindFirstObjectByType<PlayerLevel>();
             LevelUpFlow = Object.FindFirstObjectByType<LevelUpFlow>();
+            Inventory = Object.FindFirstObjectByType<WeaponInventory>();
+            Facing = Object.FindFirstObjectByType<PlayerFacing>();
             Camera = Camera.main;
 
             Assert.IsNotNull(Player, "InGame 씬에 PlayerMovement가 없다");
