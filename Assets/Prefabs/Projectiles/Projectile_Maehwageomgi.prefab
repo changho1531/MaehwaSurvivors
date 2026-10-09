@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4900754517472920416}
   - component: {fileID: 2794841333006609437}
   - component: {fileID: 3094863193851177424}
+  - component: {fileID: 8176825192299103869}
   m_Layer: 0
   m_Name: Projectile_Maehwageomgi
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.35, y: 0.35, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -61,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 6969218caf52e69479f14586e245a609, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,8 +85,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 20
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 41385ad8e5d8be544ae1e9d5241029a4, type: 3}
-  m_Color: {r: 1, g: 0.9, b: 0.4, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 9c8909005ad325c4ba1315e4e4e9c712, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -156,7 +157,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.49999997
+  m_Radius: 0.4
 --- !u!114 &3094863193851177424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,3 +170,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f8c360bdb8523046a4241e78dc64613, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Weapons.Projectile
+--- !u!114 &8176825192299103869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7556036719077026840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa2a3d6fcd107041a4ab8b561434e0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.FrameAnimation
+  target: {fileID: 4691276618436436781}
+  frames:
+  - {fileID: 21300000, guid: 9c8909005ad325c4ba1315e4e4e9c712, type: 3}
+  - {fileID: 21300000, guid: e72a3228c24a7e74d8f907619d771229, type: 3}
+  - {fileID: 21300000, guid: f33e64370a6a7fb4d9de67f523fab244, type: 3}
+  - {fileID: 21300000, guid: 898534d2e3be75e4e99909c65fcf2c68, type: 3}
+  - {fileID: 21300000, guid: be563b5378756a440bd813b4b9fa3b86, type: 3}
+  - {fileID: 21300000, guid: eca3c177f26f52d4daaf7f71b4169a1f, type: 3}
+  - {fileID: 21300000, guid: be563b5378756a440bd813b4b9fa3b86, type: 3}
+  - {fileID: 21300000, guid: 898534d2e3be75e4e99909c65fcf2c68, type: 3}
+  - {fileID: 21300000, guid: f33e64370a6a7fb4d9de67f523fab244, type: 3}
+  - {fileID: 21300000, guid: e72a3228c24a7e74d8f907619d771229, type: 3}
+  framesPerSecond: 12
+  loop: 1

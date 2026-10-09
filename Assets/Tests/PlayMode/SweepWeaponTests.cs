@@ -207,5 +207,22 @@ namespace Game.Tests.PlayMode
             }
             Assert.GreaterOrEqual(strikes.Count, data.hitCount * (1 + combosToWatch) - 1);
         }
+
+        [UnityTest]
+        public IEnumerator S9_Art_ScaledToRadius_PlaysOnceOverCombo()
+        {
+            Acquire();
+            yield return null;
+            var art = sweep.Effect.Art;
+            Assert.IsNotNull(art, "스킬 아트 연결 누락");
+            Assert.IsFalse(sweep.Effect.GetComponent<MeshRenderer>().enabled, "판정 확인용 부채꼴은 기본으로 숨김");
+            Assert.AreEqual(data.radius / 3f, art.transform.localScale.x, 0.001f, "부채꼴 길이 = 판정 반경");
+
+            int first = art.CurrentFrame;
+            yield return Wait(data.comboDuration * 0.5f);
+            Assert.Greater(art.CurrentFrame, first, "콤보 동안 프레임이 넘어간다");
+            yield return WaitUntil(() => !sweep.IsAttacking, data.comboDuration);
+            Assert.AreEqual(art.FrameCount - 1, art.CurrentFrame, "콤보가 끝날 때 마지막 프레임 (1회 재생)");
+        }
     }
 }

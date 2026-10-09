@@ -34,7 +34,7 @@ namespace Game.Weapons
             {
                 // 이펙트는 플레이어 자식이라 위치는 자동으로 따라가고, 회전만 매 프레임 바라보는 방향에 맞춘다.
                 effect = Instantiate(Data.effectPrefab, transform);
-                effect.Build(Data.radius, Data.angle);
+                effect.Build(Data.radius, Data.angle, Data.comboDuration);
                 effect.gameObject.SetActive(false);
             }
         }
