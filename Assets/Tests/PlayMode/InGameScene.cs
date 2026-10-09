@@ -15,7 +15,7 @@ namespace Game.Tests.PlayMode
     {
         public PlayerMovement Player { get; private set; }
         public EnemySpawner Spawner { get; private set; }
-        public AutoWeapon Weapon { get; private set; }
+        public ProjectileWeapon Weapon { get; private set; }
         public Camera Camera { get; private set; }
 
         public XpDropper XpDropper { get; private set; }
@@ -37,7 +37,7 @@ namespace Game.Tests.PlayMode
 
             Player = Object.FindFirstObjectByType<PlayerMovement>();
             Spawner = Object.FindFirstObjectByType<EnemySpawner>();
-            Weapon = Object.FindFirstObjectByType<AutoWeapon>();
+            Weapon = Object.FindFirstObjectByType<ProjectileWeapon>();
             XpDropper = Object.FindFirstObjectByType<XpDropper>();
             Magnet = Object.FindFirstObjectByType<PlayerMagnet>();
             Level = Object.FindFirstObjectByType<PlayerLevel>();

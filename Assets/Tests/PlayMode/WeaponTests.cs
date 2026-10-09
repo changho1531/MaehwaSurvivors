@@ -22,7 +22,7 @@ namespace Game.Tests.PlayMode
             shots.Clear();
             yield return scene.Load();
             Assert.IsNotNull(scene.Spawner, "InGame 씬에 EnemySpawner가 없다");
-            Assert.IsNotNull(scene.Weapon, "InGame 씬에 AutoWeapon이 없다");
+            Assert.IsNotNull(scene.Weapon, "InGame 씬에 ProjectileWeapon이 없다");
             scene.StopSpawningAndClear();
             scene.Weapon.Fired += OnFired;
         }

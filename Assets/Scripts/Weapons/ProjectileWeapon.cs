@@ -6,22 +6,22 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
-    /// 자동 공격 무기 (설계서 7절의 WeaponController 역할).
-    /// 쿨타임이 끝났고 사거리 안에 적이 있으면 가장 가까운 적을 향해 투사체를 풀에서 꺼내 발사한다.
-    /// 조건이 맞지 않으면 쿨타임이 끝난 상태로 대기한다.
+    /// 투사체형 무기. 사거리 안에 적이 있으면 가장 가까운 적을 향해 투사체를 풀에서 꺼내 발사한다.
+    /// 쿨타임 루프는 Weapon 베이스가 담당하고, 여기서는 "누구를 향해 무엇을 쏘나"만 구현한다.
     /// </summary>
-    public class AutoWeapon : MonoBehaviour
+    public class ProjectileWeapon : Weapon
     {
-        [SerializeField] WeaponData data;
+        [SerializeField] ProjectileWeaponData data;
 
         ComponentPool<Projectile> pool;
-        float cooldownRemaining;
 
         /// <summary>(발사한 투사체, 조준한 적)</summary>
         public event Action<Projectile, Enemy> Fired;
 
-        public WeaponData Data => data;
+        public ProjectileWeaponData Data => data;
         public ComponentPool<Projectile> Pool => pool;
+
+        protected override float Cooldown => data.cooldown;
 
         void Awake()
         {
@@ -29,20 +29,14 @@ namespace Game.Weapons
             pool = new ComponentPool<Projectile>(data.projectilePrefab, root, data.prewarmCount);
         }
 
-        void Update()
+        protected override bool TryStartAttack()
         {
-            if (cooldownRemaining > 0f)
-            {
-                cooldownRemaining -= Time.deltaTime;
-                return;
-            }
-
             var target = EnemyRegistry.FindNearest(transform.position, data.range);
             if (target == null)
-                return;
+                return false;
 
             Fire(target);
-            cooldownRemaining = data.cooldown;
+            return true;
         }
 
         void Fire(Enemy target)
