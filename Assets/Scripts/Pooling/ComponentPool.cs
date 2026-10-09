@@ -14,6 +14,7 @@ namespace Game.Pooling
         readonly int maxActive;
         readonly Stack<T> inactive = new();
         readonly HashSet<T> active = new();
+        readonly List<T> releaseBuffer = new();
 
         public int CountActive => active.Count;
         public int CountInactive => inactive.Count;
@@ -62,6 +63,16 @@ namespace Game.Pooling
 
             item.gameObject.SetActive(false);
             inactive.Push(item);
+        }
+
+        /// <summary>활성 오브젝트를 전부 반환한다 (예: 성장 완료 시 맵의 구슬 일괄 제거).</summary>
+        public void ReleaseAll()
+        {
+            releaseBuffer.Clear();
+            releaseBuffer.AddRange(active);
+            foreach (var item in releaseBuffer)
+                Release(item);
+            releaseBuffer.Clear();
         }
 
         T Create()

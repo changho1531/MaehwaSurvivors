@@ -8,5 +8,11 @@ namespace Game.Enemies
     {
         [Min(1f)] public float maxHp = 10f;
         [Min(0f)] public float moveSpeed = 2f;
+
+        [Header("경험치 구슬 (설계서 6-A절)")]
+        [Tooltip("많은 순: 보스 > 저주술사 > 궁수 > 근거리 적")]
+        [Min(0)] public int xpAmount = 1;
+        [Tooltip("구슬 모양은 공통, 색만 적 종류별")]
+        public Color xpOrbColor = new(0.788f, 0.635f, 0.294f); // GOLD #C9A24B
     }
 }

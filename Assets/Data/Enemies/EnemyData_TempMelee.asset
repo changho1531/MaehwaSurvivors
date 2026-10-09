@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Runtime::Game.Enemies.EnemyData
   maxHp: 10
   moveSpeed: 2
+  xpAmount: 1
+  xpOrbColor: {r: 0.7882353, g: 0.63529414, b: 0.29411766, a: 1}

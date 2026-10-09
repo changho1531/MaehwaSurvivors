@@ -133,6 +133,8 @@ GameObject:
   - component: {fileID: 169767279}
   - component: {fileID: 169767278}
   - component: {fileID: 169767283}
+  - component: {fileID: 169767284}
+  - component: {fileID: 169767285}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -303,6 +305,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Weapons.AutoWeapon
   data: {fileID: 11400000, guid: 4258ae6dae402544d816ed381eab96de, type: 2}
+--- !u!114 &169767284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169767277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df29551dcc233b469e42447f7761352, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Progression.PlayerLevel
+  curve: {fileID: 11400000, guid: 74f0352e9cd1c2844a9a7e2248813209, type: 2}
+--- !u!114 &169767285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169767277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62b38026ce83fb34c8f3e90ce8d77711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Progression.PlayerMagnet
+  settings: {fileID: 11400000, guid: e18bd5a5a14109f45af9c4c40c183a32, type: 2}
 --- !u!1 &869184455
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,6 +490,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.CameraSystem.CameraFollow
   target: {fileID: 169767282}
+--- !u!1 &1897601220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1897601223}
+  - component: {fileID: 1897601222}
+  - component: {fileID: 1897601221}
+  m_Layer: 0
+  m_Name: Progression
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1897601221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897601220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3402a6f7d974af48a610fcd7435abbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Progression.LevelUpFlow
+  playerLevel: {fileID: 169767284}
+  settings: {fileID: 11400000, guid: e18bd5a5a14109f45af9c4c40c183a32, type: 2}
+  autoChooseForPrototype: 1
+--- !u!114 &1897601222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897601220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e78adb204d30d4ca0276fc709a8f34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Progression.XpDropper
+  settings: {fileID: 11400000, guid: e18bd5a5a14109f45af9c4c40c183a32, type: 2}
+--- !u!4 &1897601223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897601220}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -469,3 +558,4 @@ SceneRoots:
   - {fileID: 1650031350}
   - {fileID: 169767282}
   - {fileID: 869184457}
+  - {fileID: 1897601223}

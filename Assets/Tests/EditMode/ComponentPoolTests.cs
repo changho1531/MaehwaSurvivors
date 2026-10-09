@@ -109,5 +109,34 @@ namespace Game.Tests.EditMode
             pool.Release(a);
             Assert.IsTrue(pool.TryGet(Vector3.zero, out _));
         }
+
+        [Test]
+        public void ReleaseAll_ReturnsEveryActiveObject()
+        {
+            var pool = new ComponentPool<Transform>(prefab, root);
+            var items = new List<Transform>();
+            for (int i = 0; i < 4; i++)
+                items.Add(pool.Get(Vector3.zero));
+
+            pool.ReleaseAll();
+
+            Assert.AreEqual(0, pool.CountActive);
+            Assert.AreEqual(4, pool.CountInactive);
+            foreach (var item in items)
+                Assert.IsFalse(item.gameObject.activeSelf);
+            pool.ReleaseAll(); // 빈 상태에서 다시 불러도 문제없음
+            Assert.AreEqual(4, pool.CountInactive);
+        }
+
+        [Test]
+        public void Unlimited_GrowsBeyondPrewarm()
+        {
+            var pool = new ComponentPool<Transform>(prefab, root, prewarmCount: 2);
+            for (int i = 0; i < 5; i++)
+                pool.Get(Vector3.zero);
+
+            Assert.AreEqual(5, pool.CountActive, "상한 0 = 부족하면 자동 확장");
+            Assert.AreEqual(5, pool.TotalCreated);
+        }
     }
 }

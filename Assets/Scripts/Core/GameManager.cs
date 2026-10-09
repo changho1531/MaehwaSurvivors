@@ -49,6 +49,7 @@ namespace Game.Core
             var initial = SceneManager.GetActiveScene().name == SceneNames.InGame ? GameState.Play : GameState.Title;
             StateMachine = new GameStateMachine(initial);
             StateMachine.StateChanged += OnStateChanged;
+            Time.timeScale = TimeScalePolicy.For(initial);
         }
 
         void OnDestroy()
@@ -65,6 +66,9 @@ namespace Game.Core
 
         void OnStateChanged(GameState previous, GameState next)
         {
+            // Pause·LevelUp 등에서 게임 시간을 멈춘다. 각 시스템은 상태를 몰라도 deltaTime만으로 정지된다.
+            Time.timeScale = TimeScalePolicy.For(next);
+
             if (next == GameState.Play && previous is GameState.Title or GameState.GameOver or GameState.GameClear)
                 SceneManager.LoadScene(SceneNames.InGame);
             else if (next == GameState.Title)

@@ -2,6 +2,7 @@ using System.Collections;
 using Game.Core;
 using Game.Enemies;
 using Game.Player;
+using Game.Progression;
 using Game.Weapons;
 using NUnit.Framework;
 using UnityEngine;
@@ -17,14 +18,30 @@ namespace Game.Tests.PlayMode
         public AutoWeapon Weapon { get; private set; }
         public Camera Camera { get; private set; }
 
+        public XpDropper XpDropper { get; private set; }
+        public PlayerMagnet Magnet { get; private set; }
+        public PlayerLevel Level { get; private set; }
+        public LevelUpFlow LevelUpFlow { get; private set; }
+
         public IEnumerator Load()
         {
+            // 이전 테스트가 LevelUp 등에서 끝났을 수 있으므로 GameManager(씬 간 유지)를 버리고 시간을 되돌린다.
+            // 새 GameManager는 InGame 씬 기준 Play 상태로 다시 만들어진다.
+            var manager = Object.FindFirstObjectByType<GameManager>();
+            if (manager != null)
+                Object.Destroy(manager.gameObject);
+            Time.timeScale = 1f;
+
             yield return SceneManager.LoadSceneAsync(SceneNames.InGame, LoadSceneMode.Single);
             yield return null;
 
             Player = Object.FindFirstObjectByType<PlayerMovement>();
             Spawner = Object.FindFirstObjectByType<EnemySpawner>();
             Weapon = Object.FindFirstObjectByType<AutoWeapon>();
+            XpDropper = Object.FindFirstObjectByType<XpDropper>();
+            Magnet = Object.FindFirstObjectByType<PlayerMagnet>();
+            Level = Object.FindFirstObjectByType<PlayerLevel>();
+            LevelUpFlow = Object.FindFirstObjectByType<LevelUpFlow>();
             Camera = Camera.main;
 
             Assert.IsNotNull(Player, "InGame 씬에 PlayerMovement가 없다");
