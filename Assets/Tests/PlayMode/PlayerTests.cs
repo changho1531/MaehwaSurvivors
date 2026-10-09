@@ -22,11 +22,14 @@ namespace Game.Tests.PlayMode
             yield return null;
         }
 
+        // 이동은 FixedUpdate에서 일어나므로 실시간이 아니라 물리 스텝 수로 기다린다.
+        // Time.time 기준이면 에디터 프레임이 한 번 길게 튀었을 때 이동 스텝이 0회로 끝나 테스트가 흔들렸다.
         static IEnumerator Hold(float seconds)
         {
-            float end = Time.time + seconds;
-            while (Time.time < end)
-                yield return null;
+            yield return null; // 누른 입력을 PlayerMovement.Update가 먼저 읽게 한다
+            int steps = Mathf.CeilToInt(seconds / Time.fixedDeltaTime);
+            for (int i = 0; i < steps; i++)
+                yield return new WaitForFixedUpdate();
         }
 
         [UnityTest]
