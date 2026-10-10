@@ -34,6 +34,7 @@ namespace Game.Weapons
             {
                 // 이펙트는 플레이어 자식이라 위치는 자동으로 따라가고, 회전만 매 프레임 바라보는 방향에 맞춘다.
                 effect = Instantiate(Data.effectPrefab, transform);
+                effect.transform.localPosition = OriginOffset; // 피벗(검이 모이는 지점) = 무기 원점
                 effect.Build(Data.radius, Data.angle, Data.comboDuration);
                 effect.gameObject.SetActive(false);
             }
@@ -74,7 +75,7 @@ namespace Game.Weapons
 
         void Strike(int index)
         {
-            Vector2 origin = transform.position;
+            Vector2 origin = Origin;
             var direction = FacingDirection;
 
             // 처치되면 레지스트리에서 빠지므로 복사본을 돌며 판정한다.

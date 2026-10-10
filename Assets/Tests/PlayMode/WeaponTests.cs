@@ -83,6 +83,19 @@ namespace Game.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator M6_FiresFromBodyCenter_NotFeet()
+        {
+            // 7절 무기 원점: 발 위치 + 위쪽 오프셋(몸통 중앙)에서 발사
+            Vector2? firedAt = null;
+            scene.Weapon.Fired += (p, _) => firedAt ??= p.transform.position;
+            yield return WaitUntil(() => firedAt.HasValue, 1.5f);
+
+            Assert.IsTrue(firedAt.HasValue);
+            Assert.Greater(scene.Weapon.OriginOffset.y, 0f, "원점이 발보다 위");
+            Assert.That(Vector2.Distance(firedAt.Value, scene.Weapon.Origin), Is.LessThan(0.01f));
+        }
+
+        [UnityTest]
         public IEnumerator M3_ProjectileDisappears_AfterMaxTravelDistance()
         {
             yield return WaitUntil(() => shots.Count > 0, 1.5f);
@@ -165,7 +178,7 @@ namespace Game.Tests.PlayMode
         [UnityTest]
         public IEnumerator F11_HitEnemy_IsDead_AndReturnedToPool()
         {
-            var enemy = scene.SpawnAt(new Vector2(4f, 0f), chase: false);
+            var enemy = scene.SpawnAt(new Vector2(4f, scene.Weapon.OriginOffset.y), chase: false);
             Enemy killed = null;
             void OnKilled(Enemy e) => killed = e;
             Enemy.Killed += OnKilled;
@@ -206,7 +219,7 @@ namespace Game.Tests.PlayMode
         public IEnumerator F11_PartialDamage_DoesNotKill()
         {
             scene.Weapon.enabled = false;
-            var enemy = scene.SpawnAt(new Vector2(4f, 0f), chase: false);
+            var enemy = scene.SpawnAt(new Vector2(4f, scene.Weapon.OriginOffset.y), chase: false);
             yield return null;
 
             enemy.TakeDamage(enemy.Data.maxHp * 0.5f);
@@ -218,7 +231,7 @@ namespace Game.Tests.PlayMode
         [UnityTest]
         public IEnumerator F11_MissedProjectile_ExpiresAndReturnsToPool()
         {
-            var enemy = scene.SpawnAt(new Vector2(4f, 0f), chase: false);
+            var enemy = scene.SpawnAt(new Vector2(4f, scene.Weapon.OriginOffset.y), chase: false);
             yield return WaitUntil(() => shots.Count > 0, 1.5f);
             Assert.IsNotEmpty(shots);
 
@@ -246,9 +259,9 @@ namespace Game.Tests.PlayMode
 
             var line = new[]
             {
-                scene.SpawnAt(new Vector2(2f, 0f), chase: false),
-                scene.SpawnAt(new Vector2(4f, 0f), chase: false),
-                scene.SpawnAt(new Vector2(6f, 0f), chase: false),
+                scene.SpawnAt(new Vector2(2f, scene.Weapon.OriginOffset.y), chase: false),
+                scene.SpawnAt(new Vector2(4f, scene.Weapon.OriginOffset.y), chase: false),
+                scene.SpawnAt(new Vector2(6f, scene.Weapon.OriginOffset.y), chase: false),
             };
             yield return WaitUntil(() => shots.Count > 0, 1.5f);
             Assert.IsNotEmpty(shots);

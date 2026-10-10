@@ -30,7 +30,7 @@ namespace Game.Weapons
 
         protected override bool TryStartAttack()
         {
-            var origin = (Vector2)transform.position;
+            var origin = Origin;
             var target = EnemyRegistry.FindNearest(origin, float.PositiveInfinity);
 
             Vector2 direction;

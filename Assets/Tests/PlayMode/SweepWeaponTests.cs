@@ -180,6 +180,7 @@ namespace Game.Tests.PlayMode
             yield return null;
             Assert.IsNotNull(sweep.Effect, "이펙트 프리팹 연결 누락");
             Assert.AreSame(scene.Player.transform, sweep.Effect.transform.parent, "플레이어 자식이라 이동을 따라간다");
+            Assert.AreEqual((Vector3)sweep.OriginOffset, sweep.Effect.transform.localPosition, "피벗 = 무기 원점(몸통 중앙)");
             Assert.IsTrue(sweep.Effect.gameObject.activeInHierarchy, "콤보 중 표시");
             float expected = Mathf.Atan2(scene.Facing.Direction.y, scene.Facing.Direction.x) * Mathf.Rad2Deg;
             Assert.That(Mathf.DeltaAngle(sweep.Effect.transform.eulerAngles.z, expected), Is.EqualTo(0f).Within(0.5f), "바라보는 방향으로 회전");

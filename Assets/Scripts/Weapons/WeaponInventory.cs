@@ -13,6 +13,8 @@ namespace Game.Weapons
         [SerializeField] WeaponCatalog catalog;
         [Tooltip("게임 시작 시 Lv1로 지급 (매화검기)")]
         [SerializeField] WeaponData startingWeapon;
+        [Tooltip("※ 무기 원점 = 발 위치 + 이 오프셋 (몸통 중앙). 모든 무기 공통")]
+        [SerializeField] Vector2 weaponOriginOffset = new(0f, 0.45f);
 
         readonly List<Weapon> owned = new();
 
@@ -52,6 +54,7 @@ namespace Game.Weapons
                 return false;
 
             var weapon = data.AddRuntimeTo(gameObject);
+            weapon.OriginOffset = weaponOriginOffset; // Init 전에: 이펙트 배치가 원점을 쓴다
             weapon.Init(data, 1);
             owned.Add(weapon);
             WeaponAcquired?.Invoke(weapon);

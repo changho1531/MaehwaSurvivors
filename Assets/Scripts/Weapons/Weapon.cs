@@ -17,6 +17,12 @@ namespace Game.Weapons
         public int Level { get; private set; }
         public bool IsAttacking { get; private set; }
 
+        /// <summary>플레이어 원점(발 위치)에서 무기 원점(몸통 중앙)까지. 발밑에서 칼이 나가 보이지 않게 (7절 무기 원점).</summary>
+        public Vector2 OriginOffset { get; set; }
+
+        /// <summary>투사체 발사 위치·부채꼴 판정 중심·이펙트 피벗의 공통 기준점.</summary>
+        public Vector2 Origin => (Vector2)transform.position + OriginOffset;
+
         /// <summary>WeaponInventory가 무기를 붙인 직후 한 번 호출한다.</summary>
         public void Init(WeaponData data, int level)
         {
