@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1309426505162931256}
   - component: {fileID: 8600164260315656307}
   - component: {fileID: 3486405740318040004}
-  - component: {fileID: 3906101414620082263}
   - component: {fileID: 3083572570979652168}
+  - component: {fileID: 6427641163739169195}
   m_Layer: 0
   m_Name: Enemy_TempMelee
   m_TagString: Untagged
@@ -121,8 +121,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!61 &3906101414620082263
-BoxCollider2D:
+--- !u!114 &3083572570979652168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8588493506534848042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52a4161b5d1d18947b8af83b6c5c0369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Enemies.Enemy
+  data: {fileID: 11400000, guid: 245e7eb5fd409fb4ebc9f98e4a157fef, type: 2}
+--- !u!58 &6427641163739169195
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -156,27 +169,4 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.9, y: 0.9}
-  m_EdgeRadius: 0
---- !u!114 &3083572570979652168
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8588493506534848042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a4161b5d1d18947b8af83b6c5c0369, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Runtime::Game.Enemies.Enemy
-  data: {fileID: 11400000, guid: 245e7eb5fd409fb4ebc9f98e4a157fef, type: 2}
+  m_Radius: 0.375

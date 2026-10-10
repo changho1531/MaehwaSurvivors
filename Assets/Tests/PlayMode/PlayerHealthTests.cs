@@ -69,7 +69,7 @@ namespace Game.Tests.PlayMode
         public IEnumerator H2_MultipleEnemies_DamageAddsUp()
         {
             var a = SpawnTouching(Vector2.right);
-            SpawnTouching(Vector2.left); // 적 콜라이더가 1칸 상자라 플레이어 둘레에 동시에 붙을 수 있는 수가 제한된다 → 맞은편 2마리로 검증
+            SpawnTouching(Vector2.left);
             float dps = a.Data.contactDps;
             yield return WaitUntil(() => health.CurrentHp < health.MaxHp, 2f);
             yield return WaitFixed(0.2f); // 두 마리 모두 접촉이 잡히도록
@@ -78,6 +78,29 @@ namespace Game.Tests.PlayMode
             yield return WaitFixed(1f);
             float lost = start - health.CurrentHp;
             Assert.That(lost, Is.EqualTo(dps * 2f).Within(dps * 2f * 0.2f), "마리 수만큼 합산");
+        }
+
+        [UnityTest]
+        [Ignore("결정 필요: 플레이어 반경 0.3 + 적 지름 0.75면 둘레에 최대 5마리, 적끼리 맞물려 실제 1~2마리만 닿음 (10-11 측정)")]
+        public IEnumerator H2b_Surrounded_SixOrMoreTouchAtOnce()
+        {
+            // 7-B 데이터: 적 콜라이더 원형 지름 0.75 → 플레이어 둘레에 6~8마리가 동시에 붙는다 (포위 합산 체감).
+            Game.Enemies.Enemy first = null;
+            // 같은 거리에 동시에 두면 서로 아치처럼 맞물려 아무도 못 닿으므로, 실제처럼 거리를 달리해 차례로 도착시킨다
+            for (int i = 0; i < 8; i++)
+            {
+                float a = i * Mathf.PI * 2f / 8;
+                var e = scene.SpawnAt(new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * (1f + 0.15f * i), chase: true);
+                first ??= e;
+            }
+            float dps = first.Data.contactDps;
+            yield return WaitFixed(0.8f); // 밀고 들어와 자리를 잡을 때까지 (최대 HP 100이라 짧게 잰다)
+
+            float start = health.CurrentHp;
+            yield return WaitFixed(0.5f);
+            float touching = (start - health.CurrentHp) / (dps * 0.5f);
+            Debug.Log($"[측정] 동시 접촉 ≈ {touching:F1}마리");
+            Assert.GreaterOrEqual(touching, 5.5f, "포위당하면 6마리 안팎이 동시에 데미지를 준다");
         }
 
         [UnityTest]
