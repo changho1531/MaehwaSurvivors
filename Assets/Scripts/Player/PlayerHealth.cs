@@ -51,7 +51,7 @@ namespace Game.Player
                 Died?.Invoke();
                 // GameOver로 전이하면 TimeScalePolicy가 게임 시간을 멈춘다 (적·무기·구슬·타이머 정지, 7-B 규칙 5).
                 // 같은 프레임에 레벨업이 겹쳐도 FSM이 GameOver → LevelUp을 막는다 (6-A절 예외: GameOver 우선).
-                GameManager.Instance.StateMachine.TryChangeState(GameState.GameOver);
+                GameManager.TryChangeState(GameState.GameOver);
             }
             return true;
         }

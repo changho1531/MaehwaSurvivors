@@ -31,6 +31,16 @@ namespace Game.Core
 
         public GameState CurrentState => StateMachine.Current;
 
+        /// <summary>
+        /// 실행 중 상태 전이 요청. Instance와 달리 매니저를 새로 만들지 않는다:
+        /// 씬 전환 중(이전 매니저 파괴 직후) 불리면 엉뚱한 초기 상태의 매니저가 생기기 때문. 매니저가 없으면 false.
+        /// 매니저 생성은 씬 시작 시 구독(OnEnable)과 타이틀 [게임 시작]처럼 진입점에서만 Instance로 한다.
+        /// </summary>
+        public static bool TryChangeState(GameState next) => instance != null && instance.StateMachine.TryChangeState(next);
+
+        /// <summary>현재 상태가 state인지. 매니저가 없으면 false (새로 만들지 않음).</summary>
+        public static bool IsIn(GameState state) => instance != null && instance.CurrentState == state;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetStatics()
         {

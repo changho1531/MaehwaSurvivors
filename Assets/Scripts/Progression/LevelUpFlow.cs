@@ -51,7 +51,7 @@ namespace Game.Progression
         public bool IsAwaitingChoice { get; private set; }
         // 카드 위에 일시정지 화면이 덮여 있으면(Pause) 카드를 고를 수 없다 (7-C 규칙 3). 화면 가림과 별개로 로직에서도 막는다.
         public bool CanAcceptChoice => IsAwaitingChoice && Time.unscaledTime >= inputUnlockTime
-            && GameManager.Instance.CurrentState == GameState.LevelUp;
+            && GameManager.IsIn(GameState.LevelUp);
 
         void OnEnable()
         {
@@ -81,7 +81,7 @@ namespace Game.Progression
             if (IsAwaitingChoice)
                 return; // 이미 카드 표시 중이면 대기 횟수만 늘어난 것이므로 그대로 이어서 처리된다.
 
-            if (!GameManager.Instance.StateMachine.TryChangeState(GameState.LevelUp))
+            if (!GameManager.TryChangeState(GameState.LevelUp))
                 return;
             ShowNextCards();
         }
@@ -133,7 +133,7 @@ namespace Game.Progression
             IsAwaitingChoice = false;
             cards.Clear();
             ChoiceClosed?.Invoke();
-            GameManager.Instance.StateMachine.TryChangeState(GameState.Play);
+            GameManager.TryChangeState(GameState.Play);
         }
     }
 }

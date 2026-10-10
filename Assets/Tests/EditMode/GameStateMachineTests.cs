@@ -104,5 +104,15 @@ namespace Game.Tests.EditMode
             Assert.IsFalse(fsm.TryResume());
             Assert.AreEqual(GameState.Play, fsm.Current);
         }
+
+        [Test]
+        public void StaticRequests_WithoutManager_DoNotCreateOne()
+        {
+            // 씬 전환 중(매니저 파괴 직후) 들어온 요청이 잘못된 초기 상태의 매니저를 만들지 않아야 한다.
+            Assert.IsNull(GameManager.Current);
+            Assert.IsFalse(GameManager.TryChangeState(GameState.Play));
+            Assert.IsFalse(GameManager.IsIn(GameState.Title));
+            Assert.IsNull(GameManager.Current);
+        }
     }
 }

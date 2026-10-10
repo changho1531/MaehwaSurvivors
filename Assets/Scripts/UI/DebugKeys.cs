@@ -41,9 +41,7 @@ namespace Game.UI
         {
             var keyboard = Keyboard.current;
             // 카드 선택·일시정지·결과 화면 중에는 상태가 꼬이지 않게 플레이 중에만 받는다.
-            // Instance가 아니라 Current: 씬 전환 중 매니저가 없을 때 새로 만들면 엉뚱한 초기 상태의 매니저가 남는다.
-            var manager = GameManager.Current;
-            if (keyboard == null || manager == null || manager.CurrentState != GameState.Play)
+            if (keyboard == null || !GameManager.IsIn(GameState.Play))
                 return;
 
             if (keyboard.f1Key.wasPressedThisFrame) LevelUpNow();

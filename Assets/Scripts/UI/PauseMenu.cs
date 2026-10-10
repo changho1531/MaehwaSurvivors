@@ -30,8 +30,6 @@ namespace Game.UI
         public Button TitleButton => titleButton;
         public ConfirmDialog Confirm => confirm;
 
-        static GameStateMachine Fsm => GameManager.Instance.StateMachine;
-
         void Awake()
         {
             resumeButton.onClick.AddListener(Resume);
@@ -41,8 +39,9 @@ namespace Game.UI
 
         void OnEnable()
         {
-            Fsm.StateChanged += OnStateChanged;
-            panel.SetActive(Fsm.Current == GameState.Pause);
+            var fsm = GameManager.Instance.StateMachine; // 씬 시작 진입점: 여기서만 매니저 생성을 허용
+            fsm.StateChanged += OnStateChanged;
+            panel.SetActive(fsm.Current == GameState.Pause);
         }
 
         void OnDisable()
@@ -73,19 +72,23 @@ namespace Game.UI
                 return;
             }
 
-            var state = Fsm.Current;
-            if (state == GameState.Pause)
+            if (GameManager.IsIn(GameState.Pause))
                 Resume(); // 페이드 도중이어도 즉시 재개
-            else if (state is GameState.Play or GameState.LevelUp)
-                Fsm.TryChangeState(GameState.Pause);
+            else if (GameManager.IsIn(GameState.Play) || GameManager.IsIn(GameState.LevelUp))
+                GameManager.TryChangeState(GameState.Pause);
         }
 
-        public void Resume() => Fsm.TryResume();
+        public void Resume()
+        {
+            var manager = GameManager.Current;
+            if (manager != null)
+                manager.StateMachine.TryResume();
+        }
 
         void AskQuitToTitle()
         {
             // 확인 시 Title 상태 → GameManager가 타이틀 씬 로드 (현재 런 폐기). 취소 시 일시정지 화면 유지.
-            confirm.Show(QuitToTitleMessage, () => Fsm.TryChangeState(GameState.Title));
+            confirm.Show(QuitToTitleMessage, () => GameManager.TryChangeState(GameState.Title));
         }
 
         void OnStateChanged(GameState previous, GameState next)

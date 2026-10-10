@@ -81,7 +81,7 @@ namespace Game.UI
             retryButton.interactable = false;
             titleButton.interactable = false;
             // 씬을 다시 불러와 적·구슬·투사체를 풀째로 정리한다 (GameManager가 전이에 맞춰 씬 로드).
-            GameManager.Instance.StateMachine.TryChangeState(next);
+            GameManager.TryChangeState(next);
         }
     }
 }
