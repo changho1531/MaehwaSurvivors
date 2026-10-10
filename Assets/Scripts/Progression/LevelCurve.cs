@@ -9,8 +9,8 @@ namespace Game.Progression
     [CreateAssetMenu(menuName = "Game/Level Curve", fileName = "LevelCurve")]
     public class LevelCurve : ScriptableObject
     {
-        [Tooltip("※ 예시값. 첫 레벨업은 시작 후 1분 안팎")]
-        public int[] xpToNextLevel = { 50, 65, 80, 95, 110, 125, 140, 155, 170 };
+        [Tooltip("※ 예시값. 10-10 플레이 테스트에서 레벨업이 느려 기존 표의 절반(홀수는 올림)으로 줄임")]
+        public int[] xpToNextLevel = { 25, 33, 40, 48, 55, 63, 70, 78, 85 };
 
         public int GetRequiredXp(int level)
         {

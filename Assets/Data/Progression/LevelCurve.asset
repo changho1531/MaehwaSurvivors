@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0cfe26e5aaa17348a0932b9aa6dd0bc, type: 3}
   m_Name: LevelCurve
   m_EditorClassIdentifier: Game.Runtime::Game.Progression.LevelCurve
-  xpToNextLevel: 3200000041000000500000005f0000006e0000007d0000008c0000009b000000aa000000
+  xpToNextLevel: 19000000210000002800000030000000370000003f000000460000004e00000055000000
