@@ -57,19 +57,19 @@ namespace Game.Tests.PlayMode
             if (Spawner == null)
                 return;
             Spawner.enabled = false;
-            foreach (var enemy in EnemyRegistry.Active.ToArrayCopy())
-                Spawner.Pool.Release(enemy);
+            Spawner.ReleaseAll();
         }
 
-        /// <summary>풀에서 적을 꺼내 플레이어 기준 offset 위치에 둔다. chase=false면 제자리에 고정.</summary>
-        public Enemy SpawnAt(Vector2 offset, bool chase)
+        /// <summary>풀에서 적을 꺼내 플레이어 기준 offset 위치에 둔다. chase=false면 제자리에 고정. prefab이 없으면 기본(근거리) 적.</summary>
+        public Enemy SpawnAt(Vector2 offset, bool chase, Enemy prefab = null)
         {
-            var enemy = Spawner.Spawn();
+            prefab ??= Spawner.BasePrefab;
+            var enemy = Spawner.Spawn(prefab);
             Assert.IsNotNull(enemy);
             var position = (Vector2)Player.transform.position + offset;
             enemy.transform.position = position;
             enemy.GetComponent<Rigidbody2D>().position = position;
-            enemy.Init(chase ? Player.transform : null, Spawner.Pool.Release);
+            enemy.Init(chase ? Player.transform : null, Spawner.PoolOf(prefab).Release);
             return enemy;
         }
     }

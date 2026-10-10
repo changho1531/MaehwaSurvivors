@@ -495,6 +495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Runtime::Game.Weapons.WeaponInventory
   catalog: {fileID: 11400000, guid: 7d6e4106102d12b45991a88f13aa3dba, type: 2}
   startingWeapon: {fileID: 11400000, guid: 4258ae6dae402544d816ed381eab96de, type: 2}
+  weaponOriginOffset: {x: 0, y: 0.45}
 --- !u!114 &169767287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2140,6 +2141,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Enemies.EnemySpawner
   enemyPrefab: {fileID: 3083572570979652168, guid: 42f1f5bd697fced478227f4b1bca8673, type: 3}
+  composition: {fileID: 11400000, guid: 8f98983a617fe2f4386065949927e83b, type: 2}
+  playerLevel: {fileID: 169767284}
   target: {fileID: 169767282}
   viewCamera: {fileID: 1650031349}
   spawnCurve: {fileID: 11400000, guid: 7b9fa3760be88864a9567b70feaddecf, type: 2}
