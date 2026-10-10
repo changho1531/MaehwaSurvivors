@@ -1,6 +1,7 @@
 using System;
 using Game.Core;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Game.UI
@@ -34,6 +35,20 @@ namespace Game.UI
         {
             startButton.onClick.AddListener(OnStartClicked);
             exitButton.onClick.AddListener(OnExitClicked);
+        }
+
+        void Update()
+        {
+            var keyboard = Keyboard.current;
+            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
+                OnEscape();
+        }
+
+        /// <summary>확인창이 떠 있으면 닫기(= 취소, 타이틀 유지). 일시정지 화면과 같은 규칙 (7-C 예외).</summary>
+        public void OnEscape()
+        {
+            if (confirm.IsOpen)
+                confirm.Cancel();
         }
 
         void OnStartClicked()

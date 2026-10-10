@@ -126,6 +126,31 @@ namespace Game.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator F3_EscOnConfirm_Cancels_AndStaysOnTitle()
+        {
+            // 7-C 예외: 확인창이 떠 있을 때 ESC = 취소.
+            int quitRequests = 0;
+            var originalQuit = TitleMenu.QuitHandler;
+            TitleMenu.QuitHandler = () => quitRequests++;
+            try
+            {
+                menu.OnEscape(); // 확인창이 없으면 아무 일도 없다
+                menu.ExitButton.onClick.Invoke();
+                Assert.IsTrue(menu.Confirm.IsOpen);
+
+                menu.OnEscape();
+                yield return null;
+                Assert.IsFalse(menu.Confirm.IsOpen, "ESC → 확인창 닫힘");
+                Assert.AreEqual(0, quitRequests, "ESC는 취소");
+                Assert.AreEqual(SceneNames.Title, SceneManager.GetActiveScene().name);
+            }
+            finally
+            {
+                TitleMenu.QuitHandler = originalQuit;
+            }
+        }
+
+        [UnityTest]
         public IEnumerator F4_StartButton_LoadsInGameScene()
         {
             menu.StartButton.onClick.Invoke();
