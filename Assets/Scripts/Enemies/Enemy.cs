@@ -5,7 +5,8 @@ using UnityEngine;
 namespace Game.Enemies
 {
     /// <summary>
-    /// 임시 근거리 적. 대상(플레이어)을 향해 직선으로 추적하고, HP가 0이 되면 Dead 처리 후 풀로 돌아간다.
+    /// 모든 적의 공통 부분: HP, 피격, 사망·Killed 이벤트, 풀 반환, 접촉 데미지 (설계서 8-A절 적 행동 분리).
+    /// 이동·공격은 같은 오브젝트의 EnemyBehaviour(근거리 = 추적, 궁수 = 사거리 유지 + 사격)에 맡긴다.
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public class Enemy : MonoBehaviour
@@ -16,6 +17,7 @@ namespace Game.Enemies
         [SerializeField] EnemyData data;
 
         Rigidbody2D body;
+        EnemyBehaviour behaviour;
         Transform target;
         Action<Enemy> releaseToPool;
 
@@ -26,6 +28,7 @@ namespace Game.Enemies
         void Awake()
         {
             body = GetComponent<Rigidbody2D>();
+            behaviour = GetComponent<EnemyBehaviour>();
         }
 
         void OnEnable()
@@ -48,18 +51,18 @@ namespace Game.Enemies
         {
             target = chaseTarget;
             releaseToPool = release;
+            if (behaviour != null)
+                behaviour.ResetState();
         }
 
         void FixedUpdate()
         {
-            if (target == null || data == null)
+            if (target == null || data == null || behaviour == null)
             {
                 body.linearVelocity = Vector2.zero;
                 return;
             }
-
-            var toTarget = (Vector2)target.position - body.position;
-            body.linearVelocity = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized * data.moveSpeed : Vector2.zero;
+            behaviour.Tick(target, Time.fixedDeltaTime);
         }
 
         // 접촉 데미지 (7-B 규칙 1): 닿아 있는 물리 스텝마다 contactDps × 스텝 시간만큼 깎는다.
