@@ -13,6 +13,7 @@ namespace Game.Editor
     static class ProjectLayers
     {
         const int XpLayerIndex = 8;
+        const int EnemyLayerIndex = 9;
 
         static ProjectLayers()
         {
@@ -35,10 +36,17 @@ namespace Game.Editor
                 changed = true;
             }
 
+            int enemy = EnsureLayer(GameLayers.Enemy, EnemyLayerIndex);
+            if (enemy >= 0 && !Physics2D.GetIgnoreLayerCollision(enemy, enemy))
+            {
+                Physics2D.IgnoreLayerCollision(enemy, enemy, true);
+                changed = true;
+            }
+
             if (changed)
             {
                 AssetDatabase.SaveAssets();
-                Debug.Log($"[ProjectLayers] '{GameLayers.Xp}' 레이어 충돌을 모두 끔");
+                Debug.Log("[ProjectLayers] 레이어 충돌 행렬 갱신 (XP는 전부 끔, 적↔적 끔)");
             }
         }
 

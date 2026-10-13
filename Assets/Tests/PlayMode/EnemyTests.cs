@@ -41,7 +41,7 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(0f, enemy.GetComponent<Rigidbody2D>().gravityScale, "탑다운이라 중력 0");
             var collider = enemy.GetComponent<Collider2D>();
             Assert.IsNotNull(collider);
-            Assert.IsFalse(collider.isTrigger, "적끼리/플레이어와 물리적으로 겹치지 않아야 한다");
+            Assert.IsFalse(collider.isTrigger, "플레이어와는 물리적으로 겹치지 않아야 한다 (적끼리는 충돌 없음, 7-B 1-A)");
             Assert.AreEqual(enemy.Data.maxHp, enemy.CurrentHp);
             Assert.IsTrue(enemy.IsAlive);
         }
@@ -173,6 +173,23 @@ namespace Game.Tests.PlayMode
             Assert.That(Vector2.Distance(scene.Player.transform.position, Vector2.zero), Is.LessThan(0.01f), "적에게 밀려 플레이어가 움직이면 안 된다");
             foreach (var enemy in EnemyRegistry.Active)
                 Assert.Greater(Vector2.Distance(enemy.transform.position, scene.Player.transform.position), 0.5f, "적이 플레이어를 뚫고 지나가면 안 된다");
+        }
+
+        [UnityTest]
+        public IEnumerator F9b_Enemies_DoNotCollide_ButSeparate()
+        {
+            // 7-B 규칙 1-A: 적끼리는 물리 충돌 없음 + 약한 분리 힘
+            scene.StopSpawningAndClear();
+            var a = scene.SpawnAt(new Vector2(4f, 0f), chase: true);
+            var b = scene.SpawnAt(new Vector2(4f, 0.05f), chase: true);
+            Assert.AreEqual(LayerMask.NameToLayer(Game.Core.GameLayers.Enemy), a.gameObject.layer, "적 전용 레이어");
+            Assert.IsTrue(Physics2D.GetIgnoreLayerCollision(a.gameObject.layer, a.gameObject.layer), "적↔적 충돌 끔");
+
+            yield return Wait(0.5f);
+
+            float distance = Vector2.Distance(a.transform.position, b.transform.position);
+            Assert.Greater(distance, 0.2f, "분리 힘으로 서로 벌어져야 한다");
+            Assert.Less(distance, a.Data.separationRadius + 0.05f, "충돌이 아니라 약한 힘이므로 지름(0.75)보다 가깝게 겹칠 수 있다");
         }
     }
 }

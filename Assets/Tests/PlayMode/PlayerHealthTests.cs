@@ -81,12 +81,11 @@ namespace Game.Tests.PlayMode
         }
 
         [UnityTest]
-        [Ignore("결정 필요: 플레이어 반경 0.3 + 적 지름 0.75면 둘레에 최대 5마리, 적끼리 맞물려 실제 1~2마리만 닿음 (10-11 측정)")]
         public IEnumerator H2b_Surrounded_SixOrMoreTouchAtOnce()
         {
-            // 7-B 데이터: 적 콜라이더 원형 지름 0.75 → 플레이어 둘레에 6~8마리가 동시에 붙는다 (포위 합산 체감).
+            // 7-B 규칙 1-A: 적끼리 충돌하지 않으므로 8마리가 몰려들면 대부분(약 6마리 이상)이 동시에 닿는다.
             Game.Enemies.Enemy first = null;
-            // 같은 거리에 동시에 두면 서로 아치처럼 맞물려 아무도 못 닿으므로, 실제처럼 거리를 달리해 차례로 도착시킨다
+            // 실제처럼 거리를 달리해 차례로 도착시킨다
             for (int i = 0; i < 8; i++)
             {
                 float a = i * Mathf.PI * 2f / 8;
