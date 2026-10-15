@@ -36,7 +36,7 @@ namespace Game.Tests.PlayMode
             yield return null;
 
             Assert.IsNotNull(enemy.Data, "EnemyData(SO) 연결 누락");
-            Assert.IsNotNull(enemy.GetComponent<SpriteRenderer>()?.sprite);
+            Assert.IsNotNull(enemy.GetComponentInChildren<SpriteRenderer>()?.sprite, "그림은 Art 자식에 (튀기·떨림이 몸통을 움직이지 않게)");
             Assert.AreEqual(RigidbodyType2D.Dynamic, enemy.GetComponent<Rigidbody2D>().bodyType);
             Assert.AreEqual(0f, enemy.GetComponent<Rigidbody2D>().gravityScale, "탑다운이라 중력 0");
             var collider = enemy.GetComponent<Collider2D>();

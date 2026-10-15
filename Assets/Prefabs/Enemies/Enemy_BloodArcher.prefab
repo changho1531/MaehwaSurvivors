@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1559394253337215691}
@@ -81,8 +81,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 41385ad8e5d8be544ae1e9d5241029a4, type: 3}
-  m_Color: {r: 0.54901963, g: 0.101960786, b: 0.101960786, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 1d4c14508c265754c9a9b65b4694368b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -104,6 +104,7 @@ GameObject:
   - component: {fileID: 4198513545069847882}
   - component: {fileID: 8500285118496403429}
   - component: {fileID: 8877804891027427610}
+  - component: {fileID: 6235048663902598130}
   m_Layer: 9
   m_Name: Enemy_BloodArcher
   m_TagString: Untagged
@@ -216,3 +217,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Enemies.ArcherBehaviour
   art: {fileID: 6107611232795123981}
+--- !u!114 &6235048663902598130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8924175824322129292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653c5c9572bfbf349b9c2abbff180469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Enemies.EnemyArtMotion
+  art: {fileID: 6529527828410285257}
+  artFacesRight: 1
+  bobHeight: 0.06
+  bobsPerSecond: 4
+  moveThreshold: 0.1

@@ -105,7 +105,7 @@ namespace Game.Enemies
         void SetShake(float x)
         {
             if (art != null)
-                art.localPosition = new Vector3(x, 0f, 0f);
+                art.localPosition = new Vector3(x, art.localPosition.y, 0f); // 세로는 EnemyArtMotion(통통 튀기) 몫
         }
     }
 }
