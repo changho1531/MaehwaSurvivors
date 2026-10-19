@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Enemies.EnemyArtMotion
   art: {fileID: 8885342993215507880}
-  artFacesRight: 0
+  artFacesRight: 1
   bobHeight: 0.06
   bobsPerSecond: 4
   moveThreshold: 0.1
