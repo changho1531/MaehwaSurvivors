@@ -44,7 +44,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0d8664b58b5fae4f9c6cad6320d760c, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.SlamEffect
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.BurstEffect
   art: {fileID: 1000000000000000014}
   artRadiusAtScale1: 1.71
   seconds: 0.6

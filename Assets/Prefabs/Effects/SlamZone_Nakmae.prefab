@@ -44,7 +44,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd9afdd8a7897a947b5f35be519ee3fe, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.SlamZone
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.DamageZone
   art: {fileID: 1000000000000000012}
   artRadiusAtScale1: 2.45
 --- !u!1 &1000000000000000011

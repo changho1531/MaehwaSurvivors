@@ -13,14 +13,14 @@ namespace Game.Weapons
     public class SlamWeapon : Weapon<SlamWeaponData>
     {
         readonly List<Enemy> targets = new();
-        ComponentPool<SlamZone> zonePool;
-        SlamEffect effect;
+        ComponentPool<DamageZone> zonePool;
+        BurstEffect effect;
 
         /// <summary>(맞은 적 수)</summary>
         public event Action<int> Slammed;
 
-        public ComponentPool<SlamZone> ZonePool => zonePool;
-        public SlamEffect Effect => effect;
+        public ComponentPool<DamageZone> ZonePool => zonePool;
+        public BurstEffect Effect => effect;
 
         protected override void OnInit()
         {
@@ -32,7 +32,7 @@ namespace Game.Weapons
             if (Data.zonePrefab != null)
             {
                 var root = new GameObject($"[Pool] {Data.zonePrefab.name}").transform;
-                zonePool = new ComponentPool<SlamZone>(Data.zonePrefab, root, Data.zonePrewarmCount);
+                zonePool = new ComponentPool<DamageZone>(Data.zonePrefab, root, Data.zonePrewarmCount);
             }
         }
 

@@ -6,10 +6,10 @@ using UnityEngine;
 namespace Game.Weapons
 {
     /// <summary>
-    /// 낙매진각 최대 레벨 장판 (설계서 7-E 규칙 8). 생성 위치에 고정되어 지속 시간 동안 원 안의 적에게 시간에 비례한 데미지를 주고 풀로 돌아간다.
+    /// 지속 데미지 범위 공통 컴포넌트 (설계서 7-E 장판, 7-F 만천화우). 생성 위치에 고정되어 지속 시간 동안 원 안의 적에게 시간에 비례한 데미지를 주고 풀로 돌아간다.
     /// 생성 때 받은 수치로 끝까지 가므로 지속 중 레벨업의 영향을 받지 않는다. 장판끼리는 각자 따로 데미지를 준다.
     /// </summary>
-    public class SlamZone : MonoBehaviour
+    public class DamageZone : MonoBehaviour
     {
         [SerializeField] Transform art;
         [Tooltip("아트 스케일 1일 때 그림 속 장판 반경(월드 단위). 판정 반경에 맞춰 스케일한다")]
@@ -19,9 +19,9 @@ namespace Game.Weapons
         float radius;
         float remaining;
         float damagePerSecond;
-        Action<SlamZone> release;
+        Action<DamageZone> release;
 
-        public void Begin(float zoneRadius, float seconds, float dps, Action<SlamZone> releaseToPool)
+        public void Begin(float zoneRadius, float seconds, float dps, Action<DamageZone> releaseToPool)
         {
             radius = zoneRadius;
             remaining = seconds;

@@ -22,10 +22,10 @@ namespace Game.Weapons
         [Header("최대 레벨 장판")]
         [Min(0f)] public float zoneSeconds = 2f;
         [Min(0f)] public float zoneDamagePerSecond = 2f;
-        public SlamZone zonePrefab;
+        public DamageZone zonePrefab;
         [Min(0)] public int zonePrewarmCount = 2;
 
-        public SlamEffect effectPrefab;
+        public BurstEffect effectPrefab;
 
         public float GetRadius(int level) => LevelTable.Get(radiusPerLevel, level);
 

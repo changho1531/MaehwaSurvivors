@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Game.Weapons
 {
-    /// <summary>낙매진각 내려찍기 이펙트. 그림 속 원이 판정 반경과 같도록 스케일해 "보이는 원 = 밀려나는 테두리"로 보여 주고, 한 번 재생 후 숨는다 (7-E절 연출).</summary>
-    public class SlamEffect : MonoBehaviour
+    /// <summary>원형으로 한 번 터지는 이펙트 (낙매진각 내려찍기 등). 그림 속 원이 판정 반경과 같도록 스케일해 "보이는 원 = 밀려나는 테두리"로 보여 주고, 한 번 재생 후 숨는다.</summary>
+    public class BurstEffect : MonoBehaviour
     {
         [SerializeField] FrameAnimation art;
         [Tooltip("아트 스케일 1일 때 그림 속 원의 반경(월드 단위)")]
