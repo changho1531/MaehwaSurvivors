@@ -83,6 +83,11 @@ namespace Game.Tests.PlayMode
             yield return Tap(keyboard.f4Key);
             foreach (var weapon in scene.Inventory.Owned)
                 Assert.AreEqual(weapon.Data.maxLevel, weapon.Level, "보유 무기 전부 최대 레벨");
+            Assert.IsFalse(scene.Inventory.AllMaxed, "카탈로그에 미보유 무기가 남아 있으면 성장 완료가 아니다");
+
+            foreach (var data in scene.Inventory.Catalog.weapons)
+                scene.Inventory.Acquire(data);
+            yield return Tap(keyboard.f4Key);
             Assert.IsTrue(scene.Inventory.AllMaxed, "성장 완료 판정도 평소처럼");
         }
 

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3922330727ba2e2409d25c405f855255, type: 3}
+  m_Name: Weapon_Nakmaejingak
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.SlamWeaponData
+  displayName: "\uB099\uB9E4\uC9C4\uAC01"
+  description: "\uB0B4\uB824\uCC0D\uC5B4\u0020\uC8FC\uBCC0\u0020\uC801\uC744\u0020\uC6D0\uC758\u0020\uD14C\uB450\uB9AC\uAE4C\uC9C0\u0020\uBC00\uC5B4\uB0B8\uB2E4"
+  maxLevelEffect: "\uCD5C\uB300\u0020\uB808\uBCA8\u003A\u0020\uB0B4\uB824\uCC0D\uC740\u0020\uC790\uB9AC\uC5D0\u0020\uAF43\uC78E\u0020\uC7A5\uD310"
+  icon: {fileID: 0}
+  tags: 48
+  maxLevel: 3
+  damagePerLevel:
+  - 5
+  - 5
+  - 5
+  cooldownPerLevel:
+  - 6
+  - 5
+  - 4
+  radiusPerLevel:
+  - 2
+  - 2.5
+  - 3
+  baseKnockbackSeconds: 0.2
+  contactDistance: 0.675
+  zoneSeconds: 2
+  zoneDamagePerSecond: 2
+  zonePrefab: {fileID: 1000000000000000003, guid: 4db038df67a34a9caf40441dbbcb03f8, type: 3}
+  zonePrewarmCount: 2
+  effectPrefab: {fileID: 1000000000000000003, guid: ef0022b1a7b540eaa62523a34b286c16, type: 3}

@@ -26,6 +26,10 @@ namespace Game.Enemies
         public EnemyData Data => data;
         public float CurrentHp { get; private set; }
         public bool IsAlive => CurrentHp > 0f && gameObject.activeInHierarchy;
+        public bool IsKnockedBack { get; private set; }
+
+        Vector2 knockbackTarget;
+        float knockbackSpeed;
 
         void Awake()
         {
@@ -37,6 +41,7 @@ namespace Game.Enemies
         void OnEnable()
         {
             CurrentHp = data != null ? data.maxHp : 1f;
+            IsKnockedBack = false; // 넉백 중 처치돼 풀로 돌아간 적이 밀리는 상태로 다시 나오지 않게
             EnemyRegistry.Register(this);
         }
 
@@ -58,8 +63,45 @@ namespace Game.Enemies
                 behaviour.ResetState();
         }
 
+        /// <summary>
+        /// 목표 위치까지 주어진 속도로 밀려난다 (7-E절). 무기는 "누구를 어디로"만 요청하고 이동은 적이 처리하므로
+        /// 다른 스킬·보스 패턴도 같은 넉백을 쓸 수 있다. 이미 밀리는 중이면 새 목표·속도로 갱신한다.
+        /// </summary>
+        public bool TryKnockback(Vector2 targetPosition, float speed)
+        {
+            if (!IsAlive || speed <= 0f || (data != null && data.knockbackImmune))
+                return false;
+
+            knockbackTarget = targetPosition;
+            knockbackSpeed = speed;
+            IsKnockedBack = true;
+            if (behaviour != null)
+                behaviour.OnKnockback();
+            return true;
+        }
+
+        // 도착하는 스텝에 해제하고 false를 돌려, 경직 없이 같은 스텝부터 원래 행동을 재개한다.
+        bool StepKnockback()
+        {
+            var toTarget = knockbackTarget - body.position;
+            float distance = toTarget.magnitude;
+            if (distance > knockbackSpeed * Time.fixedDeltaTime)
+            {
+                body.linearVelocity = toTarget / distance * knockbackSpeed;
+                return true;
+            }
+            body.position = knockbackTarget;
+            body.linearVelocity = Vector2.zero;
+            IsKnockedBack = false;
+            return false;
+        }
+
         void FixedUpdate()
         {
+            // 행동·분리 힘보다 먼저: 밀리는 동안은 추적·사격·분리 힘이 모두 멈춘다
+            if (IsKnockedBack && StepKnockback())
+                return;
+
             if (target == null || data == null || behaviour == null)
             {
                 body.linearVelocity = Vector2.zero;
@@ -97,7 +139,7 @@ namespace Game.Enemies
         // 데미지 양은 공격하는 쪽(적 데이터)이, 사망·GameOver 판정은 맞는 쪽(PlayerHealth)이 정한다.
         void OnCollisionStay2D(Collision2D collision)
         {
-            if (data == null || data.contactDps <= 0f || !IsAlive)
+            if (data == null || data.contactDps <= 0f || !IsAlive || IsKnockedBack)
                 return;
             if (collision.gameObject.TryGetComponent(out PlayerHealth player))
                 player.TakeDamage(data.contactDps * Time.fixedDeltaTime);

@@ -12,6 +12,9 @@ namespace Game.Enemies
         [Tooltip("플레이어와 닿아 있는 동안 초당 데미지 (7-B절). 여러 마리면 마리 수만큼 합산")]
         [FormerlySerializedAs("contactDamage"), Min(0f)] public float contactDps = 10f;
 
+        [Tooltip("넉백 무시 (7-E절). 데미지는 그대로 받는다. 저주술사 · 보스용")]
+        public bool knockbackImmune;
+
         [Header("분리 힘 (7-B 규칙 1-A, 적끼리는 충돌하지 않음)")]
         [Tooltip("이 거리 안의 다른 적에게서 밀려난다. 가까울수록 세게")]
         [Min(0f)] public float separationRadius = 0.6f;

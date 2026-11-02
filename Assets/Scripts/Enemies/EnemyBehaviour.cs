@@ -22,6 +22,9 @@ namespace Game.Enemies
         /// <summary>스폰(풀에서 꺼냄)마다 호출. 이전 생애의 타이머·상태를 지운다.</summary>
         public virtual void ResetState() { }
 
+        /// <summary>넉백이 시작될 때 Enemy가 호출한다. 행동별로 진행 중이던 동작을 정리한다 (7-E절).</summary>
+        public virtual void OnKnockback() { }
+
         /// <summary>물리 스텝마다 Enemy가 호출한다. 게임 시간이 멈추면 FixedUpdate도 멈추므로 일시정지 처리가 따로 필요 없다.</summary>
         public abstract void Tick(Transform target, float dt);
     }

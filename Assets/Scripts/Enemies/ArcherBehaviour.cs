@@ -41,6 +41,13 @@ namespace Game.Enemies
             SetShake(0f);
         }
 
+        // 떨림 중 넉백되면 그 발은 취소, 끝나면 사거리 판단부터 다시 (7-E 규칙 6). 발사 간격은 그대로 둔다.
+        public override void OnKnockback()
+        {
+            windupRemaining = -1f;
+            SetShake(0f);
+        }
+
         public override void Tick(Transform target, float dt)
         {
             if (data == null)

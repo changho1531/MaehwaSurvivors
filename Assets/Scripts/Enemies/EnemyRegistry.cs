@@ -27,6 +27,15 @@ namespace Game.Enemies
             active.Remove(enemy);
         }
 
+        /// <summary>원 안의 살아 있는 적을 result에 담는다. 처치되면 목록에서 빠지므로 범위 공격은 이 복사본을 돌며 때린다.</summary>
+        public static void CollectInRadius(Vector2 center, float radius, List<Enemy> result)
+        {
+            result.Clear();
+            foreach (var enemy in active)
+                if (enemy != null && enemy.IsAlive && ((Vector2)enemy.transform.position - center).sqrMagnitude <= radius * radius)
+                    result.Add(enemy);
+        }
+
         /// <summary>from 기준 maxRange 이내에서 가장 가까운 적. 없으면 null.</summary>
         public static Enemy FindNearest(Vector2 from, float maxRange)
         {
