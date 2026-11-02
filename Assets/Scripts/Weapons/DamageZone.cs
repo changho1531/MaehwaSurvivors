@@ -14,18 +14,27 @@ namespace Game.Weapons
         [SerializeField] Transform art;
         [Tooltip("아트 스케일 1일 때 그림 속 장판 반경(월드 단위). 판정 반경에 맞춰 스케일한다")]
         [SerializeField, Min(0.01f)] float artRadiusAtScale1 = 2.45f;
+        [Tooltip("끝 폭발 연출. 범위가 풀로 돌아간 뒤에도 재생되도록 범위 밖에 따로 둔다")]
+        [SerializeField] BurstEffect burstPrefab;
 
         readonly List<Enemy> targets = new();
+        BurstEffect burst;
         float radius;
         float remaining;
         float damagePerSecond;
+        float explosionDamage;
         Action<DamageZone> release;
 
-        public void Begin(float zoneRadius, float seconds, float dps, Action<DamageZone> releaseToPool)
+        /// <summary>(폭발 여부, 폭발에 맞은 적 수)</summary>
+        public event Action<bool, int> Ended;
+
+        /// <param name="endExplosionDamage">0보다 크면 끝나는 순간 원 안 적 전부에 1회 데미지</param>
+        public void Begin(float zoneRadius, float seconds, float dps, Action<DamageZone> releaseToPool, float endExplosionDamage = 0f)
         {
             radius = zoneRadius;
             remaining = seconds;
             damagePerSecond = dps;
+            explosionDamage = endExplosionDamage;
             release = releaseToPool;
             if (art != null)
                 art.localScale = Vector3.one * (radius / artRadiusAtScale1);
@@ -40,7 +49,28 @@ namespace Game.Weapons
 
             remaining -= dt;
             if (remaining <= 0f)
-                release?.Invoke(this);
+                Finish();
+        }
+
+        void Finish()
+        {
+            bool explodes = explosionDamage > 0f;
+            int hits = 0;
+            if (explodes)
+            {
+                EnemyRegistry.CollectInRadius(transform.position, radius, targets);
+                hits = targets.Count;
+                foreach (var enemy in targets)
+                    enemy.TakeDamage(explosionDamage);
+                if (burstPrefab != null)
+                {
+                    if (burst == null)
+                        burst = Instantiate(burstPrefab);
+                    burst.Play(transform.position, radius);
+                }
+            }
+            Ended?.Invoke(explodes, hits);
+            release?.Invoke(this);
         }
     }
 }

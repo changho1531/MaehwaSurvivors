@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7a88222add2514c842a2aae03a4a98, type: 3}
+  m_Name: Weapon_Mancheonhwau
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.RainWeaponData
+  displayName: "\uB9CC\uCC9C\uD654\uC6B0"
+  description: "\uD654\uBA74\u0020\uC548\u0020\uBB34\uC791\uC704\u0020\uC801\u0020\uC790\uB9AC\uC5D0\u0020\u0032\uCD08\uAC04\u0020\uC554\uAE30\u0020\uBE44\uAC00\u0020\uC3DF\uC544\uC9C4\uB2E4"
+  maxLevelEffect: "\uCD5C\uB300\u0020\uB808\uBCA8\u003A\u0020\uC3DF\uC544\uC9D0\uC774\u0020\uB05D\uB0A0\u0020\uB54C\u0020\uBC94\uC704\u0020\uC804\uCCB4\u0020\uD3ED\uBC1C"
+  icon: {fileID: 0}
+  tags: 66
+  maxLevel: 3
+  damagePerLevel:
+  - 6
+  - 6
+  - 6
+  cooldownPerLevel:
+  - 8
+  - 7
+  - 6
+  radiusPerLevel:
+  - 2
+  - 2.5
+  - 3
+  durationPerLevel:
+  - 2
+  - 2
+  - 2
+  explosionDamage: 10
+  zonePrefab: {fileID: 1000000000000000003, guid: 6a9b493514344453b53bf5df9a0a03e0, type: 3}
+  zonePrewarmCount: 2
