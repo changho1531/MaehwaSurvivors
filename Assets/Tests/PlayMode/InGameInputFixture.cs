@@ -12,9 +12,16 @@ namespace Game.Tests.PlayMode
     /// </summary>
     public abstract class InGameInputFixture : InputTestFixture
     {
+        bool projectActionsWereEnabled;
+
         public override void Setup()
         {
             DestroyUiInputModules();
+            // 프로젝트 전역 액션(게임 코드는 쓰지 않음)이 켜진 채 입력 상태가 교체·복원되면, 복원 뒤 다른 테스트에서
+            // "Map index out of range in ProcessControlStateChange" Assert가 간헐적으로 났다. 교체 동안만 꺼 둔다.
+            projectActionsWereEnabled = InputSystem.actions != null && InputSystem.actions.enabled;
+            if (projectActionsWereEnabled)
+                InputSystem.actions.Disable();
             base.Setup();
         }
 
@@ -22,6 +29,8 @@ namespace Game.Tests.PlayMode
         {
             DestroyUiInputModules();
             base.TearDown();
+            if (projectActionsWereEnabled && InputSystem.actions != null)
+                InputSystem.actions.Enable();
         }
 
         static void DestroyUiInputModules()
