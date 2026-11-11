@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3faab787c3cac9640b192c783929c310, type: 3}
+  m_Name: Weapon_Maehwabo
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.MovementPassiveData
+  displayName: "\uB9E4\uD654\uBCF4"
+  description: "\uC774\uB3D9\uC18D\uB3C4 +5%"
+  maxLevelEffect: "\uCD5C\uB300 \uB808\uBCA8: 3\uCD08 \uB3D9\uC548 \uC548 \uB9DE\uC73C\uBA74
+    \uC774\uB3D9\uC18D\uB3C4 +10%"
+  icon: {fileID: 0}
+  maxLevel: 3
+  damagePerLevel:
+  - 0
+  cooldownPerLevel:
+  - 0
+  speedBonusPerLevel:
+  - 0.05
+  - 0.1
+  - 0.15
+  boostDelaySeconds: 3
+  boostBonus: 0.1
+  petalPrefab: {fileID: 935527210620788080, guid: 5842229b497ab7e4c9efadb4380d2e90, type: 3}

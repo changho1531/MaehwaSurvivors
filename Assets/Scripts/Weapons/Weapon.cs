@@ -35,9 +35,13 @@ namespace Game.Weapons
         public void SetLevel(int level)
         {
             Level = Mathf.Clamp(level, 1, Data.maxLevel);
+            OnLevelChanged();
         }
 
         protected virtual void OnInit() { }
+
+        /// <summary>강화 직후. 공격형은 다음 발동 때 수치를 읽으므로 할 일이 없고, 상시형(매화보)은 여기서 바로 갱신한다.</summary>
+        protected virtual void OnLevelChanged() { }
 
         /// <summary>공격을 시작할 수 있으면 시작하고 true. 조건이 안 맞으면 false (쿨타임 끝난 상태로 대기).</summary>
         protected abstract bool TryStartAttack();
