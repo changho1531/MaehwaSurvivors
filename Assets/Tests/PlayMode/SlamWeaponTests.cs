@@ -151,7 +151,7 @@ namespace Game.Tests.PlayMode
         [UnityTest]
         public IEnumerator K5_ArcherWindingUp_ShotCancelled_RestartsAfterKnockback()
         {
-            var prefab = scene.Spawner.Composition.entries[0].prefab;
+            var prefab = scene.ArcherPrefab;
             var enemy = SpawnFromOrigin(new Vector2(1.5f, 0f), chase: true, prefab);
             var archer = enemy.GetComponent<ArcherBehaviour>();
             float firedAt = -1f;

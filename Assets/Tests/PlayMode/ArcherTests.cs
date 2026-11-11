@@ -11,7 +11,7 @@ namespace Game.Tests.PlayMode
 {
     /// <summary>
     /// [8-A절 혈영궁수] 사거리 밖 접근·안에서 정지, 0.5초 떨림 후 그 순간 플레이어 위치로 발사, 2초 간격,
-    /// 떨림 중 이탈 시 취소, 화살 1회 데미지·다른 적 통과·비행 거리 끝 소멸, 일시정지 중 정지, 레벨 기준 스폰 조합.
+    /// 떨림 중 이탈 시 취소, 화살 1회 데미지·다른 적 통과·비행 거리 끝 소멸, 일시정지 중 정지. (스폰 구성은 WaveTests)
     /// </summary>
     public class ArcherTests
     {
@@ -29,9 +29,7 @@ namespace Game.Tests.PlayMode
             scene.Weapon.enabled = false;
             scene.Weapon.Pool?.ReleaseAll();
             health = scene.Player.GetComponent<PlayerHealth>();
-            Assert.IsNotNull(scene.Spawner.Composition, "스포너에 적 조합 데이터가 없다");
-            archerPrefab = scene.Spawner.Composition.entries[0].prefab;
-            Assert.IsNotNull(archerPrefab.GetComponent<ArcherBehaviour>(), "조합 첫 항목이 궁수가 아니다");
+            archerPrefab = scene.ArcherPrefab;
         }
 
         [UnityTearDown]
@@ -181,27 +179,6 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(before, (Vector2)arrow.transform.position, "일시정지 중 화살 정지");
             Assert.AreEqual(1, shots.Count, "일시정지 중 발사 없음");
             Time.timeScale = 1f;
-        }
-
-        [UnityTest]
-        public IEnumerator A8_Composition_ByPlayerLevel_NoArchersAtLv1_AboutThirtyPercentAtMax()
-        {
-            for (int i = 0; i < 100; i++)
-                scene.Spawner.Spawn();
-            Assert.AreEqual(0, scene.Spawner.PoolOf(archerPrefab).CountActive, "Lv1: 궁수 없음");
-            scene.Spawner.ReleaseAll();
-
-            var level = scene.Player.GetComponent<PlayerLevel>();
-            while (level.Level < 10)
-                level.AddXp(level.RequiredXp); // 카드 선택 대기는 스폰 비율과 무관하므로 그대로 둔다
-            Assert.AreEqual(10, scene.Spawner.Level);
-
-            Random.InitState(1234);
-            for (int i = 0; i < 300; i++)
-                scene.Spawner.Spawn();
-            float ratio = scene.Spawner.PoolOf(archerPrefab).CountActive / 300f;
-            Assert.That(ratio, Is.InRange(0.22f, 0.38f), $"최대 레벨 근거리 7 : 궁수 3 (실제 {ratio:P0})");
-            yield return null;
         }
     }
 }

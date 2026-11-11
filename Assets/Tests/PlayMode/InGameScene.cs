@@ -60,6 +60,22 @@ namespace Game.Tests.PlayMode
             Spawner.ReleaseAll();
         }
 
+        /// <summary>웨이브 표에 나오는 궁수 프리팹 (ArcherBehaviour가 붙은 첫 적).</summary>
+        public Enemy ArcherPrefab
+        {
+            get
+            {
+                Assert.IsNotNull(Spawner.Waves, "스포너에 WaveDirector가 없다");
+                var prefabs = new System.Collections.Generic.List<Enemy>();
+                Spawner.Waves.Table.CollectPrefabs(prefabs);
+                foreach (var prefab in prefabs)
+                    if (prefab.GetComponent<ArcherBehaviour>() != null)
+                        return prefab;
+                Assert.Fail("웨이브 표에 궁수가 없다");
+                return null;
+            }
+        }
+
         /// <summary>풀에서 적을 꺼내 플레이어 기준 offset 위치에 둔다. chase=false면 제자리에 고정. prefab이 없으면 기본(근거리) 적.</summary>
         public Enemy SpawnAt(Vector2 offset, bool chase, Enemy prefab = null)
         {
