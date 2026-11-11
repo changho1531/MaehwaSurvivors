@@ -24,6 +24,7 @@ namespace Game.Player
         [SerializeField, Min(0f)] float shakeStrength = 6f;
 
         float lastDamageTime = float.NegativeInfinity;
+        float lastTintTime = float.NegativeInfinity;
         Vector2 hpBarBasePosition;
 
         public bool IsBeingHit => Time.time - lastDamageTime <= holdSeconds;
@@ -38,12 +39,18 @@ namespace Game.Player
         void OnEnable() => health.Damaged += OnDamaged;
         void OnDisable() => health.Damaged -= OnDamaged;
 
-        void OnDamaged(float amount) => lastDamageTime = Time.time;
+        void OnDamaged(float amount)
+        {
+            lastDamageTime = Time.time;
+            // 자하호신강 막이 켜져 있으면 빨간 틴트 대신 막이 하얗게 번쩍인다 ("줄여서 맞았다", 7-G절). HP 바 흔들림은 그대로
+            if (!health.IsDamageReduced)
+                lastTintTime = Time.time;
+        }
 
         void LateUpdate()
         {
             // 게임 시간 기준이라 일시정지·GameOver 중에는 틴트가 그 상태로 멈춘다 (멈춘 화면 그대로 결과 화면 배경).
-            float since = Time.time - lastDamageTime;
+            float since = Time.time - lastTintTime;
             float t = since <= holdSeconds ? 1f : 1f - Mathf.Clamp01((since - holdSeconds) / recoverSeconds);
             if (target != null)
                 target.color = Color.Lerp(Color.white, tintColor, t);

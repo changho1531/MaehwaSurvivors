@@ -20,6 +20,8 @@ namespace Game.Player
         public event Action<float, float> HealthChanged;
         /// <summary>사망. 한 런에 1회만 발행된다.</summary>
         public event Action Died;
+        /// <summary>(실제로 찬 양) — 회복 표시용</summary>
+        public event Action<float> Healed;
 
         public PlayerData Data => data;
         public float CurrentHp => Health.Current;
@@ -27,6 +29,13 @@ namespace Game.Player
         public bool IsDead => Health.IsDead;
         /// <summary>디버그 무적 (F2, 시연·측정용). 켜져 있으면 데미지를 받지 않는다.</summary>
         public bool Invincible { get; set; }
+
+        /// <summary>
+        /// 받는 피해 배율 (기본 1, 자하호신강 막이 켜지면 1 − 감소율, 7-G절).
+        /// 모든 데미지가 TakeDamage 한 곳을 지나므로, 공급원(접촉·화살·이후 보스)이 늘어도 감소를 따로 처리하지 않는다.
+        /// </summary>
+        public float IncomingDamageMultiplier { get; set; } = 1f;
+        public bool IsDamageReduced => IncomingDamageMultiplier < 1f;
 
         Health Health => health ??= new Health(data.maxHp);
 
@@ -41,6 +50,7 @@ namespace Game.Player
             // 일시정지(LevelUp·Pause·GameOver) 중에는 전투가 멈춘 상태이므로 데미지도 받지 않는다.
             if (Time.timeScale <= 0f || Invincible)
                 return false;
+            amount *= Mathf.Max(0f, IncomingDamageMultiplier);
             if (!Health.TryDamage(amount, out bool justDied))
                 return false;
 
@@ -54,6 +64,18 @@ namespace Game.Player
                 GameManager.TryChangeState(GameState.GameOver);
             }
             return true;
+        }
+
+        /// <summary>회복. 실제로 찬 양을 돌려주며, 0이면 이벤트를 내지 않는다 (체력이 가득이면 표시 없음).</summary>
+        public float Heal(float amount)
+        {
+            float healed = Health.Heal(amount);
+            if (healed <= 0f)
+                return 0f;
+
+            Healed?.Invoke(healed);
+            HealthChanged?.Invoke(Health.Current, Health.Max);
+            return healed;
         }
     }
 }

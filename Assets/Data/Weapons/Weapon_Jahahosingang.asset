@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6098e3a933bb3f46b40cf1f2e7c2ab9, type: 3}
+  m_Name: Weapon_Jahahosingang
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.ShieldWeaponData
+  displayName: "\uC790\uD558\uD638\uC2E0\uAC15"
+  description: "\uC77C\uC815 \uC8FC\uAE30\uB85C \uBCF4\uB78F\uBE5B \uB9C9\uC744 \uB458\uB7EC
+    \uBC1B\uB294 \uD53C\uD574 -20%"
+  maxLevelEffect: "\uCD5C\uB300 \uB808\uBCA8: \uB9C9\uC774 \uAEBC\uC9C8 \uB54C \uC783\uC740
+    \uCCB4\uB825\uC758 20% \uD68C\uBCF5"
+  icon: {fileID: 0}
+  maxLevel: 3
+  damagePerLevel:
+  - 0
+  cooldownPerLevel:
+  - 7
+  - 6
+  - 5
+  reductionPerLevel:
+  - 0.2
+  - 0.25
+  - 0.3
+  durationPerLevel:
+  - 3
+  - 3.5
+  - 4
+  maxLevelHealRatio: 0.2
+  effectPrefab: {fileID: 5131009855102709541, guid: c5a6d1064abdda0468d2176b6759dc7f, type: 3}

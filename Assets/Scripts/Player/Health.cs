@@ -4,7 +4,8 @@ namespace Game.Player
 {
     /// <summary>
     /// HP 규칙만 담은 순수 클래스 (Unity 의존 없음 → EditMode 테스트). 설계서 7-B절.
-    /// 무적 시간 없음: 맞는 족족 깎인다 (포위당하면 빠르게 무너지는 긴장감이 의도). 회복 수단 없음.
+    /// 무적 시간 없음: 맞는 족족 깎인다 (포위당하면 빠르게 무너지는 긴장감이 의도).
+    /// 회복은 자하호신강 최대 레벨(7-G절)뿐이며 최대 HP를 넘지 않는다.
     /// </summary>
     public class Health
     {
@@ -31,6 +32,17 @@ namespace Game.Player
             Current = Math.Max(0f, Current - amount);
             justDied = IsDead;
             return true;
+        }
+
+        /// <summary>회복하고 실제로 찬 양을 돌려준다. 죽었으면 되살리지 않는다(0), 최대 HP를 넘지 않는다.</summary>
+        public float Heal(float amount)
+        {
+            if (IsDead || amount <= 0f)
+                return 0f;
+
+            float before = Current;
+            Current = Math.Min(Max, Current + amount);
+            return Current - before;
         }
     }
 }

@@ -46,5 +46,26 @@ namespace Game.Tests.EditMode
             Assert.IsFalse(hp.TryDamage(-5f, out _));
             Assert.AreEqual(100f, hp.Current);
         }
+
+        [Test]
+        public void Heal_CapsAtMax_ReturnsActualAmount()
+        {
+            var hp = new Health(100f);
+            hp.TryDamage(30f, out _);
+            Assert.AreEqual(10f, hp.Heal(10f), 0.0001f);
+            Assert.AreEqual(80f, hp.Current, 0.0001f);
+            Assert.AreEqual(20f, hp.Heal(50f), 0.0001f, "최대 HP를 넘지 않는다");
+            Assert.AreEqual(100f, hp.Current);
+            Assert.AreEqual(0f, hp.Heal(10f), "가득이면 0");
+        }
+
+        [Test]
+        public void Heal_DoesNotReviveDead()
+        {
+            var hp = new Health(10f);
+            hp.TryDamage(10f, out _);
+            Assert.AreEqual(0f, hp.Heal(5f));
+            Assert.IsTrue(hp.IsDead);
+        }
     }
 }
