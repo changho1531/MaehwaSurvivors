@@ -61,7 +61,7 @@ namespace Game.Enemies
                 // 사거리 밖: 따라간다. 떨림 중이었으면 그 발은 취소 (규칙 4)
                 windupRemaining = -1f;
                 SetShake(0f);
-                Body.linearVelocity = toTarget.normalized * data.moveSpeed;
+                Body.linearVelocity = toTarget.normalized * Owner.MoveSpeed;
                 return;
             }
 

@@ -28,6 +28,9 @@ namespace Game.Enemies
         public bool IsAlive => CurrentHp > 0f && gameObject.activeInHierarchy;
         public bool IsKnockedBack { get; private set; }
 
+        /// <summary>이 개체의 이동속도. 기본은 데이터 값이고, 스폰하는 쪽(웨이브)이 생성 시점에 정한다 — 같은 종류라도 나온 시기에 따라 다를 수 있다.</summary>
+        public float MoveSpeed { get; private set; }
+
         Vector2 knockbackTarget;
         float knockbackSpeed;
 
@@ -55,10 +58,14 @@ namespace Game.Enemies
         }
 
         /// <summary>스폰 직후 호출. release는 처치 시 풀로 되돌리는 콜백.</summary>
-        public void Init(Transform chaseTarget, Action<Enemy> release)
+        public void Init(Transform chaseTarget, Action<Enemy> release) => Init(chaseTarget, release, data != null ? data.moveSpeed : 0f);
+
+        /// <summary>moveSpeed: 이번 개체의 이동속도 (생성될 때 정해져 웨이브가 바뀌어도 유지).</summary>
+        public void Init(Transform chaseTarget, Action<Enemy> release, float moveSpeed)
         {
             target = chaseTarget;
             releaseToPool = release;
+            MoveSpeed = Mathf.Max(0f, moveSpeed);
             if (behaviour != null)
                 behaviour.ResetState();
         }

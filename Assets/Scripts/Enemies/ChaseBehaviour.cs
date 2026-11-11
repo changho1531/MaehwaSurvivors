@@ -8,7 +8,7 @@ namespace Game.Enemies
         public override void Tick(Transform target, float dt)
         {
             var toTarget = (Vector2)target.position - Body.position;
-            Body.linearVelocity = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized * Owner.Data.moveSpeed : Vector2.zero;
+            Body.linearVelocity = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized * Owner.MoveSpeed : Vector2.zero;
         }
     }
 }
