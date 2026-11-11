@@ -1,27 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Weapons
 {
-    /// <summary>시너지 태그 (설계서 5절). 시너지 배율 계산(6절)에 쓰인다.</summary>
-    [Flags]
-    public enum SynergyTag
-    {
-        None = 0,
-        Sword = 1 << 0,     // 검
-        Ranged = 1 << 1,    // 원거리
-        Combo = 1 << 2,     // 연격
-        Melee = 1 << 3,     // 근접
-        Impact = 1 << 4,    // 타격
-        Area = 1 << 5,      // 범위
-        Multi = 1 << 6,     // 다중
-        Defense = 1 << 7,   // 방어
-        Sustain = 1 << 8,   // 지속
-        Movement = 1 << 9,  // 이동
-        Support = 1 << 10,  // 보조
-    }
-
     /// <summary>
     /// 모든 무기 데이터의 공통 베이스 (설계서 7절). 무기 유형별 수치는 하위 클래스(ProjectileWeaponData 등)에 둔다.
     /// 수치는 증가율 공식이 아니라 레벨별 수치표(배열)로 둔다 — 인스펙터에서 칸 하나만 고치면 된다. 모든 값은 ※ 예시값.
@@ -35,7 +16,6 @@ namespace Game.Weapons
         [Tooltip("최대 레벨이 되는 강화 카드에 덧붙는 한 줄 (예: \"최대 레벨: 관통 무제한\"). 비우면 생략")]
         [TextArea] public string maxLevelEffect;
         public Sprite icon;
-        public SynergyTag tags;
         [Min(1)] public int maxLevel = 5;
 
         [Tooltip("[0] = Lv1")]

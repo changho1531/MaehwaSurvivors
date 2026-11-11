@@ -16,7 +16,6 @@ MonoBehaviour:
   description: "가장 가까운 적에게 검기를 날린다"
   maxLevelEffect: "최대 레벨: 관통 무제한"
   icon: {fileID: 0}
-  tags: 3
   maxLevel: 5
   damagePerLevel:
   - 10
