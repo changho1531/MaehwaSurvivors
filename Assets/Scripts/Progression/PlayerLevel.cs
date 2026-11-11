@@ -22,6 +22,9 @@ namespace Game.Progression
         /// <summary>성장 완료 진입 (HUD의 MAX 표시용).</summary>
         public event Action Maxed;
 
+        /// <summary>(실제로 받은 경험치) — 개발용 측정 기록</summary>
+        public event Action<int> XpAdded;
+
         public int Level => Progress.Level;
         public int CurrentXp => Progress.CurrentXp;
         public int RequiredXp => Progress.RequiredXp;
@@ -36,6 +39,7 @@ namespace Game.Progression
                 return;
 
             int gained = Progress.AddXp(amount);
+            XpAdded?.Invoke(amount);
             XpChanged?.Invoke(CurrentXp, RequiredXp);
             if (gained > 0)
                 LeveledUp?.Invoke(gained);

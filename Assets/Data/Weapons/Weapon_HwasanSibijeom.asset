@@ -13,21 +13,19 @@ MonoBehaviour:
   m_Name: Weapon_HwasanSibijeom
   m_EditorClassIdentifier: Game.Runtime::Game.Weapons.SweepWeaponData
   displayName: "\uD654\uC0B0\uC2ED\uC774\uAC80"
-  description: "바라보는 방향 부채꼴로 12연속 검격을 펼친다"
-  maxLevelEffect: "최대 레벨: 쿨타임 없이 연속 발동, 타격당 데미지 감소"
+  description: "\uBC14\uB77C\uBCF4\uB294 \uBC29\uD5A5 \uBD80\uCC44\uAF34\uB85C 12\uC5F0\uC18D
+    \uAC80\uACA9\uC744 \uD3BC\uCE5C\uB2E4"
+  maxLevelEffect: "\uCD5C\uB300 \uB808\uBCA8: \uCFE8\uD0C0\uC784 \uC5C6\uC774 \uC5F0\uC18D
+    \uBC1C\uB3D9, \uD0C0\uACA9\uB2F9 \uB370\uBBF8\uC9C0 \uAC10\uC18C"
   icon: {fileID: 0}
-  maxLevel: 5
+  maxLevel: 3
   damagePerLevel:
   - 4
-  - 5
   - 6
-  - 7
   - 3
   cooldownPerLevel:
   - 5
-  - 4.5
   - 4
-  - 3.5
   - 0
   hitCount: 12
   comboDuration: 1.5

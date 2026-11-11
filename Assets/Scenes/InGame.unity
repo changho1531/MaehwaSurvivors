@@ -3926,6 +3926,7 @@ GameObject:
   - component: {fileID: 1897601221}
   - component: {fileID: 1897601224}
   - component: {fileID: 1897601225}
+  - component: {fileID: 1897601226}
   m_Layer: 0
   m_Name: Progression
   m_TagString: Untagged
@@ -4004,6 +4005,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e54114f20495bc40b9aa6122ba388e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Core.RunClock
+--- !u!114 &1897601226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897601220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec422764995df504c9e7ca7eb6456b5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Progression.GrowthLogger
+  level: {fileID: 169767284}
+  stats: {fileID: 1897601225}
+  bucketSeconds: 30
 --- !u!1 &1930725292
 GameObject:
   m_ObjectHideFlags: 0
