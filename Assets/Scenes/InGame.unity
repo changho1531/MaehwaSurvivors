@@ -2028,6 +2028,20 @@ MonoBehaviour:
   retryButton: {fileID: 281713442}
   titleButton: {fileID: 1233404878}
   settings: {fileID: 11400000, guid: bbf376f6ea483cd4089d8e5560f707d7, type: 2}
+  headerText: {fileID: 957007270}
+  background: {fileID: 760396636}
+  gameOverStyle:
+    title: "\uAC8C\uC784 \uC624\uBC84"
+    titleColor: {r: 0.788, g: 0.482, b: 0.58, a: 1}
+    backgroundColor: {r: 0, g: 0, b: 0, a: 0.65}
+  gameClearStyle:
+    title: "\uAC8C\uC784 \uD074\uB9AC\uC5B4"
+    titleColor: {r: 0.788, g: 0.635, b: 0.294, a: 1}
+    backgroundColor: {r: 0.14, g: 0.07, b: 0.03, a: 0.75}
+  earlyClearStyle:
+    title: "\uC870\uAE30 \uC18C\uD658 \uD074\uB9AC\uC5B4"
+    titleColor: {r: 0.95, g: 0.8, b: 0.45, a: 1}
+    backgroundColor: {r: 0.14, g: 0.07, b: 0.03, a: 0.75}
 --- !u!114 &668772510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2697,6 +2711,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886538301}
   m_CullTransparentMesh: 1
+--- !u!1 &888444568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 888444569}
+  - component: {fileID: 888444571}
+  - component: {fileID: 888444570}
+  m_Layer: 0
+  m_Name: BossHud
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &888444569
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888444568}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1337069357}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &888444570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888444568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d300d8e91bb29c542832573651f276ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.UI.BossAlertView
+  spawner: {fileID: 1068255249}
+  banner: {fileID: 798178478}
+  appearFormat: "{0} \uCD9C\uD604"
+  bannerSeconds: 2
+  flashSeconds: 0.6
+  flashColor: {r: 0.9, g: 0.05, b: 0.05, a: 0.75}
+--- !u!114 &888444571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888444568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a99465f15428040bd4b9ba9f15c783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.UI.BossHpBar
+  spawner: {fileID: 1068255249}
+  size: {x: 720, y: 22}
+  phase1Color: {r: 0.75, g: 0.12, b: 0.12, a: 1}
+  phase2Color: {r: 0.45, g: 0.02, b: 0.05, a: 1}
+  font: {fileID: 0}
 --- !u!1 &891710755
 GameObject:
   m_ObjectHideFlags: 0
@@ -3222,6 +3308,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 994807418}
   m_CullTransparentMesh: 1
+--- !u!1 &1068255248
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1068255250}
+  - component: {fileID: 1068255249}
+  m_Layer: 0
+  m_Name: BossSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1068255249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068255248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a604ab334c3b97743a7cf4f037a5ba07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Enemies.Boss.BossSpawner
+  waves: {fileID: 171082125}
+  spawner: {fileID: 869184456}
+  bossPrefab: {fileID: 3083572570979652168, guid: e8bf0599effbc5a4cbd19628e08ef2d8, type: 3}
+  player: {fileID: 169767282}
+  stats: {fileID: 1897601225}
+  viewCamera: {fileID: 1650031349}
+  spawnMargin: 1.5
+  defeatTimeScale: 0.3
+  defeatSeconds: 0.5
+--- !u!4 &1068255250
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068255248}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1133799188
 GameObject:
   m_ObjectHideFlags: 0
@@ -3829,6 +3968,7 @@ RectTransform:
   - {fileID: 798178477}
   - {fileID: 833873400}
   - {fileID: 1437261959}
+  - {fileID: 888444569}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4596,6 +4736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Runtime::Game.Progression.GrowthLogger
   level: {fileID: 169767284}
   stats: {fileID: 1897601225}
+  boss: {fileID: 1068255249}
   bucketSeconds: 30
 --- !u!1 &1930725292
 GameObject:
@@ -5210,3 +5351,4 @@ SceneRoots:
   - {fileID: 989143995}
   - {fileID: 1432212890}
   - {fileID: 171082126}
+  - {fileID: 1068255250}

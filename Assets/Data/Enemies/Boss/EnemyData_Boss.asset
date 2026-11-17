@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fbe3827461323e4f8509aa134b53288, type: 3}
+  m_Name: EnemyData_Boss
+  m_EditorClassIdentifier: Game.Runtime::Game.Enemies.Boss.BossEnemyData
+  maxHp: 1500
+  moveSpeed: 1.8
+  contactDps: 15
+  knockbackImmune: 1
+  separationRadius: 0.6
+  separationStrength: 0
+  xpAmount: 0
+  xpOrbColor: {r: 0.85, g: 0.1, b: 0.1, a: 1}
+  displayName: "\uD608\uAC01\uB9C8\uC874"
+  phase2HpRatio: 0.5
+  gapSecondsPerPhase:
+  - 0.8
+  - 0.6
+  retrySeconds: 0.2
+  phaseTransitionSeconds: 1
+  patterns:
+  - {fileID: 11400000, guid: 1303842775b54fb459f6e0c4d23bc00e, type: 2}
+  - {fileID: 11400000, guid: 985f25b064bee8a459221905d31a0c42, type: 2}
+  - {fileID: 11400000, guid: e26174331f19519449ca5e90d4bf237a, type: 2}
+  - {fileID: 11400000, guid: c667f7490dca64a4bb7a88af3c220908, type: 2}
+  - {fileID: 11400000, guid: 74c6a92ab9756ec4ab930a2c69cb51ce, type: 2}
+  phase2OpeningPattern: {fileID: 11400000, guid: c667f7490dca64a4bb7a88af3c220908, type: 2}

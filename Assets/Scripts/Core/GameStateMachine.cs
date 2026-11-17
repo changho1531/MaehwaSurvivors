@@ -17,7 +17,8 @@ namespace Game.Core
             { GameState.Play, new[] { GameState.Pause, GameState.LevelUp, GameState.GameOver, GameState.GameClear } },
             { GameState.Pause, new[] { GameState.Play, GameState.LevelUp, GameState.Title } },
             { GameState.LevelUp, new[] { GameState.Play, GameState.Pause } },
-            { GameState.GameOver, new[] { GameState.Play, GameState.Title } },
+            // GameOver → GameClear: 보스 처치와 플레이어 사망이 같은 프레임이면 클리어 우선 (8-C 예외). 그 판단은 보스 쪽이 한다
+            { GameState.GameOver, new[] { GameState.Play, GameState.Title, GameState.GameClear } },
             { GameState.GameClear, new[] { GameState.Play, GameState.Title } },
         };
 

@@ -15,6 +15,9 @@ namespace Game.Enemies
         /// <summary>적이 처치될 때 발행. 처치 수·XP 드롭 등은 이 이벤트를 구독해 붙인다.</summary>
         public static event Action<Enemy> Killed;
 
+        /// <summary>(실제로 깎인 양) — 보스 HP 바 · 보스전 측정용</summary>
+        public event Action<float> Damaged;
+
         [SerializeField] EnemyData data;
 
         Rigidbody2D body;
@@ -162,7 +165,9 @@ namespace Game.Enemies
             if (!IsAlive || amount <= 0f)
                 return;
 
+            float dealt = Mathf.Min(amount, CurrentHp);
             CurrentHp -= amount;
+            Damaged?.Invoke(dealt);
             if (CurrentHp <= 0f)
                 Die();
         }

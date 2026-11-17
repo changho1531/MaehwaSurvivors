@@ -22,6 +22,34 @@ namespace Game.UI
             return x < t || y < t || x >= Size - t || y >= Size - t;
         });
 
+        static Sprite edgeGlow;
+
+        /// <summary>가장자리만 진하고 가운데는 투명 (화면 가장자리 번쩍임, 8-C 연출)</summary>
+        public static Sprite EdgeGlow
+        {
+            get
+            {
+                if (edgeGlow != null)
+                    return edgeGlow;
+                const int n = 128;
+                var texture = new Texture2D(n, n, TextureFormat.RGBA32, false) { name = "UiEdgeGlow", wrapMode = TextureWrapMode.Clamp };
+                var pixels = new Color32[n * n];
+                for (int y = 0; y < n; y++)
+                for (int x = 0; x < n; x++)
+                {
+                    // 가장자리까지의 거리 0(끝) ~ 0.5(가운데) → 가장자리 22% 안쪽에서 사라진다
+                    float edge = Mathf.Min(Mathf.Min(x, n - 1 - x), Mathf.Min(y, n - 1 - y)) / (float)n;
+                    float a = Mathf.Clamp01(1f - edge / 0.22f);
+                    pixels[y * n + x] = new Color32(255, 255, 255, (byte)(a * a * 255f));
+                }
+                texture.SetPixels32(pixels);
+                texture.Apply();
+                edgeGlow = Sprite.Create(texture, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), 100f);
+                edgeGlow.name = "UiEdgeGlow";
+                return edgeGlow;
+            }
+        }
+
         static Sprite Create(string name, System.Func<int, int, bool> filled)
         {
             var texture = new Texture2D(Size, Size, TextureFormat.RGBA32, false) { name = name, wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear };

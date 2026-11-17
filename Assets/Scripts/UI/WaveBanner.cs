@@ -39,10 +39,13 @@ namespace Game.UI
                 waves.WaveChanged -= Show;
         }
 
-        void Show(int wave)
+        void Show(int wave) => ShowText(string.Format(format, wave), waves.Table != null ? waves.Table.bannerSeconds : 2f);
+
+        /// <summary>상단 중앙 문구를 seconds 동안 (보스 등장 "혈각마존 출현"도 같은 자리, 8-C 연출).</summary>
+        public void ShowText(string message, float seconds)
         {
-            remaining = waves.Table != null ? waves.Table.bannerSeconds : 2f;
-            text.text = string.Format(format, wave);
+            remaining = seconds;
+            text.text = message;
             text.enabled = true;
             SetAlpha(1f);
         }

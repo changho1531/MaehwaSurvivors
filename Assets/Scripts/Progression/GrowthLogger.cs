@@ -12,6 +12,8 @@ namespace Game.Progression
     {
         [SerializeField] PlayerLevel level;
         [SerializeField] RunStats stats;
+        [Tooltip("있으면 보스전 측정(초당 데미지 · 처치 시간)을 함께 출력 (8-C, HP 확정용)")]
+        [SerializeField] Game.Enemies.Boss.BossSpawner boss;
         [Tooltip("※ 경험치를 묶어 세는 구간(초)")]
         [SerializeField, Min(1f)] float bucketSeconds = 30f;
 
@@ -81,7 +83,9 @@ namespace Game.Progression
             if (logged)
                 return;
             logged = true;
-            Debug.Log(Record.Format(ending, Now));
+            var text = Record.Format(ending, Now);
+            var bossLine = boss != null ? boss.MeasurementLine : null;
+            Debug.Log(bossLine != null ? text + "\n" + bossLine : text);
         }
     }
 }

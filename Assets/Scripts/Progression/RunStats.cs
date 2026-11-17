@@ -14,6 +14,21 @@ namespace Game.Progression
         public float Elapsed { get; private set; }
         public int Kills { get; private set; }
 
+        /// <summary>보스를 쓰러뜨렸는지 (결과 화면 제목 · 색, 11절 MU-C-002)</summary>
+        public bool Cleared { get; private set; }
+        /// <summary>[보스 소환] 버튼으로 조기 소환한 판인지</summary>
+        public bool BossSummonedEarly { get; private set; }
+        /// <summary>보스가 나온 시각 (경과 시간)</summary>
+        public float BossSummonedAt { get; private set; }
+
+        /// <summary>보스 처치 시 BossSpawner가 기록한다 (8-C 이벤트 · 연결).</summary>
+        public void RecordClear(bool summonedEarly, float summonedAt)
+        {
+            Cleared = true;
+            BossSummonedEarly = summonedEarly;
+            BossSummonedAt = summonedAt;
+        }
+
         void OnEnable() => Enemy.Killed += OnEnemyKilled;
         void OnDisable() => Enemy.Killed -= OnEnemyKilled;
 
