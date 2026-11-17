@@ -16,7 +16,8 @@ MonoBehaviour:
   description: "\uC774\uB3D9\uC18D\uB3C4 +5%"
   maxLevelEffect: "\uCD5C\uB300 \uB808\uBCA8: 3\uCD08 \uB3D9\uC548 \uC548 \uB9DE\uC73C\uBA74
     \uC774\uB3D9\uC18D\uB3C4 +10%"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 4bbf99ca0b5ba7a4387ed836fcdb7391, type: 3}
+  slotLetter: "\uBCF4"
   maxLevel: 3
   damagePerLevel:
   - 0

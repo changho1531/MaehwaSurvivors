@@ -52,6 +52,9 @@ namespace Game.Weapons
             return true; // 적이 없어도 발동
         }
 
+        // 슬롯 테두리 게이지 = 콤보의 남은 시간 (7-J 규칙 3)
+        protected override float AttackRemainingRatio => Data.comboDuration > 0f ? 1f - elapsed / Data.comboDuration : 0f;
+
         protected override bool TickAttack(float dt)
         {
             elapsed += dt;

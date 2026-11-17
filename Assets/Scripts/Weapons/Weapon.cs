@@ -12,6 +12,7 @@ namespace Game.Weapons
     public abstract class Weapon : MonoBehaviour
     {
         float cooldownRemaining;
+        float cooldownTotal;
 
         public WeaponData Data { get; private set; }
         public int Level { get; private set; }
@@ -78,10 +79,26 @@ namespace Game.Weapons
                 FinishAttack();
         }
 
+        /// <summary>
+        /// HUD 무기 슬롯이 그릴 상태 (7-J절). 슬롯 UI는 무기 종류를 모르고 이것만 읽는다 —
+        /// 새 무기 유형은 필요하면 이 메서드나 AttackRemainingRatio만 재정의하면 슬롯이 맞게 그려진다 (OCP).
+        /// 기본: 공격 진행 중이면 "지속 중"(막·콤보처럼 켜져 있는 시간), 아니면 쿨타임 진행률.
+        /// </summary>
+        public virtual WeaponSlotState GetSlotState()
+        {
+            if (IsAttacking)
+                return new WeaponSlotState(1f, true, Mathf.Clamp01(AttackRemainingRatio), false);
+            float progress = cooldownTotal > 0f ? 1f - Mathf.Clamp01(cooldownRemaining / cooldownTotal) : 1f;
+            return new WeaponSlotState(progress, false, 0f, false);
+        }
+
+        /// <summary>진행 중인 공격의 남은 비율 (1 → 0). 지속형(막·콤보)만 재정의한다.</summary>
+        protected virtual float AttackRemainingRatio => 1f;
+
         void FinishAttack()
         {
             IsAttacking = false;
-            cooldownRemaining = Data.GetCooldown(Level);
+            cooldownRemaining = cooldownTotal = Data.GetCooldown(Level);
         }
     }
 

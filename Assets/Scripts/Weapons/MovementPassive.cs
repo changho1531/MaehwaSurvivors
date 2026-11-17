@@ -46,6 +46,9 @@ namespace Game.Weapons
         // 공격하지 않는다. 공통 루프를 쓰지 않으므로 호출되지 않는다
         protected override bool TryStartAttack() => false;
 
+        /// <summary>쿨타임이 없어 항상 준비 완료(덮개 없음), 최대 레벨 가속 중에만 강조 (7-J 규칙 4).</summary>
+        public override WeaponSlotState GetSlotState() => new(1f, false, 0f, IsBoosted);
+
         protected override void Update()
         {
             float dt = Time.deltaTime;

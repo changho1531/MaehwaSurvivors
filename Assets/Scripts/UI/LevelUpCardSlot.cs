@@ -12,6 +12,8 @@ namespace Game.UI
         [SerializeField] Text nameText;
         [SerializeField] Text kindText;
         [SerializeField] Text descriptionText;
+        [Tooltip("스킬 아이콘 (7-J절, 슬롯과 같은 그림). 비어 있거나 무기에 아이콘이 없으면 숨김")]
+        [SerializeField] Image iconImage;
 
         readonly List<string> lines = new();
 
@@ -19,10 +21,16 @@ namespace Game.UI
         public string NameLabel => nameText.text;
         public string KindLabel => kindText.text;
         public string DescriptionLabel => descriptionText.text;
+        public bool IsIconShown => iconImage != null && iconImage.enabled;
 
         public void Show(LevelUpCard card)
         {
             nameText.text = card.Weapon.displayName;
+            if (iconImage != null)
+            {
+                iconImage.sprite = card.Weapon.icon;
+                iconImage.enabled = card.Weapon.icon != null;
+            }
             // 신규: 한 줄 설명 / 강화: 수치표에서 계산한 변화 목록 (7-D절)
             if (card.IsNew)
             {

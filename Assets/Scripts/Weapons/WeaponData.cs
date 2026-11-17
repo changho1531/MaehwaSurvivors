@@ -15,13 +15,20 @@ namespace Game.Weapons
         [TextArea] public string description;
         [Tooltip("최대 레벨이 되는 강화 카드에 덧붙는 한 줄 (예: \"최대 레벨: 관통 무제한\"). 비우면 생략")]
         [TextArea] public string maxLevelEffect;
+        [Tooltip("HUD 무기 슬롯 · 레벨업 카드 아이콘 (7-J절)")]
         public Sprite icon;
+        [Tooltip("아이콘이 없을 때 슬롯에 쓰는 글자. 비우면 이름 첫 글자 (매화검기와 겹치는 매화보는 \"보\")")]
+        public string slotLetter;
         [Min(1)] public int maxLevel = 5;
 
         [Tooltip("[0] = Lv1")]
         public float[] damagePerLevel = { 10f };
         [Tooltip("[0] = Lv1. 공격이 끝난 뒤부터 세는 쿨타임(초)")]
         public float[] cooldownPerLevel = { 1f };
+
+        public string SlotLetter =>
+            !string.IsNullOrWhiteSpace(slotLetter) ? slotLetter.Trim() :
+            string.IsNullOrEmpty(displayName) ? "?" : displayName.Substring(0, 1);
 
         public float GetDamage(int level) => LevelTable.Get(damagePerLevel, level);
         // 쿨타임 0 = 공격이 끝나자마자 다음 공격 (화산십이검 최대 레벨 연속 발동, 7절 규칙 6).

@@ -14,6 +14,7 @@ namespace Game.Weapons
         PlayerHealth health;
         ShieldEffect effect;
         float remaining;
+        float duration;
         bool healOnEnd; // 켜질 때 정한다: 이번 막은 켜질 때 수치로 끝까지 (중간 레벨업은 다음 발동부터)
 
         /// <summary>(감소율, 지속시간)</summary>
@@ -39,7 +40,7 @@ namespace Game.Weapons
         protected override bool TryStartAttack()
         {
             float reduction = Data.GetReduction(Level);
-            float duration = Data.GetDuration(Level);
+            duration = Data.GetDuration(Level);
             remaining = duration;
             healOnEnd = Level >= Data.maxLevel;
 
@@ -51,6 +52,9 @@ namespace Game.Weapons
             ShieldStarted?.Invoke(reduction, duration);
             return true; // 적 유무와 관계없이 켜진다
         }
+
+        // 슬롯 테두리 게이지 = 막의 남은 시간 (7-J 규칙 3)
+        protected override float AttackRemainingRatio => duration > 0f ? remaining / duration : 0f;
 
         protected override bool TickAttack(float dt)
         {
