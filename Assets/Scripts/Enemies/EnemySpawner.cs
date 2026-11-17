@@ -12,7 +12,7 @@ namespace Game.Enemies
     /// 웨이브·성장·보스가 모두 시간 기준이라, 레벨 기준이던 적 구성(8-A절)을 웨이브로 대체해 축을 하나로 맞췄다.
     /// 적 종류마다 풀을 따로 두고, 고른 종류의 풀에서 꺼낸다.
     /// </summary>
-    public class EnemySpawner : MonoBehaviour
+    public class EnemySpawner : MonoBehaviour, IEnemySource
     {
         [Tooltip("기본 적 (근거리). 웨이브 구성 비율에 없는 나머지를 채운다")]
         [SerializeField] Enemy enemyPrefab;
@@ -44,6 +44,8 @@ namespace Game.Enemies
         ComponentPool<Enemy> pool;
         PlayerMovement targetMovement;
         float timer;
+        WaveTable.Settings specialsFor;
+        float[] specialTimers = System.Array.Empty<float>();
 
         /// <summary>기본 적(근거리) 풀.</summary>
         public ComponentPool<Enemy> Pool => pool;
@@ -128,6 +130,7 @@ namespace Game.Enemies
         void Update()
         {
             Elapsed += Time.deltaTime;
+            AdvanceSpecials(Time.deltaTime);
             timer += Time.deltaTime;
             float interval = CurrentInterval;
             while (timer >= interval)
@@ -175,6 +178,56 @@ namespace Game.Enemies
             return waves.Table.GetEnemySpeed(baseSpeed, Settings.speedMultiplier, playerBase);
         }
 
+        /// <summary>
+        /// 특수몹(저주술사) 등장 (8-B 규칙 7). 구성 비율과 따로, 웨이브 표의 간격마다 1마리 — 동시 최대 수에 닿아 있으면 건너뛴다.
+        /// 웨이브가 바뀌면(설정이 바뀌면) 그 웨이브의 첫 1마리를 바로 낸다. 보스전 설정에는 특수몹이 없어 새로 나오지 않는다.
+        /// 낸 수를 돌려준다. 테스트에서 시간을 건너뛸 때도 쓴다.
+        /// </summary>
+        public int AdvanceSpecials(float dt)
+        {
+            var settings = Settings;
+            if (settings == null || dt <= 0f)
+                return 0;
+            var specials = settings.specials ?? System.Array.Empty<WaveTable.Special>();
+            if (settings != specialsFor)
+            {
+                specialsFor = settings;
+                specialTimers = new float[specials.Length];
+                for (int i = 0; i < specials.Length; i++)
+                    specialTimers[i] = specials[i].intervalSeconds; // 웨이브 시작 순간 첫 1마리
+            }
+
+            int spawned = 0;
+            for (int i = 0; i < specials.Length; i++)
+            {
+                var special = specials[i];
+                specialTimers[i] += dt;
+                if (special.prefab == null || specialTimers[i] < special.intervalSeconds)
+                    continue;
+                specialTimers[i] = 0f;
+                if (PoolOf(special.prefab).CountActive >= special.maxAlive)
+                    continue;
+                if (SpawnAt(special.prefab, Random.Range(0f, Mathf.PI * 2f)) != null)
+                    spawned++;
+            }
+            return spawned;
+        }
+
+        /// <summary>적이 부르는 소환 (8-B 규칙 6). 일반 스폰과 같은 풀 · 상한 · 웨이브 속도를 쓴다.</summary>
+        public Enemy SpawnNear(Enemy prefab, Vector2 center, float radius)
+        {
+            if (target == null || prefab == null)
+                return null;
+            if (maxActive > 0 && CountActive >= maxActive)
+                return null; // 상한에 닿으면 들어가는 만큼만
+
+            var typePool = PoolOf(prefab);
+            var enemy = typePool.Get(center + Random.insideUnitCircle * radius);
+            enemy.SetSource(this);
+            enemy.Init(target, typePool.Release, GetSpawnSpeed(prefab));
+            return enemy;
+        }
+
         Enemy SpawnAt(Enemy prefab, float angle)
         {
             if (target == null || prefab == null)
@@ -189,6 +242,7 @@ namespace Game.Enemies
 
             var typePool = PoolOf(prefab);
             var enemy = typePool.Get(target.position + offset);
+            enemy.SetSource(this);
             enemy.Init(target, typePool.Release, GetSpawnSpeed(prefab));
             return enemy;
         }

@@ -16,6 +16,7 @@ MonoBehaviour:
   - startSeconds: 0
     settings:
       shares: []
+      specials: []
       groupSize: 1
       speedMultiplier: 1
   - startSeconds: 120
@@ -23,6 +24,7 @@ MonoBehaviour:
       shares:
       - prefab: {fileID: 8500285118496403429, guid: 03b7830ff67d77943959ff5b0a87bb7f, type: 3}
         ratio: 0.25
+      specials: []
       groupSize: 1
       speedMultiplier: 1
   - startSeconds: 240
@@ -30,6 +32,10 @@ MonoBehaviour:
       shares:
       - prefab: {fileID: 8500285118496403429, guid: 03b7830ff67d77943959ff5b0a87bb7f, type: 3}
         ratio: 0.3
+      specials:
+      - prefab: {fileID: 8500285118496403429, guid: b588a60fb04383344975af29166d5282, type: 3}
+        intervalSeconds: 40
+        maxAlive: 2
       groupSize: 1
       speedMultiplier: 1
   - startSeconds: 360
@@ -37,6 +43,10 @@ MonoBehaviour:
       shares:
       - prefab: {fileID: 8500285118496403429, guid: 03b7830ff67d77943959ff5b0a87bb7f, type: 3}
         ratio: 0.35
+      specials:
+      - prefab: {fileID: 8500285118496403429, guid: b588a60fb04383344975af29166d5282, type: 3}
+        intervalSeconds: 30
+        maxAlive: 3
       groupSize: 2
       speedMultiplier: 1.1
   - startSeconds: 480
@@ -44,6 +54,10 @@ MonoBehaviour:
       shares:
       - prefab: {fileID: 8500285118496403429, guid: 03b7830ff67d77943959ff5b0a87bb7f, type: 3}
         ratio: 0.4
+      specials:
+      - prefab: {fileID: 8500285118496403429, guid: b588a60fb04383344975af29166d5282, type: 3}
+        intervalSeconds: 20
+        maxAlive: 3
       groupSize: 3
       speedMultiplier: 1.2
   bossSeconds: 600
@@ -52,6 +66,7 @@ MonoBehaviour:
     shares:
     - prefab: {fileID: 8500285118496403429, guid: 03b7830ff67d77943959ff5b0a87bb7f, type: 3}
       ratio: 0.25
+    specials: []
     groupSize: 1
     speedMultiplier: 1
   bossIntervalAtSeconds: 180

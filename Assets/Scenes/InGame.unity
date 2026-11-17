@@ -298,6 +298,7 @@ GameObject:
   - component: {fileID: 169767288}
   - component: {fileID: 169767290}
   - component: {fileID: 169767291}
+  - component: {fileID: 169767292}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -574,6 +575,20 @@ MonoBehaviour:
   holdSeconds: 0.1
   recoverSeconds: 0.3
   shakeStrength: 6
+--- !u!114 &169767292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169767277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8972eeadf167aa94a99caf4e12c4b41f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Player.PlayerCurse
+  auraColor: {r: 0.32, g: 0.12, b: 0.42, a: 0.85}
+  auraMaterial: {fileID: 2100000, guid: abbb91dff85d49f469e3bb9b29898ac7, type: 2}
 --- !u!1 &171082124
 GameObject:
   m_ObjectHideFlags: 0

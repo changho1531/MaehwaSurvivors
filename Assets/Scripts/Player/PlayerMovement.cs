@@ -21,8 +21,14 @@ namespace Game.Player
         /// <summary>이동속도 배율 (기본 1). 매화보만 바꾼다.</summary>
         public float SpeedMultiplier { get; set; } = 1f;
 
-        /// <summary>실제로 움직이는 속도 = 기본 속도 × 배율</summary>
-        public float CurrentSpeed => moveSpeed * Mathf.Max(0f, SpeedMultiplier);
+        /// <summary>
+        /// 감속 배율 (기본 1). 저주(PlayerCurse, 8-B절)만 바꾼다. 매화보 배율과 따로 두고 곱한다 —
+        /// 둘이 서로의 값을 덮어쓰지 않고, 가속이 켜지거나 꺼져도 저주가 그대로 반영된다.
+        /// </summary>
+        public float SlowMultiplier { get; set; } = 1f;
+
+        /// <summary>실제로 움직이는 속도 = 기본 속도 × 매화보 배율 × 감속 배율</summary>
+        public float CurrentSpeed => moveSpeed * Mathf.Max(0f, SpeedMultiplier) * Mathf.Max(0f, SlowMultiplier);
         public Vector2 CurrentInput { get; private set; }
 
         void Awake()

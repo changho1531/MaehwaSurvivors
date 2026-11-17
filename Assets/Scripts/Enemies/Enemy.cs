@@ -31,6 +31,11 @@ namespace Game.Enemies
         /// <summary>이 개체의 이동속도. 기본은 데이터 값이고, 스폰하는 쪽(웨이브)이 생성 시점에 정한다 — 같은 종류라도 나온 시기에 따라 다를 수 있다.</summary>
         public float MoveSpeed { get; private set; }
 
+        /// <summary>이 적을 꺼낸 스포너. 다른 적을 부르는 행동(저주술사 소환)이 쓴다. 테스트에서 직접 놓으면 없을 수 있다.</summary>
+        public IEnemySource Source { get; private set; }
+
+        public void SetSource(IEnemySource source) => Source = source;
+
         Vector2 knockbackTarget;
         float knockbackSpeed;
 

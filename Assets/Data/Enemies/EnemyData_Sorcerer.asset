@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0435b9aefd17a36408866d42c88948d1, type: 3}
+  m_Name: EnemyData_Sorcerer
+  m_EditorClassIdentifier: Game.Runtime::Game.Enemies.SorcererEnemyData
+  maxHp: 25
+  moveSpeed: 1.2
+  contactDps: 5
+  knockbackImmune: 1
+  separationRadius: 0.6
+  separationStrength: 1
+  xpAmount: 10
+  xpOrbColor: {r: 0.62, g: 0.36, b: 0.85, a: 1}
+  keepDistance: 4.5
+  castInterval: 5
+  zoneWarningSeconds: 1
+  zoneSeconds: 3
+  zoneRadius: 1.5
+  zoneDamagePerSecond: 5
+  zonePrefab: {fileID: 6830457911401612710, guid: ecd1097abed412d4b89a6c00614898a6, type: 3}
+  curseSlowRatio: 0.2
+  curseSeconds: 2
+  summonInterval: 10
+  summonCount: 2
+  summonRadius: 1.5
+  summonPrefab: {fileID: 3083572570979652168, guid: 42f1f5bd697fced478227f4b1bca8673, type: 3}
+  castShakeSeconds: 0.3
+  shakeAmplitude: 0.05
+  shakeFrequency: 30

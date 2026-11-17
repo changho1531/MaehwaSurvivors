@@ -19,11 +19,26 @@ namespace Game.Enemies
             [Range(0f, 1f)] public float ratio = 0.25f;
         }
 
+        /// <summary>
+        /// 구성 비율에 섞지 않고 따로 나오는 적 (저주술사, 8-B절). 간격마다 1마리, 동시 최대 수에 닿아 있으면 그 회차는 건너뛴다.
+        /// 비율에 넣으면 무리에 섞여 나오고 수도 들쭉날쭉해 "노려서 잡는" 특수몹이 되지 않는다.
+        /// </summary>
+        [Serializable]
+        public class Special
+        {
+            public Enemy prefab;
+            [Tooltip("등장 간격(초). 웨이브가 시작되는 순간 첫 1마리")]
+            [Min(1f)] public float intervalSeconds = 40f;
+            [Min(1)] public int maxAlive = 2;
+        }
+
         /// <summary>한 구간의 스폰 설정. 비율 합이 1보다 작으면 나머지는 기본 적(도병)이 채운다.</summary>
         [Serializable]
         public class Settings
         {
             public Share[] shares = Array.Empty<Share>();
+            [Tooltip("구성 비율과 따로 나오는 특수몹 (저주술사)")]
+            public Special[] specials = Array.Empty<Special>();
             [Tooltip("스폰 간격마다 한 번에 내보내는 수 (같은 방향 근처에 무리로)")]
             [Min(1)] public int groupSize = 1;
             [Tooltip("적 기본 이동속도에 곱하는 배율 (상한 적용)")]
@@ -97,6 +112,9 @@ namespace Game.Enemies
                 foreach (var share in settings.shares)
                     if (share.prefab != null && !result.Contains(share.prefab))
                         result.Add(share.prefab);
+                foreach (var special in settings.specials ?? Array.Empty<Special>())
+                    if (special.prefab != null && !result.Contains(special.prefab))
+                        result.Add(special.prefab);
             }
             foreach (var wave in waves)
                 Add(wave.settings);
