@@ -15,11 +15,6 @@ namespace Game.Enemies
         [Tooltip("화살 중심과 플레이어 원점(발, 판정 반경 0.3) 사이 이 거리 안이면 명중")]
         [SerializeField, Min(0.01f)] float hitRadius = 0.4f;
 
-        // 모든 궁수가 공유하는 풀. 루트가 씬 오브젝트라 씬이 바뀌면 파괴되므로, 그때 새로 만든다.
-        // shortcut: 화살 프리팹이 1종이라고 가정, 원거리 적이 늘어 화살 종류가 생기면 프리팹별 풀로 바꾼다.
-        static ComponentPool<Arrow> pool;
-        static Transform poolRoot;
-
         PlayerHealth target;
         Vector2 velocity;
         float damage;
@@ -29,15 +24,8 @@ namespace Game.Enemies
         public bool IsLive { get; private set; }
         public Vector2 Velocity => velocity;
 
-        public static ComponentPool<Arrow> PoolFor(Arrow prefab)
-        {
-            if (poolRoot == null)
-            {
-                poolRoot = new GameObject("[Pool] Arrows").transform;
-                pool = new ComponentPool<Arrow>(prefab, poolRoot, 20);
-            }
-            return pool;
-        }
+        /// <summary>화살 프리팹별 공유 풀. 쏜 개체가 처치돼도 날아가던 화살은 끝까지 간다.</summary>
+        public static ComponentPool<Arrow> PoolFor(Arrow prefab) => PrefabPools.For(prefab, 20);
 
         public void Launch(Vector2 direction, float speed, float hitDamage, float travelDistance, PlayerHealth player, Action<Arrow> release)
         {

@@ -43,13 +43,19 @@ namespace Game.Weapons
         void Update()
         {
             float dt = Mathf.Min(Time.deltaTime, remaining); // 마지막 프레임이 길어도 총 데미지가 지속 시간 × 초당 데미지를 넘지 않게
-            EnemyRegistry.CollectInRadius(transform.position, radius, targets);
-            foreach (var enemy in targets)
-                enemy.TakeDamage(damagePerSecond * dt);
+            DamageTargets(damagePerSecond * dt);
 
             remaining -= dt;
             if (remaining <= 0f)
                 Finish();
+        }
+
+        /// <summary>이번 프레임 원 안의 대상에게 데미지. 대상(적 / 플레이어)이 늘어도 지속 · 폭발 흐름은 그대로 두고 여기만 바뀐다.</summary>
+        void DamageTargets(float amount)
+        {
+            EnemyRegistry.CollectInRadius(transform.position, radius, targets);
+            foreach (var enemy in targets)
+                enemy.TakeDamage(amount);
         }
 
         void Finish()
