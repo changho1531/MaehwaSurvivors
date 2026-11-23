@@ -14,7 +14,7 @@ namespace Game.Enemies.Boss
         readonly Transform art;
         readonly Vector3 baseScale;
         readonly Color baseColor;
-        float time;
+        readonly ArtShake shake;
 
         public BossArt(SpriteRenderer renderer)
         {
@@ -22,18 +22,12 @@ namespace Game.Enemies.Boss
             art = renderer != null ? renderer.transform : null;
             baseScale = art != null ? art.localScale : Vector3.one;
             baseColor = renderer != null ? renderer.color : Color.white;
+            shake = new ArtShake(art);
         }
 
         public Color BaseColor => baseColor;
 
-        public void Shake(float amplitude, float frequency, float dt)
-        {
-            if (art == null)
-                return;
-            time += dt;
-            var p = art.localPosition;
-            art.localPosition = new Vector3(Mathf.Sin(time * frequency * Mathf.PI * 2f) * amplitude, p.y, p.z);
-        }
+        public void Shake(float amplitude, float frequency, float dt) => shake.Tick(amplitude, frequency, dt); // 궁수 · 저주술사와 같은 떨림
 
         /// <summary>amount 0 → 1: 낮아지고 넓어진다</summary>
         public void Crouch(float amount)
@@ -66,11 +60,9 @@ namespace Game.Enemies.Boss
 
         public void ResetPose()
         {
-            time = 0f;
+            shake.Stop();
             if (art == null)
                 return;
-            var p = art.localPosition;
-            art.localPosition = new Vector3(0f, p.y, p.z);
             art.localScale = baseScale;
             art.localRotation = Quaternion.identity;
             renderer.color = baseColor;

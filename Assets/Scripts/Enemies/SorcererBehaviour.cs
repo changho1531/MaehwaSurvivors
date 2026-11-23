@@ -26,7 +26,7 @@ namespace Game.Enemies
         float castTimer;
         float summonTimer;
         float shakeRemaining;
-        float shakeTime;
+        ArtShake shake;
 
         /// <summary>(장판 위치) — 테스트 · 연출용</summary>
         public event Action<Vector2> ZoneCast;
@@ -39,6 +39,7 @@ namespace Game.Enemies
         {
             base.Awake();
             data = Owner.Data as SorcererEnemyData;
+            shake = new ArtShake(art);
         }
 
         public override void ResetState()
@@ -46,7 +47,7 @@ namespace Game.Enemies
             castTimer = 0f;
             summonTimer = 0f;
             shakeRemaining = 0f;
-            SetShake(0f);
+            shake.Stop();
             if (castEffect != null)
                 castEffect.gameObject.SetActive(false); // 풀에서 다시 꺼낼 때 지난 시전이 남아 있지 않게
         }
@@ -93,7 +94,7 @@ namespace Game.Enemies
                     data.zoneDamagePerSecond, data.curseSlowRatio, data.curseSeconds, pool.Release);
             }
             shakeRemaining = data.castShakeSeconds;
-            shakeTime = 0f;
+            shake.Restart();
             if (castEffect != null)
                 castEffect.Play(castEffect.transform.position); // 자식이라 몸을 따라다닌다
             ZoneCast?.Invoke(position);
@@ -129,8 +130,10 @@ namespace Game.Enemies
             if (shakeRemaining <= 0f)
                 return;
             shakeRemaining -= dt;
-            shakeTime += dt;
-            SetShake(shakeRemaining > 0f ? Mathf.Sin(shakeTime * data.shakeFrequency * Mathf.PI * 2f) * data.shakeAmplitude : 0f);
+            if (shakeRemaining > 0f)
+                shake.Tick(data.shakeAmplitude, data.shakeFrequency, dt);
+            else
+                shake.Stop();
         }
 
         void CacheTarget(Transform target)
@@ -139,12 +142,6 @@ namespace Game.Enemies
                 return;
             cachedTarget = target;
             targetHealth = target.GetComponent<PlayerHealth>();
-        }
-
-        void SetShake(float x)
-        {
-            if (art != null)
-                art.localPosition = new Vector3(x, art.localPosition.y, 0f);
         }
     }
 }

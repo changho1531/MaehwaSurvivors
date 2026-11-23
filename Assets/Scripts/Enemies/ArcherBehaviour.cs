@@ -20,7 +20,7 @@ namespace Game.Enemies
         Transform cachedTarget;
         float windupRemaining = -1f; // < 0 이면 떨림 중이 아님
         float cooldownRemaining;
-        float shakeTime;
+        ArtShake shake;
 
         /// <summary>(발사한 화살)</summary>
         public event Action<Arrow> Fired;
@@ -32,20 +32,21 @@ namespace Game.Enemies
         {
             base.Awake();
             data = Owner.Data as RangedEnemyData;
+            shake = new ArtShake(art);
         }
 
         public override void ResetState()
         {
             windupRemaining = -1f;
             cooldownRemaining = 0f;
-            SetShake(0f);
+            shake.Stop();
         }
 
         // 떨림 중 넉백되면 그 발은 취소, 끝나면 사거리 판단부터 다시 (7-E 규칙 6). 발사 간격은 그대로 둔다.
         public override void OnKnockback()
         {
             windupRemaining = -1f;
-            SetShake(0f);
+            shake.Stop();
         }
 
         public override void Tick(Transform target, float dt)
@@ -60,7 +61,7 @@ namespace Game.Enemies
             {
                 // 사거리 밖: 따라간다. 떨림 중이었으면 그 발은 취소 (규칙 4)
                 windupRemaining = -1f;
-                SetShake(0f);
+                shake.Stop();
                 Body.linearVelocity = toTarget.normalized * Owner.MoveSpeed;
                 return;
             }
@@ -73,18 +74,17 @@ namespace Game.Enemies
                 if (cooldownRemaining > 0f)
                     return;
                 windupRemaining = data.windupSeconds;
-                shakeTime = 0f;
+                shake.Restart();
             }
 
             windupRemaining -= dt;
-            shakeTime += dt;
-            SetShake(Mathf.Sin(shakeTime * data.shakeFrequency * Mathf.PI * 2f) * data.shakeAmplitude);
+            shake.Tick(data.shakeAmplitude, data.shakeFrequency, dt);
             if (windupRemaining > 0f)
                 return;
 
             Fire(toTarget);
             windupRemaining = -1f;
-            SetShake(0f);
+            shake.Stop();
             cooldownRemaining = data.fireInterval - data.windupSeconds; // 대기 1.5 + 다음 떨림 0.5 = 발사 간격 2초
         }
 
@@ -107,12 +107,6 @@ namespace Game.Enemies
             cachedTarget = target;
             targetHealth = target.GetComponent<PlayerHealth>();
             targetMovement = target.GetComponent<PlayerMovement>();
-        }
-
-        void SetShake(float x)
-        {
-            if (art != null)
-                art.localPosition = new Vector3(x, art.localPosition.y, 0f); // 세로는 EnemyArtMotion(통통 튀기) 몫
         }
     }
 }
