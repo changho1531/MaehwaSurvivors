@@ -259,5 +259,40 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(50 + Settings.prewarmCount, pool.CountActive, "상한 없이 확장");
             yield return null;
         }
+
+        [UnityTest]
+        public IEnumerator X9_DroppedOrb_PopsToFullSize_PulledOrbIsFullSize()
+        {
+            var enemy = scene.SpawnAt(new Vector2(8f, 0f), chase: false);
+            yield return null;
+            enemy.TakeDamage(enemy.Data.maxHp);
+            while (ActiveOrbs().Count == 0)
+                yield return null;
+            var orb = ActiveOrbs()[0];
+            float full = Settings.orbPrefab.transform.localScale.x;
+            Assert.Less(orb.transform.localScale.x, full, "작게 튀어나오기 시작");
+            yield return WaitGame(Settings.spawnPopSeconds + 0.1f);
+            Assert.AreEqual(full, orb.transform.localScale.x, 0.001f, "제 크기로");
+
+            orb.transform.localScale = Vector3.zero;
+            orb.PlaySpawnPop(1f);
+            orb.BeginPull();
+            Assert.AreEqual(full, orb.transform.localScale.x, 0.001f, "자석에 잡히면 연출을 끝내고 제 크기");
+        }
+
+        [UnityTest]
+        public IEnumerator X10_LevelUp_PulseRings_PlayInRealtime_WhileCardsPause()
+        {
+            var pulse = scene.Player.GetComponent<LevelUpPulse>();
+            Assert.IsNotNull(pulse, "플레이어에 LevelUpPulse");
+            scene.Level.AddXp(scene.Level.RequiredXp);
+            yield return null;
+            Assert.AreEqual(GameState.LevelUp, State, "카드 중 게임 시간 정지");
+            Assert.IsTrue(pulse.IsPlaying, "레벨업 순간 고리");
+            float end = Time.realtimeSinceStartup + 1.2f;
+            while (Time.realtimeSinceStartup < end)
+                yield return null;
+            Assert.IsFalse(pulse.IsPlaying, "게임이 멈춰 있어도 실시간으로 끝남");
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Enemies;
+using DG.Tweening;
 using Game.Pooling;
 using UnityEngine;
 
@@ -34,6 +35,8 @@ namespace Game.Progression
 
         void Awake()
         {
+            // 한꺼번에 많이 처치하면 구슬 연출이 동시에 수백 개 — 기본 용량(200)을 넘을 때 매번 늘리지 않게 미리 잡는다
+            DOTween.SetTweensCapacity(1000, 100);
             var root = new GameObject("[Pool] XpOrbs").transform;
             // 상한 없음: 구슬은 습득 전까지 사라지지 않으므로 부족하면 늘리기만 한다 (6-A절 풀 정책).
             pool = new ComponentPool<XpOrb>(settings.orbPrefab, root, settings.prewarmCount);
@@ -81,7 +84,7 @@ namespace Game.Progression
                     continue;
                 }
 
-                SpawnOrb(drop.Position, drop.Value, drop.Color);
+                SpawnOrb(drop.Position, drop.Value, drop.Color).PlaySpawnPop(settings.spawnPopSeconds);
                 pending.RemoveAt(i);
             }
         }

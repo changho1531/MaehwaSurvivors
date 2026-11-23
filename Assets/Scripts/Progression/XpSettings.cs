@@ -21,5 +21,9 @@ namespace Game.Progression
         [Tooltip("카드가 새로 뜬 뒤 클릭을 무시하는 실시간(초)")]
         [Min(0f)] public float cardInputLockSeconds = 0.2f;
         [Min(0)] public int prewarmCount = 200;
+
+        [Header("연출 ※")]
+        [Tooltip("적이 떨군 구슬이 0에서 제 크기로 튀어나오는 시간 (위치 · 판정은 그대로). 0이면 연출 없음")]
+        [Min(0f)] public float spawnPopSeconds = 0.25f;
     }
 }
