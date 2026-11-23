@@ -5039,6 +5039,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e54114f20495bc40b9aa6122ba388e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Core.RunClock
+  waves: {fileID: 171082125}
 --- !u!114 &1897601226
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game.Enemies;
+using Game.Progression;
 using Game.UI;
 using NUnit.Framework;
 using UnityEngine;
@@ -66,6 +67,22 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(360f, table.earlySummonSeconds);
             CollectionAssert.AreEqual(new[] { 1, 1, 1, 2, 3 }, System.Array.ConvertAll(table.waves, w => w.settings.groupSize));
             Assert.AreEqual(1, table.bossPhase.groupSize, "보스전은 웨이브 2 수준");
+        }
+
+        [UnityTest]
+        public IEnumerator W0b_OneRunClock_SurvivalTimeAndSpawnCurveFollowWaves()
+        {
+            var waves = scene.Spawner.Waves;
+            var stats = Object.FindFirstObjectByType<RunStats>();
+            yield return null;
+            yield return null;
+            Assert.Greater(waves.Elapsed, 0f);
+            Assert.AreEqual(waves.Elapsed, stats.Elapsed, "생존 시간 = 판 시계");
+            Assert.AreEqual(waves.Elapsed, scene.Spawner.Elapsed, "스폰 곡선 = 판 시계");
+
+            waves.Advance(361f); // 시간을 건너뛰어도
+            Assert.AreEqual(361f, stats.Elapsed, 0.001f, "생존 시간도 같이 건너뜀 (보스 소환 시각과 어긋나지 않게)");
+            Assert.AreEqual(361f, scene.Spawner.Elapsed, 0.001f, "스폰 곡선도 같은 시각");
         }
 
         [UnityTest]

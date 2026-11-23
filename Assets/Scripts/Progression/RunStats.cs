@@ -5,13 +5,17 @@ namespace Game.Progression
 {
     /// <summary>
     /// 이번 런의 기록 (설계서 7-B절): 생존 시간, 처치 수. HUD와 결과 화면이 읽는다.
-    /// 생존 시간은 게임 시간(deltaTime)으로 누적하므로 Pause·LevelUp·GameOver 중에는 자동으로 멈춘다 (규칙 9).
+    /// 생존 시간은 판 시계(WaveDirector.Elapsed, 게임 시간)를 그대로 읽는다 — Pause·LevelUp·GameOver 중에는 자동으로 멈추고 (규칙 9),
+    /// 웨이브 · 스폰 곡선과 같은 시계라 시간을 건너뛰어도(디버그 · 테스트) 서로 어긋나지 않는다.
     /// 처치 수는 Enemy.Killed 1회 = 1 (규칙 10, 적 종류 구분 없음). 적은 이 클래스를 모른다 (Observer).
     /// 씬과 함께 생성·파괴되므로 재도전 시 씬 재로드로 자연히 0부터 시작한다.
     /// </summary>
     public class RunStats : MonoBehaviour
     {
-        public float Elapsed { get; private set; }
+        [Tooltip("판 시계. 생존 시간 = 웨이브 경과 시간")]
+        [SerializeField] WaveDirector waves;
+
+        public float Elapsed => waves != null ? waves.Elapsed : 0f;
         public int Kills { get; private set; }
 
         /// <summary>보스를 쓰러뜨렸는지 (결과 화면 제목 · 색, 11절 MU-C-002)</summary>
@@ -31,11 +35,6 @@ namespace Game.Progression
 
         void OnEnable() => Enemy.Killed += OnEnemyKilled;
         void OnDisable() => Enemy.Killed -= OnEnemyKilled;
-
-        void Update()
-        {
-            Elapsed += Time.deltaTime;
-        }
 
         void OnEnemyKilled(Enemy enemy) => Kills++;
 

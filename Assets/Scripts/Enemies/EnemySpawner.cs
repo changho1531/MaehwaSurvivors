@@ -51,8 +51,8 @@ namespace Game.Enemies
         public ComponentPool<Enemy> Pool => pool;
         public Enemy BasePrefab => enemyPrefab;
         public WaveDirector Waves => waves;
-        /// <summary>게임 시간 기준 경과 초 (일시정지 중 멈춤). 곡선 조회용.</summary>
-        public float Elapsed { get; private set; }
+        /// <summary>판 시계(WaveDirector) 경과 초 — 일시정지 중 멈춤, 웨이브와 같은 시계. 곡선 조회용.</summary>
+        public float Elapsed => waves != null ? waves.Elapsed : 0f;
         /// <summary>켜면 곡선 대신 곡선의 하한(가장 빠른 간격)으로 스폰 (디버그 F5).</summary>
         public bool ForceFastest { get; set; }
 
@@ -129,7 +129,6 @@ namespace Game.Enemies
 
         void Update()
         {
-            Elapsed += Time.deltaTime;
             AdvanceSpecials(Time.deltaTime);
             timer += Time.deltaTime;
             float interval = CurrentInterval;
