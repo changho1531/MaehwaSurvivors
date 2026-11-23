@@ -178,5 +178,16 @@ namespace Game.Tests.PlayMode
             yield return WaitZoneEnd();
             Assert.AreEqual(TestHp - 24f, enemy.CurrentHp, 1f, "두 범위가 겹치면 합산");
         }
+
+        [UnityTest]
+        public IEnumerator R7_RainArt_PlaysOnceOverDuration_FallThenLand()
+        {
+            Acquire();
+            yield return WaitCast();
+            var art = Object.FindFirstObjectByType<DamageZone>().GetComponentInChildren<FrameAnimation>();
+            Assert.Less(art.CurrentFrame, 5, "처음은 사선 낙하 시작");
+            yield return new WaitForSeconds(data.GetDuration(1) - 0.15f);
+            Assert.GreaterOrEqual(art.CurrentFrame, art.FrameCount - 5, "장판이 끝날 무렵 착탄 장면까지 재생");
+        }
     }
 }

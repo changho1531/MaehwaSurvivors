@@ -21,6 +21,8 @@ namespace Game.Weapons
         [SerializeField, Min(0.01f)] float artRadiusAtScale1 = 2.45f;
         [Tooltip("끝 폭발 연출. 범위가 풀로 돌아간 뒤에도 재생되도록 범위 밖에 따로 둔다")]
         [SerializeField] BurstEffect burstPrefab;
+        [Tooltip("(선택) 장판 지속 시간 동안 처음부터 끝까지 1회 재생할 그림 (만천화우: 사선 낙하 → 착탄)")]
+        [SerializeField] FrameAnimation playOverDuration;
 
         [Header("경고 표시 (선택, 8-B — 그림이 없으면 코드로 만든 원/링)")]
         [Tooltip("장판 안쪽 채움. 경고 중에는 숨긴다")]
@@ -99,6 +101,8 @@ namespace Game.Weapons
             release = releaseToPool;
             if (art != null)
                 art.localScale = Vector3.one * (radius / artRadiusAtScale1);
+            if (playOverDuration != null)
+                playOverDuration.SetDuration(seconds);
             UpdateVisual(0f);
         }
 

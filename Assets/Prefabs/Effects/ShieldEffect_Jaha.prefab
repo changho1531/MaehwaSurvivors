@@ -46,14 +46,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Runtime::Game.Weapons.ShieldEffect
   fillSprite: {fileID: 0}
   ringSprite: {fileID: 0}
+  fillFrames:
+  - {fileID: 21300000, guid: 5934132861712b84cb3187446820ff1f, type: 3}
+  - {fileID: 21300000, guid: a2f6f30ad4e0d5b4bb5e86658184ac78, type: 3}
+  - {fileID: 21300000, guid: 00ac3545bd54e4f46a1fa32a0da46f8c, type: 3}
+  - {fileID: 21300000, guid: 6a82ccc20e02bf54dab4983c2592ed63, type: 3}
+  - {fileID: 21300000, guid: 4ad3d58c0ce3ec448baba471102e1877, type: 3}
+  - {fileID: 21300000, guid: 8fff7b10bbda4cd4abc996cd7048eb98, type: 3}
+  - {fileID: 21300000, guid: d5d4d5f7e76721649ab38d677ba1412a, type: 3}
+  - {fileID: 21300000, guid: b9fe5290140e26e4ca9d7fe1df93f4da, type: 3}
+  - {fileID: 21300000, guid: 6028b6c89607a85428692cf5c4290825, type: 3}
+  - {fileID: 21300000, guid: e00d0543e08103c449e0a08eba8e5fba, type: 3}
+  - {fileID: 21300000, guid: e2065c0ff3128eb40ba46a04a60e840d, type: 3}
+  - {fileID: 21300000, guid: ce5a8fdb8a5eeba4389b20902e83f20c, type: 3}
+  - {fileID: 21300000, guid: f36da89cb0993ac47bada37066f27dc2, type: 3}
+  - {fileID: 21300000, guid: 05fc1689d49a2334e9e090653fbca1c3, type: 3}
+  - {fileID: 21300000, guid: 4a4ccc3d447de9744843cc0b72eaf9b4, type: 3}
+  - {fileID: 21300000, guid: de7b4432f0db63246957d3629fe3ad6a, type: 3}
+  - {fileID: 21300000, guid: 3b62f388d6cb7e247ba424a4c14f3622, type: 3}
+  - {fileID: 21300000, guid: 1a6410166cba15e438c8eee58e6784ad, type: 3}
+  - {fileID: 21300000, guid: 5233624a4dc474243a28866c98c98d80, type: 3}
+  - {fileID: 21300000, guid: f6c5213526b94a641882c7b210d7a015, type: 3}
+  - {fileID: 21300000, guid: 733a3bf94eb79bb41b904a2f8963e075, type: 3}
+  - {fileID: 21300000, guid: d343cd2bd4a8fc448908d88aa4f8aaaa, type: 3}
+  - {fileID: 21300000, guid: 2952cf17c707a4840a1c09ebced24f56, type: 3}
+  - {fileID: 21300000, guid: 42876d5128ab8b54ab1f3866d87a70f0, type: 3}
+  - {fileID: 21300000, guid: 74b40455760b34d40ad8cef36d8722b2, type: 3}
+  - {fileID: 21300000, guid: c75bdf183051c5c4180762dc9ecb1f07, type: 3}
+  - {fileID: 21300000, guid: 4c118fa4b02d72b479164df5159674b7, type: 3}
+  - {fileID: 21300000, guid: f4bcf6e9514a5eb4ebdd4aac122a3f29, type: 3}
+  - {fileID: 21300000, guid: b195a933ebd3cd0478e9f0e2754862e3, type: 3}
+  - {fileID: 21300000, guid: 00bca80d28ab33f43a01713837a5ad05, type: 3}
+  - {fileID: 21300000, guid: c105f37b87a414f4a84867781d54419e, type: 3}
+  framesPerSecond: 12
+  loopFromFrame: 5
+  fillMaterial: {fileID: 2100000, guid: 6969218caf52e69479f14586e245a609, type: 2}
   radius: 0.8
-  color: {r: 0.62, g: 0.38, b: 0.92, a: 0.38}
+  color: {r: 0.85, g: 0.75, b: 1, a: 1}
   hitFlashColor: {r: 1, g: 1, b: 1, a: 0.75}
   healTextColor: {r: 0.45, g: 0.95, b: 0.45, a: 1}
   sortingOrder: 14
   ringSeconds: 0.35
   ringMaxScale: 2
-  breatheAmount: 0.06
+  breatheAmount: 0.02
   breatheSpeed: 1.5
   hitFlashSeconds: 0.12
   blinkSeconds: 1

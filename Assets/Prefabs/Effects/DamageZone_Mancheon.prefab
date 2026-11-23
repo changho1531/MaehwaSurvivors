@@ -46,8 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Weapons.DamageZone
   art: {fileID: 1000000000000000012}
-  artRadiusAtScale1: 2.45
+  artRadiusAtScale1: 2
   burstPrefab: {fileID: 1000000000000000003, guid: 4370b85ba416485890f3c6e092915c8f, type: 3}
+  playOverDuration: {fileID: 1000000000000000014}
+  fillRenderer: {fileID: 0}
+  ringRenderer: {fileID: 0}
+  warningBlinksPerSecond: 4
 --- !u!1 &1000000000000000011
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,20 +97,49 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 6969218caf52e69479f14586e245a609, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 15
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 63ee49c1819cc8f47abeaf8f7251cb18, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5.12, y: 5.12}
+  m_Size: {x: 10.666667, y: 6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -121,17 +154,61 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: afa2a3d6fcd107041a4ab8b561434e0f, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Weapons.FrameAnimation
   target: {fileID: 1000000000000000013}
   frames:
-  - {fileID: 21300000, guid: e066f56fec1341e6a97c960d9f5a0a79, type: 3}
-  - {fileID: 21300000, guid: db392ca5a2914f6b979e64bef8e23d11, type: 3}
-  - {fileID: 21300000, guid: 4cf0f387a6d644b99d292779ba6cc774, type: 3}
-  - {fileID: 21300000, guid: cde45fbab38249c2b536fd6e99d34eb1, type: 3}
-  - {fileID: 21300000, guid: 771fee539bf345ec9407343ca233d2e3, type: 3}
-  - {fileID: 21300000, guid: 9f0941f2373b40408908fe3a8c144a3f, type: 3}
-  - {fileID: 21300000, guid: 1cbab69b1e2a431bbe26f54c08f7656e, type: 3}
-  - {fileID: 21300000, guid: e4c85a614fe44cae97a51ad4f8ab8cde, type: 3}
-  framesPerSecond: 12
-  loop: 1
+  - {fileID: 21300000, guid: 63ee49c1819cc8f47abeaf8f7251cb18, type: 3}
+  - {fileID: 21300000, guid: 29ce669431197a34e95ac9103eed57cf, type: 3}
+  - {fileID: 21300000, guid: df9ea9a59303cda4ebd99e65653ece8d, type: 3}
+  - {fileID: 21300000, guid: 3bc9f335d63fab84aa47b15f78988248, type: 3}
+  - {fileID: 21300000, guid: 03829b33132824b4aa84e2d1c48a2532, type: 3}
+  - {fileID: 21300000, guid: 31d99b0814d059349870314a2da4969e, type: 3}
+  - {fileID: 21300000, guid: 97bda94c7fe55bc4ab6d98983db528df, type: 3}
+  - {fileID: 21300000, guid: e1630f70a90f44149ac6b59308fd0008, type: 3}
+  - {fileID: 21300000, guid: 2f105faf5d8aa84459c318e234fcee33, type: 3}
+  - {fileID: 21300000, guid: f45df9945307f884bb267c066c77c979, type: 3}
+  - {fileID: 21300000, guid: fa2862bff279a5e4382007e960e94aa0, type: 3}
+  - {fileID: 21300000, guid: d27f0f6975323d640a9380a37de968dc, type: 3}
+  - {fileID: 21300000, guid: f817bb267ccf6b4498706ec43720119f, type: 3}
+  - {fileID: 21300000, guid: b835860d41362c843aa71b782c86a3a7, type: 3}
+  - {fileID: 21300000, guid: 7e36ebe7920f30b4787db7fbcdba2408, type: 3}
+  - {fileID: 21300000, guid: a5988a72431a5074aa0716e174bf7bbf, type: 3}
+  - {fileID: 21300000, guid: e8efd729cddb7e1429eeb2cf983c9258, type: 3}
+  - {fileID: 21300000, guid: da21c40c7c05eea4dbeda0f6b6bb98e3, type: 3}
+  - {fileID: 21300000, guid: 4565a751fe7d50e41bc62ef806fc7230, type: 3}
+  - {fileID: 21300000, guid: 7681e24945be162459fa13c5b4243cf0, type: 3}
+  - {fileID: 21300000, guid: f507d4eed16666344bfe2dcff56645eb, type: 3}
+  - {fileID: 21300000, guid: 6ce2353c31c87974da08222d989b143a, type: 3}
+  - {fileID: 21300000, guid: 2b7889555ab22aa46b189015133b169c, type: 3}
+  - {fileID: 21300000, guid: 5e8132a4f5988644c927c1b6b0da0aea, type: 3}
+  - {fileID: 21300000, guid: bd3f6284346ac5a4fb1c2808427a2674, type: 3}
+  - {fileID: 21300000, guid: c1b2d84bbd5fb4f44b5419619372fbe5, type: 3}
+  - {fileID: 21300000, guid: 1fb0fb6e95eec054db62dbc5d1d58248, type: 3}
+  - {fileID: 21300000, guid: 4c6b3e27dbade4a41bb16cedcf4958fa, type: 3}
+  - {fileID: 21300000, guid: 23fa73a5b350b4b45a93a4ab5b279dd8, type: 3}
+  - {fileID: 21300000, guid: e41f927efa3fa344db0f26bb145a8f1d, type: 3}
+  - {fileID: 21300000, guid: a1c43c537a1b0b0428b1c27740bdfdd1, type: 3}
+  - {fileID: 21300000, guid: 809afe69bb084ed4abf6dfbc6912f745, type: 3}
+  - {fileID: 21300000, guid: c3dae9f7d0f4c444faad607f0de05d20, type: 3}
+  - {fileID: 21300000, guid: ac4a94ded10ed3f4198b5d159d5c53f6, type: 3}
+  - {fileID: 21300000, guid: 04afc183c9f62614eb050447f93349d4, type: 3}
+  - {fileID: 21300000, guid: 715e3886195035643b4afc56f8c3064c, type: 3}
+  - {fileID: 21300000, guid: 2ab5522507632194eb8bd33d9acc939b, type: 3}
+  - {fileID: 21300000, guid: ec01e297ed0a7eb439d3a46bb6a2f28f, type: 3}
+  - {fileID: 21300000, guid: 6fa6092db4bd9334f86bea7f32dc75b1, type: 3}
+  - {fileID: 21300000, guid: df3c197b27e64644a97fe2306cc318e5, type: 3}
+  - {fileID: 21300000, guid: 368df379acc8d214f95d2f6c2f235be1, type: 3}
+  - {fileID: 21300000, guid: 6022c8758238eb948b253de9cadc0b0f, type: 3}
+  - {fileID: 21300000, guid: 0e6c82e169ba59541a5ca2a2dc203ab5, type: 3}
+  - {fileID: 21300000, guid: 465eac8a58a8dc841991f17fd974d81b, type: 3}
+  - {fileID: 21300000, guid: 7e1e2fac3290db84db5983055f3cca7a, type: 3}
+  - {fileID: 21300000, guid: 81eb8cae7bb3bff48bc9e62f576c91da, type: 3}
+  - {fileID: 21300000, guid: c7459f56d568e0a4ca0ad5bd73800779, type: 3}
+  - {fileID: 21300000, guid: fb819fef58d556f4d996ae6b3293b1eb, type: 3}
+  - {fileID: 21300000, guid: 455231e6e52c325498916ca29be86f00, type: 3}
+  - {fileID: 21300000, guid: 447bf6e0f9a886f409eda6d00acd3086, type: 3}
+  - {fileID: 21300000, guid: ecd0ecf59e94ddb4f84d215e43c30e2e, type: 3}
+  framesPerSecond: 25
+  loop: 0
+  loopFromFrame: 0

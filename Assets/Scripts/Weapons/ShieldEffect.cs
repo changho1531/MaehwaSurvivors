@@ -5,7 +5,7 @@ namespace Game.Weapons
 {
     /// <summary>
     /// 자하호신강 막 연출 (설계서 7-G 연출). 판정과 무관한 순수 표시.
-    /// 새 그림 없이 코드로 만든 원/링 스프라이트를 쓰고, 스프라이트를 지정하면 그것으로 바뀐다 (그림만 교체, 코드 그대로).
+    /// 막 프레임 그림(fillFrames)이 있으면 그것을 재생하고, 없으면 코드로 만든 원/링 스프라이트를 쓴다 (그림만 교체, 코드 그대로).
     /// 켜질 때 링이 퍼짐 → 켜져 있는 동안 숨 쉬기 → 맞으면 흰 번쩍임 → 마지막 1초 깜빡임 → 꺼질 때 회복량 표시.
     /// 모두 게임 시간 기준이라 일시정지 중에는 그대로 멈춘다.
     /// </summary>
@@ -15,6 +15,12 @@ namespace Game.Weapons
         [SerializeField] Sprite fillSprite;
         [Tooltip("비우면 코드로 만든 링")]
         [SerializeField] Sprite ringSprite;
+        [Tooltip("(선택) 막 프레임 그림. 있으면 fillSprite 대신 재생 — 앞 loopFromFrame장은 펼쳐지는 연출 1회, 이후 반복. 그림 속 막 지름이 1칸이 되게 임포트")]
+        [SerializeField] Sprite[] fillFrames;
+        [SerializeField, Min(0.1f)] float framesPerSecond = 12f;
+        [SerializeField, Min(0)] int loopFromFrame;
+        [Tooltip("(선택) 막 머티리얼. 검은 배경 그림이면 Additive")]
+        [SerializeField] Material fillMaterial;
 
         [Header("※ 예시값")]
         [Tooltip("막 반경(월드 단위). 캐릭터를 감싸는 정도")]
@@ -47,10 +53,14 @@ namespace Game.Weapons
         public bool IsFlashing => hitElapsed < hitFlashSeconds;
         public bool IsShowingHeal => healText != null && healText.gameObject.activeSelf;
         public string HealLabel => healText != null ? healText.text : "";
+        public Sprite FillSprite => fill != null ? fill.sprite : null;
 
         void Awake()
         {
-            fill = CreateRenderer("Fill", fillSprite != null ? fillSprite : ProceduralCircle.Disk, sortingOrder);
+            bool hasFrames = fillFrames != null && fillFrames.Length > 0;
+            fill = CreateRenderer("Fill", hasFrames ? fillFrames[0] : fillSprite != null ? fillSprite : ProceduralCircle.Disk, sortingOrder);
+            if (fillMaterial != null)
+                fill.sharedMaterial = fillMaterial;
             ring = CreateRenderer("Ring", ringSprite != null ? ringSprite : ProceduralCircle.Ring, sortingOrder);
             healText = CreateHealText();
             fill.enabled = false;
@@ -127,6 +137,8 @@ namespace Game.Weapons
             {
                 float breathe = 1f + Mathf.Sin(elapsed * breatheSpeed * Mathf.PI * 2f) * breatheAmount;
                 fill.transform.localScale = Vector3.one * (diameter * breathe);
+                if (fillFrames != null && fillFrames.Length > 0)
+                    fill.sprite = fillFrames[FrameAnimation.FrameIndex((int)(elapsed * framesPerSecond), fillFrames.Length, true, loopFromFrame)];
 
                 var c = IsFlashing ? Color.Lerp(color, hitFlashColor, 1f - hitElapsed / hitFlashSeconds) : color;
                 // 마지막 1초 깜빡임: 언제 꺼지는지 미리 알린다

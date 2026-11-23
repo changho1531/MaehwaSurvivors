@@ -213,5 +213,16 @@ namespace Game.Tests.PlayMode
             yield return WaitUntil(() => !shield.IsShieldActive, 2f);
             Assert.IsFalse(shield.Effect.IsVisible);
         }
+
+        [UnityTest]
+        public IEnumerator J9_EffectPlaysShieldFrames_OpeningThenLoop()
+        {
+            Acquire();
+            yield return WaitUntil(() => shield.IsShieldActive, 1f);
+            StringAssert.StartsWith("Shield_", shield.Effect.FillSprite.name, "코드 원이 아니라 막 그림");
+            var first = shield.Effect.FillSprite;
+            yield return new WaitForSeconds(0.5f);
+            Assert.AreNotEqual(first, shield.Effect.FillSprite, "프레임이 넘어간다");
+        }
     }
 }

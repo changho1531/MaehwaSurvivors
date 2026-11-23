@@ -15,6 +15,8 @@ namespace Game.Weapons
         [SerializeField] Sprite[] frames;
         [SerializeField, Min(0.1f)] float framesPerSecond = 12f;
         [SerializeField] bool loop = true;
+        [Tooltip("반복할 때 처음으로 돌아가지 않고 이 프레임부터 반복 (앞부분 = 시작 연출 1회, 자하호신강)")]
+        [SerializeField, Min(0)] int loopFromFrame;
 
         float time;
 
@@ -40,7 +42,20 @@ namespace Game.Weapons
                 return;
             time += Time.deltaTime;
             int index = (int)(time * framesPerSecond);
-            Show(loop ? index % FrameCount : Mathf.Min(index, FrameCount - 1));
+            Show(FrameIndex(index, FrameCount, loop, loopFromFrame));
+        }
+
+        /// <summary>경과 프레임 수 → 보여 줄 프레임. 반복이면 첫 바퀴 뒤에는 loopFrom부터 반복, 아니면 마지막 프레임에 멈춘다.</summary>
+        public static int FrameIndex(int elapsedFrames, int count, bool loop, int loopFrom = 0)
+        {
+            if (count <= 0)
+                return 0;
+            if (elapsedFrames < count)
+                return elapsedFrames;
+            if (!loop)
+                return count - 1;
+            loopFrom = Mathf.Clamp(loopFrom, 0, count - 1);
+            return loopFrom + (elapsedFrames - count) % (count - loopFrom);
         }
 
         void Show(int index)
