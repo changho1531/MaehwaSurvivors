@@ -8,7 +8,7 @@ namespace Game.Enemies
 {
     /// <summary>
     /// 저주술사 (설계서 8-B절). 유지 거리보다 멀면 다가오고 안이면 멈춘다(물러나지 않음 — 다가가면 잡힌다).
-    /// 주기마다 그 순간의 플레이어 위치에 저주 장판(경고 → 장판)을 깔고, 주기마다 주변에 도병을 부른다.
+    /// 주기마다 그 순간의 플레이어 위치에 저주 장판(경고 → 장판)을 깔고, 주기마다 주변에 도병을 부른다 (둘 다 화면 안에 있을 때만).
     /// 장판은 공통 DamageZone을 "플레이어 대상"으로 쓰고, 소환은 자기를 꺼낸 스포너(IEnemySource)에 맡긴다 —
     /// 그래서 저주술사가 죽어도 이미 깔린 장판과 불려 나온 도병은 각자의 풀에서 끝까지 진행된다 (규칙 8).
     /// </summary>
@@ -70,8 +70,9 @@ namespace Game.Enemies
                 CastZone(target.position);
             }
 
+            // 소환도 화면 밖이면 기다렸다가 화면에 들어오는 순간 (보이지 않는 곳에서 생기면 소환인지 알 수 없다)
             summonTimer += dt;
-            if (summonTimer >= data.summonInterval)
+            if (summonTimer >= data.summonInterval && ScreenCheck.IsVisible(Body.position))
             {
                 summonTimer = 0f;
                 Summon();

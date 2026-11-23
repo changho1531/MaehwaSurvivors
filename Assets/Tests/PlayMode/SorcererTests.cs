@@ -285,6 +285,27 @@ namespace Game.Tests.PlayMode
             Assert.IsFalse(aura.activeSelf);
         }
 
+        [UnityTest]
+        public IEnumerator C15_OffScreen_DoesNotSummon_ThenSummonsWhenVisible()
+        {
+            health.Invincible = true;
+            var sorcerer = Spawn(new Vector2(40f, 0f));
+            int summons = 0;
+            sorcerer.Summoned += _ => summons++;
+            Time.timeScale = 5f;
+            yield return WaitGameSeconds(10.5f);
+            Time.timeScale = 1f;
+            Assert.IsFalse(ScreenCheck.IsVisible(sorcerer.transform.position), "아직 화면 밖이어야 한다");
+            Assert.AreEqual(0, summons, "화면 밖이면 주기가 차도 소환하지 않음");
+
+            var body = sorcerer.GetComponent<Rigidbody2D>();
+            body.position = (Vector2)scene.Player.transform.position + new Vector2(3f, 0f);
+            sorcerer.transform.position = body.position;
+            for (int i = 0; i < 3; i++)
+                yield return new WaitForFixedUpdate();
+            Assert.AreEqual(1, summons, "화면에 들어오는 순간 밀린 소환 1회");
+        }
+
         [Test]
         public void C10_KnockbackImmune_TakesDamage()
         {
