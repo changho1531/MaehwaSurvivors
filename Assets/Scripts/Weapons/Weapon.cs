@@ -68,7 +68,8 @@ namespace Game.Weapons
             else if (cooldownRemaining > 0f)
             {
                 cooldownRemaining -= dt;
-                return;
+                if (cooldownRemaining > 0f)
+                    return; // 다 찬 프레임에 바로 공격 — 한 프레임 쉬면 쿨타임마다 1프레임씩 늦어진다
             }
 
             if (!TryStartAttack())
