@@ -33,6 +33,7 @@ MonoBehaviour:
   summonCount: 2
   summonRadius: 1.5
   summonPrefab: {fileID: 3083572570979652168, guid: 42f1f5bd697fced478227f4b1bca8673, type: 3}
+  summonEffectPrefab: {fileID: 5794264305688726250, guid: db08143389f4aa1499ebf401b15bd2b6, type: 3}
   castShakeSeconds: 0.3
   shakeAmplitude: 0.05
   shakeFrequency: 30

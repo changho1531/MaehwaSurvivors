@@ -249,6 +249,42 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(10f, summons[0] - start, 0.3f);
         }
 
+        [UnityTest]
+        public IEnumerator C14_Art_WalkWhileMoving_CastEffect_SummonSmoke_CurseAura()
+        {
+            health.Invincible = true;
+            var idle = sorcererPrefab.GetComponentInChildren<SpriteRenderer>().sprite;
+            var walker = Spawn(new Vector2(8f, 0f));
+            var stander = Spawn(new Vector2(0f, 3f));
+            for (int i = 0; i < 10; i++)
+                yield return new WaitForFixedUpdate();
+            yield return null;
+            var walk = walker.transform.Find("Art").GetComponent<FrameAnimation>();
+            Assert.IsTrue(walk.enabled, "다가오는 동안 걷기 프레임 재생");
+            var stand = stander.transform.Find("Art");
+            Assert.IsFalse(stand.GetComponent<FrameAnimation>().enabled, "멈추면 걷기 끔");
+            Assert.AreEqual(idle, stand.GetComponent<SpriteRenderer>().sprite, "멈추면 정지 그림");
+
+            var cast = stander.transform.Find("CastEffect").gameObject;
+            Assert.IsFalse(cast.activeSelf);
+            stander.CastZone(scene.Player.transform.position);
+            Assert.IsTrue(cast.activeSelf, "장판을 쏠 때 시전 이펙트");
+
+            var smokePool = PrefabPools.For(stander.Data.summonEffectPrefab);
+            int summoned = stander.Summon();
+            Assert.Greater(summoned, 0);
+            Assert.AreEqual(summoned, smokePool.CountActive, "불러낸 자리마다 연기 1회");
+            yield return WaitGameSeconds(1.2f);
+            Assert.AreEqual(0, smokePool.CountActive, "재생이 끝나면 풀로 돌아감");
+            Assert.IsFalse(cast.activeSelf, "시전 이펙트도 끝나면 숨김");
+
+            var aura = scene.Player.transform.Find("CurseAura").gameObject;
+            curse.Apply(0.2f, 1f);
+            Assert.IsTrue(aura.activeSelf, "저주 중 발밑 연출");
+            curse.Clear();
+            Assert.IsFalse(aura.activeSelf);
+        }
+
         [Test]
         public void C10_KnockbackImmune_TakesDamage()
         {

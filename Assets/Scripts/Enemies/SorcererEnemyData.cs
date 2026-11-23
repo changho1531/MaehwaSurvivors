@@ -34,6 +34,8 @@ namespace Game.Enemies
         [Min(0f)] public float summonRadius = 1.5f;
         [Tooltip("불러내는 적 (도병). 일반 도병과 같은 프리팹 = 같은 풀")]
         public Enemy summonPrefab;
+        [Tooltip("(선택) 불러낸 자리마다 1회 재생하는 연기. 저주술사가 죽어도 끝까지 재생되도록 공유 풀에서 꺼낸다")]
+        public BurstEffect summonEffectPrefab;
 
         [Header("연출")]
         [Tooltip("장판을 쏠 때 손을 드는 떨림 시간 ※")]

@@ -101,6 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6975278028016663345}
   - component: {fileID: 2599443318658476149}
+  - component: {fileID: 1835796346188949314}
   m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
@@ -149,7 +150,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 6969218caf52e69479f14586e245a609, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -172,16 +173,44 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 0.3, g: 0.1, b: 0.38, a: 0.4}
+  m_Sprite: {fileID: 21300000, guid: a7ca83e52d26cfc47ae89a6d1a1b6cb6, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.1636363, y: 1.1636363}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1835796346188949314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3715287202130852082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa2a3d6fcd107041a4ab8b561434e0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Weapons.FrameAnimation
+  target: {fileID: 2599443318658476149}
+  frames:
+  - {fileID: 21300000, guid: a7ca83e52d26cfc47ae89a6d1a1b6cb6, type: 3}
+  - {fileID: 21300000, guid: d3862c42d580d8c48ab86f32aaa6f34f, type: 3}
+  - {fileID: 21300000, guid: b0d6f74624724814d9f2487888921d89, type: 3}
+  - {fileID: 21300000, guid: b01f9957d79f4a04a85f952abcd81997, type: 3}
+  - {fileID: 21300000, guid: 6c9acd59f1b5ff743936720271155527, type: 3}
+  - {fileID: 21300000, guid: 8cb28b06f511552429dc10c23dad07a0, type: 3}
+  - {fileID: 21300000, guid: c58db56b4ab8a9a49b126ca8f1351566, type: 3}
+  - {fileID: 21300000, guid: bf0159f867d78a24eb45f95b3cdb2b0b, type: 3}
+  - {fileID: 21300000, guid: 4aa70462c23c1814db4c2e57f9d0796c, type: 3}
+  - {fileID: 21300000, guid: 9f36cfc6941d4584bb19a1fa2d874e3c, type: 3}
+  - {fileID: 21300000, guid: 5aa57ddc3f470a449a493d495c774a87, type: 3}
+  - {fileID: 21300000, guid: 3bef7bf963edb5b46a0bddebf5bb9357, type: 3}
+  framesPerSecond: 8
+  loop: 1
 --- !u!1 &5569662892007020988
 GameObject:
   m_ObjectHideFlags: 0

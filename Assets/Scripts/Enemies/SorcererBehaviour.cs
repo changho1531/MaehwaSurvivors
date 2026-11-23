@@ -16,6 +16,8 @@ namespace Game.Enemies
     {
         [Tooltip("떨림 연출로 흔들 그림(자식). 몸통(물리)은 흔들지 않는다")]
         [SerializeField] Transform art;
+        [Tooltip("(선택) 장판을 쏠 때 몸 위에서 1회 재생하는 시전 이펙트 (자식)")]
+        [SerializeField] BurstEffect castEffect;
 
         SorcererEnemyData data;
         Transform cachedTarget;
@@ -44,6 +46,8 @@ namespace Game.Enemies
             summonTimer = 0f;
             shakeRemaining = 0f;
             SetShake(0f);
+            if (castEffect != null)
+                castEffect.gameObject.SetActive(false); // 풀에서 다시 꺼낼 때 지난 시전이 남아 있지 않게
         }
 
         public override void Tick(Transform target, float dt)
@@ -88,6 +92,8 @@ namespace Game.Enemies
             }
             shakeRemaining = data.castShakeSeconds;
             shakeTime = 0f;
+            if (castEffect != null)
+                castEffect.Play(castEffect.transform.position); // 자식이라 몸을 따라다닌다
             ZoneCast?.Invoke(position);
         }
 
@@ -97,10 +103,23 @@ namespace Game.Enemies
             int count = 0;
             if (Owner.Source != null && data.summonPrefab != null)
                 for (int i = 0; i < data.summonCount; i++)
-                    if (Owner.Source.SpawnNear(data.summonPrefab, Body.position, data.summonRadius) != null)
-                        count++;
+                {
+                    var summoned = Owner.Source.SpawnNear(data.summonPrefab, Body.position, data.summonRadius);
+                    if (summoned == null)
+                        continue;
+                    count++;
+                    PlaySummonSmoke(summoned.transform.position);
+                }
             Summoned?.Invoke(count);
             return count;
+        }
+
+        void PlaySummonSmoke(Vector2 position)
+        {
+            if (data.summonEffectPrefab == null)
+                return;
+            var pool = PrefabPools.For(data.summonEffectPrefab, 2);
+            pool.Get(position).Play(position, pool.Release);
         }
 
         void UpdateShake(float dt)

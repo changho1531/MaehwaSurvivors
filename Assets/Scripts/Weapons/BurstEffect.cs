@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Game.Weapons
@@ -11,11 +12,16 @@ namespace Game.Weapons
         [SerializeField, Min(0.05f)] float seconds = 0.6f;
 
         float remaining;
+        Action<BurstEffect> release;
 
         public FrameAnimation Art => art;
 
-        public void Play(Vector2 position, float radius)
+        /// <summary>그림 크기 그대로 1회 재생 (저주 시전 · 소환 연기). 풀에서 꺼냈으면 끝날 때 releaseToPool로 돌려보낸다.</summary>
+        public void Play(Vector2 position, Action<BurstEffect> releaseToPool = null) => Play(position, artRadiusAtScale1, releaseToPool);
+
+        public void Play(Vector2 position, float radius, Action<BurstEffect> releaseToPool = null)
         {
+            release = releaseToPool;
             transform.position = position;
             remaining = seconds;
             if (art != null)
@@ -30,7 +36,11 @@ namespace Game.Weapons
         void Update()
         {
             remaining -= Time.deltaTime;
-            if (remaining <= 0f)
+            if (remaining > 0f)
+                return;
+            if (release != null)
+                release(this); // 풀이 비활성화까지 맡는다
+            else
                 gameObject.SetActive(false);
         }
     }

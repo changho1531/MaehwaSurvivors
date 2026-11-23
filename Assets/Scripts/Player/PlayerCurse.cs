@@ -15,6 +15,8 @@ namespace Game.Player
         [SerializeField] Color auraColor = new(0.32f, 0.12f, 0.42f, 0.85f);
         [Tooltip("파티클 재질 (Sprites/Default 계열). 비우면 연출 없음")]
         [SerializeField] Material auraMaterial;
+        [Tooltip("(선택) 발밑에서 반복 재생하는 그림 (자식, 처음엔 꺼 둠). 있으면 파티클 대신 이것을 켠다")]
+        [SerializeField] GameObject auraArt;
 
         PlayerMovement movement;
         PlayerHealth health;
@@ -32,7 +34,7 @@ namespace Game.Player
         {
             movement = GetComponent<PlayerMovement>();
             health = GetComponent<PlayerHealth>();
-            if (auraMaterial != null)
+            if (auraArt == null && auraMaterial != null)
                 aura = BuildAura();
         }
 
@@ -63,6 +65,8 @@ namespace Game.Player
                 movement.SlowMultiplier = 1f - SlowRatio;
             if (aura != null)
                 aura.Play();
+            if (auraArt != null)
+                auraArt.SetActive(true);
             Changed?.Invoke(true);
         }
 
@@ -76,6 +80,8 @@ namespace Game.Player
                 movement.SlowMultiplier = 1f;
             if (aura != null)
                 aura.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            if (auraArt != null)
+                auraArt.SetActive(false);
             Changed?.Invoke(false);
         }
 

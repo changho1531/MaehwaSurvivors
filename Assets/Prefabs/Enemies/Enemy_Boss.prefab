@@ -81,8 +81,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 6
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: d4f73f6407d22e94ea81a3b0ae1ba063, type: 3}
-  m_Color: {r: 0.85, g: 0.35, b: 0.35, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 4d3c4bf4cc7448f4bbfd9a134f719cd1, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Enemies.EnemyArtMotion
   art: {fileID: 8885342993215507880}
-  artFacesRight: 1
+  artFacesRight: 0
   bobHeight: 0.06
   bobsPerSecond: 4
   moveThreshold: 0.1
