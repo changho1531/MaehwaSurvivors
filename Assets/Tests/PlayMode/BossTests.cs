@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.CameraSystem;
 using Game.Core;
 using Game.Enemies;
 using Game.Enemies.Boss;
@@ -360,6 +361,37 @@ namespace Game.Tests.PlayMode
             Assert.IsTrue(GameManager.IsIn(GameState.GameClear), "같은 프레임이면 클리어 우선");
             yield return null;
             Assert.AreEqual("게임 클리어", Object.FindFirstObjectByType<ResultScreen>().HeaderText.text);
+        }
+
+        [UnityTest]
+        public IEnumerator B15_Camera_ShakesOnAppear_PullsOnPhase_ZoomsTowardBossOnDefeat()
+        {
+            health.Invincible = true;
+            var fx = Object.FindFirstObjectByType<CameraFx>();
+            Assert.IsNotNull(fx, "카메라에 CameraFx");
+            var cam = fx.GetComponent<Camera>();
+            yield return SpawnAt(new Vector2(6f, 0f));
+            Assert.IsTrue(fx.IsShaking, "등장 때 화면 흔들림");
+            yield return WaitGameSeconds(1f);
+            Assert.IsFalse(fx.IsShaking);
+            Assert.Less(fx.Offset.magnitude, 0.001f, "흔들림이 끝나면 다시 플레이어 중앙");
+
+            behaviour.FixedRoll = -1f;
+            boss.TakeDamage(boss.Data.maxHp * 0.55f);
+            yield return WaitUntil(() => behaviour.IsTransitioning, 6f);
+            Assert.IsTrue(fx.IsShaking, "페이즈 전환 흔들림");
+            yield return WaitGameSeconds(0.25f);
+            Assert.Less(cam.orthographicSize, fx.BaseSize, "잠깐 당겨짐");
+            yield return WaitGameSeconds(1f);
+            Assert.AreEqual(fx.BaseSize, cam.orthographicSize, 0.001f, "원래 크기로");
+
+            Vector2 toBoss = boss.transform.position - scene.Player.transform.position;
+            boss.TakeDamage(boss.Data.maxHp * 2f);
+            float end = Time.realtimeSinceStartup + 0.4f;
+            while (Time.realtimeSinceStartup < end)
+                yield return null;
+            Assert.Less(cam.orthographicSize, fx.BaseSize * 0.9f, "처치 순간 확대");
+            Assert.Greater(Vector2.Dot(fx.Offset, toBoss.normalized), toBoss.magnitude * 0.3f, "보스 쪽으로 초점 이동");
         }
     }
 }

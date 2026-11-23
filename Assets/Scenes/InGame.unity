@@ -3350,6 +3350,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1068255250}
   - component: {fileID: 1068255249}
+  - component: {fileID: 1068255251}
   m_Layer: 0
   m_Name: BossSpawner
   m_TagString: Untagged
@@ -3394,6 +3395,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1068255251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068255248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce1f10b2c98e4d4f9c77ddd416fdb53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Enemies.Boss.BossPresentation
+  spawner: {fileID: 1068255249}
+  cameraFx: {fileID: 1650031353}
+  appearShake: 0.3
+  appearShakeSeconds: 0.7
+  phaseShake: 0.4
+  phaseShakeSeconds: 0.6
+  phaseZoom: 0.9
+  defeatFocus: 0.6
+  defeatZoom: 0.7
+  defeatSeconds: 0.45
 --- !u!1 &1133799188
 GameObject:
   m_ObjectHideFlags: 0
@@ -4528,6 +4551,7 @@ GameObject:
   - component: {fileID: 1650031348}
   - component: {fileID: 1650031351}
   - component: {fileID: 1650031352}
+  - component: {fileID: 1650031353}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4622,6 +4646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.CameraSystem.CameraFollow
   target: {fileID: 169767282}
+  fx: {fileID: 1650031353}
 --- !u!114 &1650031352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4666,6 +4691,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1650031353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650031347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cc3f4f819afc3a46b88d01ef1fd490a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.CameraSystem.CameraFx
 --- !u!1 &1775953523
 GameObject:
   m_ObjectHideFlags: 0
