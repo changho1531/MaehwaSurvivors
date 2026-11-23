@@ -44,6 +44,9 @@ namespace Game.Progression
         /// <summary>새 카드가 뽑혔다. 카드 UI가 구독한다.</summary>
         public event Action<IReadOnlyList<LevelUpCard>> CardsShown;
 
+        /// <summary>(고른 카드 번호) 선택이 받아들여진 순간, 다음 카드 · 닫힘보다 먼저. 카드 UI의 선택 연출이 구독한다.</summary>
+        public event Action<int> CardChosen;
+
         /// <summary>카드 선택이 모두 끝나 Play로 돌아간다.</summary>
         public event Action ChoiceClosed;
 
@@ -116,6 +119,7 @@ namespace Game.Progression
             if (!CanAcceptChoice || index < 0 || index >= cards.Count)
                 return false;
 
+            CardChosen?.Invoke(index); // 카드 내용이 바뀌기 전에 알린다 (연출이 고른 카드를 그대로 복사할 수 있게)
             inventory.Apply(cards[index].Weapon);
 
             if (playerLevel.ConsumePending() > 0)

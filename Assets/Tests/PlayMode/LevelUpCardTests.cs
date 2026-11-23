@@ -80,6 +80,27 @@ namespace Game.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator C7_Choose_LeavesChosenCardGhost_ThenClears_FlowUnchanged()
+        {
+            scene.Level.AddXp(scene.Level.RequiredXp);
+            yield return null;
+            float unlock = Time.realtimeSinceStartup + 0.3f;
+            while (Time.realtimeSinceStartup < unlock)
+                yield return null;
+            string chosenName = VisibleSlots()[0].NameLabel;
+            Assert.IsTrue(scene.LevelUpFlow.Choose(0));
+            Assert.AreEqual(GameState.Play, State, "흐름은 기다리지 않고 바로 복귀");
+            Assert.IsFalse(view.Panel.activeInHierarchy, "카드 화면은 바로 닫힘");
+            Assert.IsNotNull(view.ChosenGhost, "고른 카드의 잔상");
+            StringAssert.Contains(chosenName, string.Join(",", System.Array.ConvertAll(view.ChosenGhost.GetComponentsInChildren<UnityEngine.UI.Text>(), t => t.text)), "고른 카드와 같은 내용");
+            Assert.IsFalse(view.ChosenGhost.GetComponent<CanvasGroup>().blocksRaycasts, "잔상은 클릭을 막지 않음");
+            float end = Time.realtimeSinceStartup + 0.8f;
+            while (Time.realtimeSinceStartup < end)
+                yield return null;
+            Assert.IsTrue(view.ChosenGhost == null, "연출이 끝나면 사라짐");
+        }
+
+        [UnityTest]
         public IEnumerator C2_LevelUp_ShowsUpToTwoCards_LabelledUpgradeOrNew()
         {
             int expected = Mathf.Min(2, CandidateCount());
