@@ -3342,6 +3342,7 @@ MonoBehaviour:
   bossPrefab: {fileID: 3083572570979652168, guid: e8bf0599effbc5a4cbd19628e08ef2d8, type: 3}
   player: {fileID: 169767282}
   stats: {fileID: 1897601225}
+  xpDropper: {fileID: 1897601222}
   viewCamera: {fileID: 1650031349}
   spawnMargin: 1.5
   defeatTimeScale: 0.3

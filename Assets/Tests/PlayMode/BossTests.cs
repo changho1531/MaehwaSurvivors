@@ -319,6 +319,7 @@ namespace Game.Tests.PlayMode
             health.Invincible = true;
             yield return SpawnAt(new Vector2(6f, 0f));
             scene.SpawnAt(new Vector2(3f, 3f), chase: false);
+            scene.XpDropper.SpawnOrb(scene.Player.transform.position + new Vector3(10f, 0f), 1, Color.white);
             boss.TakeDamage(boss.Data.maxHp * 2f);
             Assert.IsTrue(bossSpawner.IsDefeated);
             Assert.IsTrue(health.DamageLocked, "처치 순간부터 플레이어는 맞지 않음");
@@ -326,6 +327,7 @@ namespace Game.Tests.PlayMode
             yield return WaitUntil(() => GameManager.IsIn(GameState.GameClear), 2f);
             Assert.IsTrue(GameManager.IsIn(GameState.GameClear));
             Assert.AreEqual(0, scene.Spawner.CountActive, "남은 적 정리");
+            Assert.AreEqual(0, scene.XpDropper.Pool.CountActive, "남은 경험치 구슬 정리");
 
             var result = Object.FindFirstObjectByType<ResultScreen>();
             Assert.IsTrue(result.Panel.activeSelf);

@@ -10,7 +10,7 @@ namespace Game.Enemies.Boss
 {
     /// <summary>
     /// 보스 등장 · 처치 (설계서 8-C절). WaveDirector.BossPhaseStarted(10분 또는 조기 소환)를 구독해 화면 밖 위쪽에 보스를 1마리 만들고,
-    /// 처치되면 짧은 슬로 모션 → 남은 적 · 투사체 · 장판 정리 → GameClear로 넘긴다. HP 바 · 문구 · 대사는 BossSpawned를 구독한다 (Observer).
+    /// 처치되면 짧은 슬로 모션 → 남은 적 · 투사체 · 장판 · 구슬 정리 → GameClear로 넘긴다. HP 바 · 문구 · 대사는 BossSpawned를 구독한다 (Observer).
     /// 보스는 한 판에 1마리라 풀을 쓰지 않고 처음 등장할 때 만든다.
     /// </summary>
     public class BossSpawner : MonoBehaviour
@@ -20,6 +20,7 @@ namespace Game.Enemies.Boss
         [SerializeField] Enemy bossPrefab;
         [SerializeField] Transform player;
         [SerializeField] RunStats stats;
+        [SerializeField] XpDropper xpDropper;
         [Tooltip("이 카메라 시야 바로 위쪽 바깥에서 생성")]
         [SerializeField] Camera viewCamera;
         [Header("※ 예시값")]
@@ -141,13 +142,15 @@ namespace Game.Enemies.Boss
         void FinishClear()
         {
             Boss.gameObject.SetActive(false);
-            // 화면의 남은 적 · 투사체 · 장판을 모두 정리하고 새로 나오지 않게
+            // 화면의 남은 적 · 투사체 · 장판 · 경험치 구슬을 모두 정리하고 새로 나오지 않게 (곧바로 클리어라 구슬은 의미 없음)
             if (spawner != null)
             {
                 spawner.ReleaseAll();
                 spawner.enabled = false;
             }
             PrefabPools.ReleaseAll();
+            if (xpDropper != null)
+                xpDropper.StopDropsAndClear();
             if (stats != null && waves != null)
                 stats.RecordClear(waves.BossSummonedEarly, waves.BossPhaseStartedAt);
             GameManager.TryChangeState(GameState.GameClear);
