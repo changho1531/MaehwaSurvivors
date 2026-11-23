@@ -59,7 +59,8 @@ namespace Game.Progression
         void OnEnable()
         {
             playerLevel.LeveledUp += OnLeveledUp;
-            GameManager.Instance.StateMachine.StateChanged += OnStateChanged;
+            if (GameManager.Current != null)
+                GameManager.Current.StateMachine.StateChanged += OnStateChanged;
         }
 
         void OnDisable()

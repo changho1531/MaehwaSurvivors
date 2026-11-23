@@ -54,7 +54,7 @@ namespace Game.Tests.PlayMode
             yield return Prepare();
             yield return Tap(keyboard.f1Key);
             Assert.AreEqual(2, scene.Level.Level);
-            Assert.AreEqual(GameState.LevelUp, GameManager.Instance.CurrentState, "평소와 같은 레벨업 흐름(카드 표시)");
+            Assert.AreEqual(GameState.LevelUp, GameManager.Current.CurrentState, "평소와 같은 레벨업 흐름(카드 표시)");
         }
 
         [UnityTest]
@@ -108,7 +108,7 @@ namespace Game.Tests.PlayMode
         public IEnumerator D5_KeysIgnored_OutsidePlay()
         {
             yield return Prepare();
-            GameManager.Instance.StateMachine.TryChangeState(GameState.Pause);
+            GameManager.Current.StateMachine.TryChangeState(GameState.Pause);
             yield return Tap(keyboard.f3Key);
             Assert.AreEqual(1, scene.Inventory.Owned.Count, "일시정지 중에는 디버그 키 무시");
         }

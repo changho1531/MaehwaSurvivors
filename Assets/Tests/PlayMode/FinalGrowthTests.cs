@@ -40,7 +40,7 @@ namespace Game.Tests.PlayMode
             float timeout = Time.realtimeSinceStartup + 60f;
             while (!scene.Inventory.AllMaxed && Time.realtimeSinceStartup < timeout)
             {
-                if (GameManager.Instance.CurrentState == GameState.Play)
+                if (GameManager.Current.CurrentState == GameState.Play)
                     scene.Level.AddXp(scene.Level.RequiredXp);
                 if (scene.LevelUpFlow.CanAcceptChoice && scene.LevelUpFlow.Choose(0))
                     cards++;
@@ -63,7 +63,7 @@ namespace Game.Tests.PlayMode
                     Assert.GreaterOrEqual(levels[i].time, levels[i - 1].time);
             }
             yield return null;
-            Assert.AreEqual(GameState.Play, GameManager.Instance.CurrentState);
+            Assert.AreEqual(GameState.Play, GameManager.Current.CurrentState);
         }
     }
 }

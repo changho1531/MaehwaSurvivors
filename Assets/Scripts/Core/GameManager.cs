@@ -5,26 +5,24 @@ namespace Game.Core
 {
     /// <summary>
     /// 씬을 넘어 유지되는 게임 흐름 관리자. FSM을 소유하고, 상태 전이에 맞춰 씬을 이동한다.
-    /// 어느 씬에서 플레이를 시작하든 Instance 첫 접근 시 자동 생성된다.
+    /// 만드는 곳은 씬 진입점(GameBootstrap) 하나뿐이고, 다른 코드는 Current로 읽기만 한다 — 어느 씬에서 플레이를 시작해도 진입점이 만든다.
     /// </summary>
     public class GameManager : MonoBehaviour
     {
         static GameManager instance;
 
-        /// <summary>이미 있는 GameManager. 없으면 null (Instance와 달리 새로 만들지 않음 — 씬 종료 중 구독 해제용).</summary>
+        /// <summary>이미 있는 GameManager. 없으면 null (새로 만들지 않는다). 모든 시스템은 이것만 쓴다.</summary>
         public static GameManager Current => instance;
 
-        public static GameManager Instance
+        /// <summary>없으면 만든다. 씬 진입점(GameBootstrap)에서만 부른다.</summary>
+        public static GameManager EnsureCreated()
         {
-            get
+            if (instance == null)
             {
-                if (instance == null)
-                {
-                    var go = new GameObject(nameof(GameManager));
-                    instance = go.AddComponent<GameManager>();
-                }
-                return instance;
+                var go = new GameObject(nameof(GameManager));
+                instance = go.AddComponent<GameManager>();
             }
+            return instance;
         }
 
         public GameStateMachine StateMachine { get; private set; }
@@ -32,9 +30,8 @@ namespace Game.Core
         public GameState CurrentState => StateMachine.Current;
 
         /// <summary>
-        /// 실행 중 상태 전이 요청. Instance와 달리 매니저를 새로 만들지 않는다:
+        /// 실행 중 상태 전이 요청. 매니저를 새로 만들지 않는다:
         /// 씬 전환 중(이전 매니저 파괴 직후) 불리면 엉뚱한 초기 상태의 매니저가 생기기 때문. 매니저가 없으면 false.
-        /// 매니저 생성은 씬 시작 시 구독(OnEnable)과 타이틀 [게임 시작]처럼 진입점에서만 Instance로 한다.
         /// </summary>
         public static bool TryChangeState(GameState next) => instance != null && instance.StateMachine.TryChangeState(next);
 

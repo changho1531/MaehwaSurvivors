@@ -117,7 +117,7 @@ namespace Game.Tests.PlayMode
 
             Assert.IsTrue(health.IsDead);
             Assert.AreEqual(1, died, "Died 1회만");
-            Assert.AreEqual(GameState.GameOver, GameManager.Instance.CurrentState, "HP 0 → GameOver");
+            Assert.AreEqual(GameState.GameOver, GameManager.Current.CurrentState, "HP 0 → GameOver");
             Assert.AreEqual(0f, Time.timeScale, "GameOver 중 게임 시간 정지");
         }
 
@@ -130,7 +130,7 @@ namespace Game.Tests.PlayMode
             scene.Level.AddXp(scene.Level.RequiredXp);
             yield return null;
 
-            Assert.AreEqual(GameState.GameOver, GameManager.Instance.CurrentState, "GameOver 우선");
+            Assert.AreEqual(GameState.GameOver, GameManager.Current.CurrentState, "GameOver 우선");
             Assert.IsFalse(scene.LevelUpFlow.IsAwaitingChoice, "카드 표시 안 함");
         }
 
@@ -139,7 +139,7 @@ namespace Game.Tests.PlayMode
         {
             scene.Level.AddXp(scene.Level.RequiredXp);
             yield return null;
-            Assert.AreEqual(GameState.LevelUp, GameManager.Instance.CurrentState);
+            Assert.AreEqual(GameState.LevelUp, GameManager.Current.CurrentState);
 
             Assert.IsFalse(health.TakeDamage(10f), "일시정지 중 피해 없음");
             Assert.AreEqual(health.MaxHp, health.CurrentHp);

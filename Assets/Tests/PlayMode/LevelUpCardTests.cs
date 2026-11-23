@@ -33,7 +33,7 @@ namespace Game.Tests.PlayMode
             yield return null;
         }
 
-        GameState State => GameManager.Instance.CurrentState;
+        GameState State => GameManager.Current.CurrentState;
 
         List<LevelUpCardSlot> VisibleSlots()
         {

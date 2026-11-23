@@ -39,7 +39,9 @@ namespace Game.UI
 
         void OnEnable()
         {
-            var fsm = GameManager.Instance.StateMachine; // 씬 시작 진입점: 여기서만 매니저 생성을 허용
+            if (GameManager.Current == null)
+                return; // 매니저는 씬 진입점(GameBootstrap)이 만든다
+            var fsm = GameManager.Current.StateMachine;
             fsm.StateChanged += OnStateChanged;
             panel.SetActive(fsm.Current == GameState.Pause);
         }

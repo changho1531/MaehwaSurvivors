@@ -57,7 +57,7 @@ namespace Game.Tests.PlayMode
                 yield return null;
         }
 
-        static GameState State => GameManager.Instance.CurrentState;
+        static GameState State => GameManager.Current.CurrentState;
 
         [UnityTest]
         public IEnumerator P1_Esc_Pauses_FadesIn_EscAgainResumes()

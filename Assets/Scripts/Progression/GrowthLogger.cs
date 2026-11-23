@@ -39,9 +39,10 @@ namespace Game.Progression
                 level.XpAdded += OnXpAdded;
                 level.LeveledUp += OnLeveledUp;
             }
-            // 씬 오브젝트가 켜질 때는 매니저가 있어야 하므로 ResultScreen과 같이 Instance로 받는다
-            machine = GameManager.Instance.StateMachine;
-            machine.StateChanged += OnStateChanged;
+            // 매니저는 씬 진입점(GameBootstrap)이 먼저 만든다
+            machine = GameManager.Current != null ? GameManager.Current.StateMachine : null;
+            if (machine != null)
+                machine.StateChanged += OnStateChanged;
         }
 
         void OnDisable()

@@ -39,7 +39,7 @@ namespace Game.Tests.PlayMode
             Object.FindFirstObjectByType<TitleMenu>().StartButton.onClick.Invoke();
             yield return WaitScene(SceneNames.InGame);
             yield return null;
-            Assert.AreEqual(GameState.Play, GameManager.Instance.CurrentState);
+            Assert.AreEqual(GameState.Play, GameManager.Current.CurrentState);
 
             var health = Object.FindFirstObjectByType<PlayerHealth>();
             var level = Object.FindFirstObjectByType<PlayerLevel>();
@@ -54,9 +54,9 @@ namespace Game.Tests.PlayMode
             var picks = new System.Text.StringBuilder();
             bool xpGranted = false;
 
-            while (GameManager.Instance.CurrentState != GameState.GameOver && stats.Elapsed < MaxGameSeconds)
+            while (GameManager.Current.CurrentState != GameState.GameOver && stats.Elapsed < MaxGameSeconds)
             {
-                var state = GameManager.Instance.CurrentState;
+                var state = GameManager.Current.CurrentState;
                 // 제자리에 선 봇은 멀리서 죽은 적의 구슬을 줍지 못해, 스폰 곡선에 따라 레벨업 전에 죽을 수 있다.
                 // 이 테스트는 밸런스가 아니라 흐름(레벨업 카드 포함)을 보므로 레벨업 1회분을 직접 준다. 밸런스는 SpawnBalanceTests.
                 if (!xpGranted && state == GameState.Play && stats.Elapsed >= 10f)
@@ -87,7 +87,7 @@ namespace Game.Tests.PlayMode
                 $"첫 피격 {firstHitAt:F1}s / 첫 레벨업 {firstLevelUpAt:F1}s / HP {health.CurrentHp:F0}/{health.MaxHp:F0}\n" +
                 $"카드 선택: {picks}\n" +
                 $"보유 무기: {string.Join(", ", System.Linq.Enumerable.Select(inventory.Owned, w => $"{w.Data.displayName} Lv{w.Level}"))}";
-            bool diedNaturally = GameManager.Instance.CurrentState == GameState.GameOver;
+            bool diedNaturally = GameManager.Current.CurrentState == GameState.GameOver;
             Debug.Log($"[SMOKE] 자연 사망 {(diedNaturally ? "예" : "아니오")}\n" + report);
 
             // 밸런스상 안 죽을 수도 있다(그 자체는 기록만). 결과 화면 흐름을 보려고 강제로 사망시킨다.
@@ -97,7 +97,7 @@ namespace Game.Tests.PlayMode
                 health.TakeDamage(health.MaxHp + 1f);
                 yield return null;
             }
-            Assert.AreEqual(GameState.GameOver, GameManager.Instance.CurrentState);
+            Assert.AreEqual(GameState.GameOver, GameManager.Current.CurrentState);
             Assert.Greater(stats.Kills, 0, "무기가 적을 처치해야 한다");
             Assert.GreaterOrEqual(levelUps, 1, "한 판에 최소 한 번은 레벨업");
             Assert.AreEqual(0f, Time.timeScale, "GameOver 중 시간 정지");
@@ -115,7 +115,7 @@ namespace Game.Tests.PlayMode
             while (stats != null && Time.realtimeSinceStartup < end)
                 yield return null;
             yield return null;
-            Assert.AreEqual(GameState.Play, GameManager.Instance.CurrentState, "재도전 = 새 런");
+            Assert.AreEqual(GameState.Play, GameManager.Current.CurrentState, "재도전 = 새 런");
             Assert.AreEqual(0, Object.FindFirstObjectByType<RunStats>().Kills);
         }
 

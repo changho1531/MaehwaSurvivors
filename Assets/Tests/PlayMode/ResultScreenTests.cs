@@ -45,7 +45,7 @@ namespace Game.Tests.PlayMode
         {
             health.TakeDamage(health.MaxHp + 1f);
             yield return null;
-            Assert.AreEqual(GameState.GameOver, GameManager.Instance.CurrentState);
+            Assert.AreEqual(GameState.GameOver, GameManager.Current.CurrentState);
         }
 
         static IEnumerator WaitRealtime(float seconds)
@@ -120,7 +120,7 @@ namespace Game.Tests.PlayMode
             yield return null;
 
             Assert.AreEqual(SceneNames.InGame, SceneManager.GetActiveScene().name);
-            Assert.AreEqual(GameState.Play, GameManager.Instance.CurrentState, "재도전 = 새 런");
+            Assert.AreEqual(GameState.Play, GameManager.Current.CurrentState, "재도전 = 새 런");
             Assert.AreEqual(1f, Time.timeScale);
             var newStats = Object.FindFirstObjectByType<RunStats>();
             Assert.AreEqual(0, newStats.Kills, "새 런은 처치 수 0부터");
@@ -140,7 +140,7 @@ namespace Game.Tests.PlayMode
             while (SceneManager.GetActiveScene().name != SceneNames.Title && Time.realtimeSinceStartup < end)
                 yield return null;
             Assert.AreEqual(SceneNames.Title, SceneManager.GetActiveScene().name);
-            Assert.AreEqual(GameState.Title, GameManager.Instance.CurrentState, "연타한 재도전은 처리되지 않음");
+            Assert.AreEqual(GameState.Title, GameManager.Current.CurrentState, "연타한 재도전은 처리되지 않음");
         }
     }
 }

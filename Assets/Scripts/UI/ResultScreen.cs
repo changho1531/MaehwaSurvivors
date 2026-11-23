@@ -57,7 +57,11 @@ namespace Game.UI
             panel.SetActive(false);
         }
 
-        void OnEnable() => GameManager.Instance.StateMachine.StateChanged += OnStateChanged;
+        void OnEnable()
+        {
+            if (GameManager.Current != null)
+                GameManager.Current.StateMachine.StateChanged += OnStateChanged;
+        }
 
         void OnDisable()
         {

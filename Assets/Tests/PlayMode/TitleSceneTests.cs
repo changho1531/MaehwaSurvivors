@@ -162,7 +162,7 @@ namespace Game.Tests.PlayMode
                 yield return null;
 
             Assert.AreEqual(SceneNames.InGame, SceneManager.GetActiveScene().name);
-            Assert.AreEqual(GameState.Play, GameManager.Instance.CurrentState);
+            Assert.AreEqual(GameState.Play, GameManager.Current.CurrentState);
             LogAssert.NoUnexpectedReceived();
         }
 

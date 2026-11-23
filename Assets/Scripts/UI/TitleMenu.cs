@@ -55,7 +55,8 @@ namespace Game.UI
         {
             if (confirm.IsOpen)
                 return; // 확인창이 떠 있는 동안에는 뒤 버튼을 받지 않는다
-            GameManager.Instance.StartGame();
+            if (GameManager.Current != null)
+                GameManager.Current.StartGame();
         }
 
         void OnExitClicked()

@@ -37,7 +37,7 @@ namespace Game.Tests.PlayMode
 
         XpSettings Settings => scene.XpDropper.Settings;
         Vector2 PlayerPos => scene.Player.transform.position;
-        GameState State => GameManager.Instance.CurrentState;
+        GameState State => GameManager.Current.CurrentState;
 
         static IEnumerator WaitGame(float seconds)
         {
@@ -166,7 +166,7 @@ namespace Game.Tests.PlayMode
             int cardRequests = 0;
             void OnCards(IReadOnlyList<LevelUpCard> _) => cardRequests++;
 
-            GameManager.Instance.StateMachine.StateChanged += OnChanged;
+            GameManager.Current.StateMachine.StateChanged += OnChanged;
             scene.LevelUpFlow.CardsShown += OnCards;
             try
             {
@@ -189,7 +189,7 @@ namespace Game.Tests.PlayMode
             }
             finally
             {
-                GameManager.Instance.StateMachine.StateChanged -= OnChanged;
+                GameManager.Current.StateMachine.StateChanged -= OnChanged;
                 scene.LevelUpFlow.CardsShown -= OnCards;
             }
         }
