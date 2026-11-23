@@ -218,5 +218,24 @@ namespace Game.Tests.PlayMode
             scene.Level.AddXp(required / 2);
             Assert.AreEqual((float)(required / 2) / required, hud.XpBar.Ratio, 0.001f, "XP 획득 시 XP 바 증가");
         }
+
+        [UnityTest]
+        public IEnumerator P10_HpTrail_LagsThenCatchesUp_XpFillsSmoothly()
+        {
+            yield return Prepare();
+            var health = scene.Player.GetComponent<PlayerHealth>();
+            health.TakeDamage(health.MaxHp * 0.5f);
+            Assert.AreEqual(0.5f, hud.HpBar.ShownFill, 0.001f, "채움은 즉시 줄어든다");
+            Assert.AreEqual(1f, hud.HpBar.ShownTrail, 0.001f, "잔상은 잠깐 남는다");
+            health.TakeDamage(health.MaxHp * 0.1f); // 따라가기 전에 더 깎여도
+            yield return WaitRealtime(1.2f);
+            Assert.AreEqual(0.4f, hud.HpBar.ShownTrail, 0.01f, "잔상이 마지막 값까지 따라온다");
+
+            int required = scene.Level.RequiredXp;
+            scene.Level.AddXp(required / 2);
+            Assert.Less(hud.XpBar.ShownFill, hud.XpBar.Ratio, "경험치 바는 차오르는 중");
+            yield return WaitRealtime(0.5f);
+            Assert.AreEqual(hud.XpBar.Ratio, hud.XpBar.ShownFill, 0.001f, "다 차오름");
+        }
     }
 }

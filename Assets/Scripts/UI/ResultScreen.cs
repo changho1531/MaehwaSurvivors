@@ -93,6 +93,8 @@ namespace Game.UI
             group.alpha = 0f;
             choiceMade = false;
             panel.SetActive(true);
+            if (headerText != null)
+                UiTween.PopIn(headerText.transform, 1.6f, 0.45f, settings.fadeSeconds * 0.5f); // 페이드 중간에 제목이 내려앉음
         }
 
         void Update()

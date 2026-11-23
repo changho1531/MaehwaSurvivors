@@ -13,6 +13,10 @@ namespace Game.UI
         [SerializeField] LevelUpFlow flow;
         [SerializeField] GameObject panel;
         [SerializeField] LevelUpCardSlot[] slots;
+        [Header("등장 연출 ※")]
+        [SerializeField, Range(0.1f, 1f)] float popFrom = 0.7f;
+        [SerializeField, Min(0f)] float popSeconds = 0.25f;
+        [SerializeField, Min(0f)] float popStagger = 0.06f;
 
         public GameObject Panel => panel;
         public IReadOnlyList<LevelUpCardSlot> Slots => slots;
@@ -49,6 +53,9 @@ namespace Game.UI
                     slots[i].Hide();
             }
             panel.SetActive(true);
+            // 카드가 차례로 튀어나온다. 카드 중에는 게임 시간이 멈춰 있어 실시간 기준 (입력 잠금 0.2초와 비슷한 길이)
+            for (int i = 0; i < cards.Count && i < slots.Length; i++)
+                UiTween.PopIn(slots[i].transform, popFrom, popSeconds, i * popStagger);
         }
 
         void OnChoiceClosed()

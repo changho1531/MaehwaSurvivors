@@ -3,7 +3,8 @@
     "rootNamespace": "Game",
     "references": [
         "Unity.InputSystem",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -66,6 +66,20 @@ namespace Game.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator C6_Cards_PopIn_InRealtime_WhileGamePaused()
+        {
+            scene.Level.AddXp(scene.Level.RequiredXp);
+            yield return null;
+            var first = VisibleSlots()[0].transform;
+            Assert.Less(first.localScale.x, 1f, "작게 시작");
+            float end = Time.realtimeSinceStartup + 0.6f;
+            while (Time.realtimeSinceStartup < end)
+                yield return null;
+            foreach (var slot in VisibleSlots())
+                Assert.AreEqual(1f, slot.transform.localScale.x, 0.001f, "게임 시간이 멈춰 있어도 제 크기로");
+        }
+
+        [UnityTest]
         public IEnumerator C2_LevelUp_ShowsUpToTwoCards_LabelledUpgradeOrNew()
         {
             int expected = Mathf.Min(2, CandidateCount());

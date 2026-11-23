@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Game.Enemies;
 using Game.Enemies.Boss;
 using UnityEngine;
@@ -64,6 +65,10 @@ namespace Game.UI
             fill.color = phase1Color;
             Refresh();
             root.SetActive(true);
+            // 가로로 펼쳐지며 등장 (게임 시간)
+            root.transform.DOKill();
+            root.transform.localScale = new Vector3(0f, 1f, 1f);
+            root.transform.DOScaleX(1f, 0.4f).SetEase(Ease.OutCubic).SetLink(root, LinkBehaviour.KillOnDestroy);
         }
 
         void Unbind()

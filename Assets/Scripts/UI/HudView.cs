@@ -17,6 +17,8 @@ namespace Game.UI
         [SerializeField] UiBar xpBar;
         [SerializeField] Text levelText;
 
+        int shownLevel;
+
         public UiBar HpBar => hpBar;
         public UiBar XpBar => xpBar;
         public Text LevelText => levelText;
@@ -48,6 +50,9 @@ namespace Game.UI
         {
             xpBar.Set(current, required);
             levelText.text = level.IsMaxed ? $"Lv {level.Level} MAX" : $"Lv {level.Level}";
+            if (shownLevel != 0 && level.Level > shownLevel)
+                UiTween.Punch(levelText.transform, 0.35f, 0.4f); // 레벨업 순간 글자가 통통
+            shownLevel = level.Level;
         }
 
         void OnMaxed() => OnXpChanged(level.RequiredXp, level.RequiredXp);

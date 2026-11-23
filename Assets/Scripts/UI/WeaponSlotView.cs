@@ -108,7 +108,11 @@ namespace Game.UI
             levelText.text = Weapon.Level >= Weapon.Data.maxLevel ? "MAX" : Weapon.Level.ToString();
         }
 
-        public void Flash() => flashRemaining = flashSeconds;
+        public void Flash()
+        {
+            flashRemaining = flashSeconds;
+            UiTween.Punch(transform, 0.18f, flashSeconds, unscaled: false); // 얻거나 강화한 칸이 통통 (게임 시간 — 카드 선택 뒤 재개될 때 보인다)
+        }
 
         /// <summary>매 프레임. dt는 게임 시간이라 일시정지 · 카드 선택 중에는 반짝임도 멈춘다 (규칙 6).</summary>
         public void Refresh(in WeaponSlotState state, float dt)

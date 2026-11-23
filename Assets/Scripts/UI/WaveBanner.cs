@@ -48,6 +48,7 @@ namespace Game.UI
             text.text = message;
             text.enabled = true;
             SetAlpha(1f);
+            UiTween.PopIn(text.transform, 1.5f, 0.35f, unscaled: false); // 크게 나타났다 제자리로. 게임 시간 기준 (일시정지 중 멈춤)
         }
 
         void Update()
