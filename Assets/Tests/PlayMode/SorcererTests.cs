@@ -4,6 +4,7 @@ using System.Reflection;
 using Game.Enemies;
 using Game.Player;
 using Game.Pooling;
+using Game.Visuals;
 using Game.Weapons;
 using NUnit.Framework;
 using UnityEngine;

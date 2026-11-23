@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Game.Weapons
+namespace Game.Visuals
 {
     /// <summary>원형으로 한 번 터지는 이펙트 (낙매진각 내려찍기 등). 그림 속 원이 판정 반경과 같도록 스케일해 "보이는 원 = 밀려나는 테두리"로 보여 주고, 한 번 재생 후 숨는다.</summary>
     public class BurstEffect : MonoBehaviour

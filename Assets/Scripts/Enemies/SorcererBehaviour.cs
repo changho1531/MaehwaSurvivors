@@ -1,6 +1,7 @@
 using System;
 using Game.Player;
 using Game.Pooling;
+using Game.Visuals;
 using Game.Weapons;
 using UnityEngine;
 

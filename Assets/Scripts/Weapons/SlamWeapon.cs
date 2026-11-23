@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Game.Enemies;
 using Game.Pooling;
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Weapons

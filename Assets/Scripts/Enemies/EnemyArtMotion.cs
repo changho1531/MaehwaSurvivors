@@ -1,4 +1,4 @@
-using Game.Weapons;
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Enemies

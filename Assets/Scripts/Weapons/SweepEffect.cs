@@ -1,3 +1,4 @@
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Weapons

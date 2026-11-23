@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Weapons
+namespace Game.Visuals
 {
     /// <summary>
     /// 스킬 이펙트 프레임 재생 (설계서 7-D절 3). 활성화될 때마다 처음부터 재생한다 — 풀에서 다시 꺼낸 투사체,

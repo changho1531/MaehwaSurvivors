@@ -1,5 +1,5 @@
 using DG.Tweening;
-using Game.Weapons;
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Progression

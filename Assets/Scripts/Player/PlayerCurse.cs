@@ -1,4 +1,5 @@
 using System;
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Player
@@ -130,7 +131,7 @@ namespace Game.Player
 
             var renderer = go.GetComponent<ParticleSystemRenderer>();
             renderer.material = auraMaterial;
-            renderer.material.mainTexture = Game.Weapons.ProceduralCircle.Disk.texture; // 둥근 입자 (매화보 꽃잎과 같은 원)
+            renderer.material.mainTexture = ProceduralCircle.Disk.texture; // 둥근 입자 (매화보 꽃잎과 같은 원)
             renderer.sortingOrder = 4; // 저주 장판(2 · 3) 위, 적(5) · 캐릭터 아래
             return ps;
         }

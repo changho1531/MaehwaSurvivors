@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Weapons

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game.Enemies;
+using Game.Visuals;
 using Game.Weapons;
 using NUnit.Framework;
 using UnityEngine;
