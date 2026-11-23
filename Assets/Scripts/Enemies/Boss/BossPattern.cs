@@ -1,4 +1,6 @@
 using Game.Player;
+using Game.Pooling;
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Enemies.Boss
@@ -47,6 +49,18 @@ namespace Game.Enemies.Boss
         public void Stop() => Body.linearVelocity = Vector2.zero;
 
         /// <summary>모든 보스 데미지는 PlayerHealth 진입점으로 (자하호신강 감소 적용).</summary>
+        /// <summary>패턴 이펙트: 공유 풀에서 꺼내 direction(그림의 +x)으로 돌려 radius 크기로 1회 재생. 프리팹이 없으면 null.</summary>
+        public BurstEffect PlayEffect(BurstEffect prefab, Vector2 position, Vector2 direction, float radius)
+        {
+            if (prefab == null)
+                return null;
+            var pool = PrefabPools.For(prefab, 2);
+            var effect = pool.Get(position);
+            effect.transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+            effect.Play(position, radius, pool.Release);
+            return effect;
+        }
+
         public void HitPlayer(float amount)
         {
             if (PlayerHealth != null && amount > 0f)

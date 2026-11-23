@@ -47,6 +47,7 @@ namespace Game.Enemies.Boss
             if (LastHit)
                 ctx.HitPlayer(Data.damage);
             ctx.Telegraph.ShowFan(direction, Data.radius, strong: true);
+            ctx.PlayEffect(Data.effectPrefab, ctx.Position, direction, Data.radius); // 그림 속 초승달 = 판정 반원
         }
 
         protected override bool OnExecuteTick(BossContext ctx, float dt)

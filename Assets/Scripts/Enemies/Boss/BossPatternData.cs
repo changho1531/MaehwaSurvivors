@@ -1,3 +1,4 @@
+using Game.Visuals;
 using Game.Weapons;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ namespace Game.Enemies.Boss
         [Tooltip("경고 시간 — 방향은 경고가 시작되는 순간 고정")]
         [Min(0f)] public float warningSeconds = 0.6f;
         [Min(0f)] public float damage = 15f;
+        [Tooltip("(선택) 실행 순간 재생할 이펙트. 공격 방향으로 돌려 공유 풀에서 꺼낸다 (보스가 사라져도 끝까지 재생)")]
+        public BurstEffect effectPrefab;
 
         public bool IsAllowed(int phase, float distance) =>
             phase >= minPhase && distance >= minDistance && distance <= maxDistance;

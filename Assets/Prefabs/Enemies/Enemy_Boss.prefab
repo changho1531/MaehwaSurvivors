@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 976467391850239198}
   - component: {fileID: 8885342993215507880}
+  - component: {fileID: 8054099116132179196}
   m_Layer: 9
   m_Name: Art
   m_TagString: Untagged
@@ -91,6 +92,36 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &8054099116132179196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4216216269444132204}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa2a3d6fcd107041a4ab8b561434e0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Visuals.FrameAnimation
+  target: {fileID: 8885342993215507880}
+  frames:
+  - {fileID: 21300000, guid: ac02370bf49dea049a452a75712a9eda, type: 3}
+  - {fileID: 21300000, guid: c0ab715937367c24ab3b8753ea5fe2f7, type: 3}
+  - {fileID: 21300000, guid: 11f4f3252c7c56845bb716051240517d, type: 3}
+  - {fileID: 21300000, guid: 2d30e33aca5b5634490d270b0f89c82d, type: 3}
+  - {fileID: 21300000, guid: 0ed8d82e06a69d745b743b27c780fd40, type: 3}
+  - {fileID: 21300000, guid: 9a8c59a30e0b5d54b9fa38ba8b826470, type: 3}
+  - {fileID: 21300000, guid: f50200133c75e974f9fd13deef42479d, type: 3}
+  - {fileID: 21300000, guid: 88e79e849db88b943a462a73fefd5345, type: 3}
+  - {fileID: 21300000, guid: d2f8a0303e87b0e4db8199b26972c640, type: 3}
+  - {fileID: 21300000, guid: 104a9b0bf175da54b82f92a35b09d6b6, type: 3}
+  - {fileID: 21300000, guid: ccf836b104fe4c843b835ff770d57b12, type: 3}
+  - {fileID: 21300000, guid: b6584a94a6458f641926589d3aba816e, type: 3}
+  - {fileID: 21300000, guid: 831567c6a2b21c3469d4e10061038798, type: 3}
+  framesPerSecond: 8
+  loop: 1
+  loopFromFrame: 0
 --- !u!1 &8588493506534848042
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,9 +249,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Runtime::Game.Enemies.EnemyArtMotion
   art: {fileID: 8885342993215507880}
   artFacesRight: 0
-  bobHeight: 0.06
+  bobHeight: 0
   bobsPerSecond: 4
   moveThreshold: 0.1
+  walk: {fileID: 8054099116132179196}
 --- !u!114 &3853270485100903335
 MonoBehaviour:
   m_ObjectHideFlags: 0

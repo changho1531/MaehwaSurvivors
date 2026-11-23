@@ -6,6 +6,7 @@ using Game.Enemies;
 using Game.Enemies.Boss;
 using Game.Player;
 using Game.Pooling;
+using Game.Visuals;
 using Game.UI;
 using NUnit.Framework;
 using UnityEngine;
@@ -249,6 +250,52 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(8f, moved, 0.6f, "직선 8칸");
             Assert.IsTrue(charge.HasHit, "경로 위 플레이어 1회 명중");
             Assert.Less(boss.GetComponent<Rigidbody2D>().linearVelocity.magnitude, 0.01f, "숨 고르기 동안 멈춤");
+        }
+
+        [UnityTest]
+        public IEnumerator B16_Art_WalkFrames_SwingEffectFacesAttack()
+        {
+            health.Invincible = true;
+            boss = bossSpawner.SpawnBoss(); // 화면 밖에서 걸어 들어오는 중
+            for (int i = 0; i < 5; i++)
+                yield return new WaitForFixedUpdate();
+            yield return null;
+            Assert.IsTrue(boss.transform.Find("Art").GetComponent<FrameAnimation>().enabled, "걷는 동안 걷기 프레임");
+            Object.Destroy(boss.gameObject);
+            boss = null;
+            yield return null;
+
+            yield return SpawnAt(new Vector2(2f, 0f));
+            yield return WaitUntil(() => behaviour.Current is SwingPattern swing && !swing.InWarning, 3f);
+            var swingPattern = (SwingPattern)behaviour.Current;
+            var swingFx = PrefabPools.For(swingPattern.Data.effectPrefab);
+            Assert.AreEqual(1, swingFx.CountActive, "휘두르는 순간 이펙트 1개");
+            var fx = FindEffect("SwingEffect_Boss");
+            Assert.Greater(Vector2.Dot(fx.transform.right, swingPattern.LockedDirection), 0.99f, "이펙트가 공격 방향을 향함");
+        }
+
+        [UnityTest]
+        public IEnumerator B17_ChargeTrail_FollowsBossWhileDashing()
+        {
+            health.Invincible = true;
+            yield return SpawnAt(new Vector2(6f, 0f), roll: 0f); // 돌진
+            yield return WaitUntil(() => behaviour.Current is ChargePattern c && !c.InWarning, 3f);
+            var charge = (ChargePattern)behaviour.Current;
+            for (int i = 0; i < 6; i++)
+                yield return new WaitForFixedUpdate();
+            var trail = FindEffect("ChargeTrail_Boss");
+            Assert.IsNotNull(trail, "돌진 불꽃 꼬리");
+            Vector2 expected = boss.GetComponent<Rigidbody2D>().position + Vector2.up * ((ChargePatternData)charge.Data).effectHeight;
+            Assert.Less(Vector2.Distance(trail.transform.position, expected), 0.5f, "보스를 따라간다");
+            Assert.Greater(Vector2.Dot(trail.transform.right, charge.LockedDirection), 0.99f, "돌진 방향을 향함");
+        }
+
+        static BurstEffect FindEffect(string prefabName)
+        {
+            foreach (var e in Object.FindObjectsByType<BurstEffect>(FindObjectsSortMode.None))
+                if (e.name.StartsWith(prefabName))
+                    return e;
+            return null;
         }
 
         [UnityTest]

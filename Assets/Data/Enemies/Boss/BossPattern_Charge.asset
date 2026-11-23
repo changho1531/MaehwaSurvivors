@@ -21,6 +21,7 @@ MonoBehaviour:
   - 4.2
   warningSeconds: 0.8
   damage: 20
+  effectPrefab: {fileID: 8317277938523120396, guid: 36dc079bc8a0f024a95db294d544c238, type: 3}
   distance: 8
   speed: 12
   restSeconds: 0.5
@@ -28,3 +29,4 @@ MonoBehaviour:
   lineWidth: 1.4
   shakeAmplitude: 0.06
   shakeFrequency: 25
+  effectHeight: 0.9

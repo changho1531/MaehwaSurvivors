@@ -21,5 +21,6 @@ MonoBehaviour:
   - 2.1
   warningSeconds: 0.6
   damage: 15
+  effectPrefab: {fileID: 5798707216583641506, guid: 8a85d3857b1e3d246b1f3ca3e41f226f, type: 3}
   radius: 2.5
   strikeShowSeconds: 0.15

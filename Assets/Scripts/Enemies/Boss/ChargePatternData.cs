@@ -1,3 +1,4 @@
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Enemies.Boss
@@ -16,6 +17,8 @@ namespace Game.Enemies.Boss
         [Min(0.1f)] public float lineWidth = 1.4f;
         [Min(0f)] public float shakeAmplitude = 0.06f;
         [Min(0f)] public float shakeFrequency = 25f;
+        [Tooltip("돌진 불꽃 꼬리 높이(발 기준, 칸) — 몸 가운데에서 뒤로 뻗게 ※")]
+        public float effectHeight = 0.9f;
 
         void Reset()
         {
@@ -35,6 +38,7 @@ namespace Game.Enemies.Boss
         float traveled;
         float rested;
         bool hit;
+        BurstEffect trail;
 
         public ChargePattern(ChargePatternData data) : base(data) { }
 
@@ -58,7 +62,10 @@ namespace Game.Enemies.Boss
             hit = false;
             ctx.PassThroughPlayer(true);
             ctx.Body.linearVelocity = direction * Data.speed;
+            trail = ctx.PlayEffect(Data.effectPrefab, TrailPosition(ctx), direction, Data.hitRadius);
         }
+
+        Vector2 TrailPosition(BossContext ctx) => ctx.Position + Vector2.up * Data.effectHeight;
 
         protected override void OnCancel(BossContext ctx) => ctx.PassThroughPlayer(false);
 
@@ -71,6 +78,8 @@ namespace Game.Enemies.Boss
                 ctx.Body.linearVelocity = moving ? direction * Data.speed : Vector2.zero;
                 if (!moving)
                     ctx.PassThroughPlayer(false);
+                else if (trail != null && trail.isActiveAndEnabled)
+                    trail.transform.position = TrailPosition(ctx); // 풀 오브젝트라 보스 자식으로 두지 않고 따라가게만
                 if (!hit && ctx.Player != null && ctx.Distance <= Data.hitRadius)
                 {
                     hit = true; // 몸에 닿으면 1회
