@@ -80,7 +80,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c105f37b87a414f4a84867781d54419e, type: 3}
   framesPerSecond: 12
   loopFromFrame: 5
-  fillMaterial: {fileID: 2100000, guid: 6969218caf52e69479f14586e245a609, type: 2}
+  fillMaterial: {fileID: 0}
   radius: 0.8
   color: {r: 0.85, g: 0.75, b: 1, a: 1}
   hitFlashColor: {r: 1, g: 1, b: 1, a: 0.75}

@@ -20,7 +20,7 @@ namespace Game.Weapons
         [SerializeField] Sprite[] fillFrames;
         [SerializeField, Min(0.1f)] float framesPerSecond = 12f;
         [SerializeField, Min(0)] int loopFromFrame;
-        [Tooltip("(선택) 막 머티리얼. 검은 배경 그림이면 Additive")]
+        [Tooltip("(선택) 막 머티리얼. 비우면 기본 스프라이트 재질 (그림은 투명 배경)")]
         [SerializeField] Material fillMaterial;
 
         [Header("※ 예시값")]
