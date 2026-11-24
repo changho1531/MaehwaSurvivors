@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8645774327455730174}
   - component: {fileID: 7353305894315809594}
   - component: {fileID: 8324615675837653358}
+  - component: {fileID: 1199031170100344320}
   m_Layer: 0
   m_Name: BloodOrb_Boss
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.45, y: 0.45, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -82,8 +83,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 15
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 41385ad8e5d8be544ae1e9d5241029a4, type: 3}
-  m_Color: {r: 0.85, g: 0.08, b: 0.1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: ac3440b4401e71d42b4a979d66650ef9, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -105,3 +106,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Runtime::Game.Enemies.Arrow
   hitRadius: 0.4
+--- !u!114 &1199031170100344320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8836641388716037271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa2a3d6fcd107041a4ab8b561434e0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game.Runtime::Game.Visuals.FrameAnimation
+  target: {fileID: 7353305894315809594}
+  frames:
+  - {fileID: 21300000, guid: ac3440b4401e71d42b4a979d66650ef9, type: 3}
+  - {fileID: 21300000, guid: ae1ccc8ec144d15479721c26b8e8655b, type: 3}
+  - {fileID: 21300000, guid: ca277a01f0b225e4491b960c22c6f4c2, type: 3}
+  - {fileID: 21300000, guid: e457db98d10675744859c9ed6ab1044e, type: 3}
+  - {fileID: 21300000, guid: 17e20274a8c3f8649a8d764a1b108384, type: 3}
+  - {fileID: 21300000, guid: fc03d3b2cdb85884ab965dc6471430cb, type: 3}
+  - {fileID: 21300000, guid: 556147969500c394dbb0ac736e631b8e, type: 3}
+  - {fileID: 21300000, guid: df2b33908c5c6834e9fbbcf18817678b, type: 3}
+  - {fileID: 21300000, guid: db06bfc1f8ea43b4796c28c295f61c16, type: 3}
+  - {fileID: 21300000, guid: 427d133c12024d740b06a678fb154c6c, type: 3}
+  - {fileID: 21300000, guid: 73d28c52f88b64d49b8e0bebcb5b123c, type: 3}
+  - {fileID: 21300000, guid: e4b8dffb5744ffe4e9c24dd02580a1fa, type: 3}
+  framesPerSecond: 12
+  loop: 1
+  loopFromFrame: 0
