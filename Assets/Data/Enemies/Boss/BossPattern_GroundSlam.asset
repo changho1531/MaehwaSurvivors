@@ -20,6 +20,7 @@ MonoBehaviour:
   - 7
   warningSeconds: 1
   damage: 15
+  effectPrefab: {fileID: 5798707216583641506, guid: 2c1e8fcb8660d064caa93c053be1d371, type: 3}
   maxRadius: 6
   expandSeconds: 1
   thickness: 0.5

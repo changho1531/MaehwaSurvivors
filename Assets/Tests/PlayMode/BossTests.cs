@@ -206,6 +206,11 @@ namespace Game.Tests.PlayMode
             Assert.AreEqual(2, behaviour.Phase);
             Assert.AreEqual(1, phaseEvents);
             Assert.AreEqual("지면 강타", started[before], "2페이즈 첫 패턴은 거리와 상관없이 지면 강타");
+
+            yield return WaitUntil(() => behaviour.Current is GroundSlamPattern slam && !slam.InWarning, 3f);
+            var impact = FindEffect("SlamImpact_Boss");
+            Assert.IsNotNull(impact, "내려찍는 순간 이펙트");
+            Assert.Less(Vector2.Distance(impact.transform.position, boss.GetComponent<Rigidbody2D>().position), 0.1f, "보스 발밑에서");
         }
 
         [UnityTest]

@@ -46,6 +46,7 @@ namespace Game.Enemies.Boss
         {
             elapsed = 0f;
             LastRing = null;
+            ctx.PlayEffect(Data.effectPrefab, ctx.Position, Vector2.right, Data.warningRadius); // 내려찍는 그림의 땅 원 = 경고 원
             if (Data.ringPrefab == null)
                 return;
             var pool = PrefabPools.For(Data.ringPrefab, 2);
