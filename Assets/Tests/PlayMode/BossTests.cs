@@ -356,11 +356,18 @@ namespace Game.Tests.PlayMode
             yield return WaitUntil(() => behaviour.Current is WhirlwindPattern, 4f);
             var whirl = (WhirlwindPattern)behaviour.Current;
             yield return WaitUntil(() => whirl.IsSpinning, 3f);
+            for (int i = 0; i < 6; i++)
+                yield return new WaitForFixedUpdate();
+            var vortex = FindEffect("Whirlwind_Boss");
+            Assert.IsNotNull(vortex, "회전하는 동안 소용돌이 이펙트");
+            Assert.Less(Vector2.Distance(vortex.transform.position, boss.GetComponent<Rigidbody2D>().position), 0.3f, "보스 발밑을 따라간다");
             health.Invincible = false;
             float hp = health.CurrentHp;
             yield return WaitUntil(() => whirl.IsDizzy, 4f);
             float dealt = hp - health.CurrentHp;
             Assert.AreEqual(40f, dealt, 6f, "2초 × 초당 20 (계속 붙어 있음)");
+            yield return WaitGameSeconds(0.1f);
+            Assert.IsNull(FindEffect("Whirlwind_Boss"), "어지러움이 시작되면 소용돌이는 사라짐");
             yield return new WaitForFixedUpdate();
             Assert.Less(boss.GetComponent<Rigidbody2D>().linearVelocity.magnitude, 0.01f, "어지러움 동안 멈춤");
             Time.timeScale = 1f;
@@ -432,6 +439,7 @@ namespace Game.Tests.PlayMode
             boss.TakeDamage(boss.Data.maxHp * 0.55f);
             yield return WaitUntil(() => behaviour.IsTransitioning, 6f);
             Assert.IsTrue(fx.IsShaking, "페이즈 전환 흔들림");
+            Assert.IsNotNull(FindEffect("PhaseBurst_Boss"), "페이즈 전환 폭발");
             yield return WaitGameSeconds(0.25f);
             Assert.Less(cam.orthographicSize, fx.BaseSize, "잠깐 당겨짐");
             yield return WaitGameSeconds(1f);
@@ -439,6 +447,7 @@ namespace Game.Tests.PlayMode
 
             Vector2 toBoss = boss.transform.position - scene.Player.transform.position;
             boss.TakeDamage(boss.Data.maxHp * 2f);
+            Assert.IsNotNull(FindEffect("DefeatBurst_Boss"), "처치 폭발");
             float end = Time.realtimeSinceStartup + 0.4f;
             while (Time.realtimeSinceStartup < end)
                 yield return null;

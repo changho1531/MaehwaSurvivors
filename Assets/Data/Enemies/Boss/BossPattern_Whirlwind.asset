@@ -20,6 +20,7 @@ MonoBehaviour:
   - 10
   warningSeconds: 0.8
   damage: 20
+  effectPrefab: {fileID: 5798707216583641506, guid: 5dc7e84ced4fb085d77ee6adbdacd911, type: 3}
   spinSeconds: 2
   moveSpeed: 3
   radius: 1.5

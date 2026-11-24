@@ -1,3 +1,4 @@
+using Game.Visuals;
 using UnityEngine;
 
 namespace Game.Enemies.Boss
@@ -31,18 +32,30 @@ namespace Game.Enemies.Boss
     public class WhirlwindPattern : BossPattern<WhirlwindPatternData>
     {
         float elapsed;
+        BurstEffect vortex;
 
         public WhirlwindPattern(WhirlwindPatternData data) : base(data) { }
 
         public bool IsSpinning => !InWarning && elapsed < Data.spinSeconds;
         public bool IsDizzy => !InWarning && elapsed >= Data.spinSeconds;
 
-        protected override void OnWarningStart(BossContext ctx) => elapsed = 0f;
+        protected override void OnWarningStart(BossContext ctx)
+        {
+            elapsed = 0f;
+            // 소용돌이 그림 1개가 경고(모이는 연출) → 회전(루프)까지 이어짐. 길이를 데이터에서 받아 회전이 끝나는 순간 사라진다
+            vortex = ctx.PlayEffect(Data.effectPrefab, ctx.Position, Vector2.right, Data.radius, Data.warningSeconds + Data.spinSeconds);
+        }
 
         protected override void OnWarningTick(BossContext ctx, float progress)
         {
             ctx.Art.Crouch(progress); // 웅크림 + 붉은 기운 소용돌이
             ctx.Art.Glow(progress);
+        }
+
+        void FollowVortex(BossContext ctx)
+        {
+            if (vortex != null && vortex.isActiveAndEnabled)
+                vortex.transform.position = ctx.Position; // 풀 오브젝트라 보스 자식으로 두지 않고 따라가게만 (돌진 꼬리와 같은 방식)
         }
 
         protected override void OnExecuteStart(BossContext ctx)
@@ -57,6 +70,7 @@ namespace Game.Enemies.Boss
             if (elapsed < Data.spinSeconds)
             {
                 ctx.Body.linearVelocity = ctx.DirectionToPlayer * Data.moveSpeed;
+                FollowVortex(ctx);
                 ctx.Art.Spin(elapsed * Data.spinDegreesPerSecond);
                 ctx.Art.Glow(1f);
                 if (ctx.Player != null && ctx.Distance <= Data.radius)

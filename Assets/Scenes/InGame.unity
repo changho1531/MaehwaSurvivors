@@ -3417,6 +3417,10 @@ MonoBehaviour:
   defeatFocus: 0.6
   defeatZoom: 0.7
   defeatSeconds: 0.45
+  phaseBurst: {fileID: 5798707216583641506, guid: 8913f419d4c216935edb40066d48d85d, type: 3}
+  defeatBurst: {fileID: 5798707216583641506, guid: f6d528e06f7bc5b0b2bbfba5563af69b, type: 3}
+  burstRadius: 3
+  burstHeight: 1
 --- !u!1 &1133799188
 GameObject:
   m_ObjectHideFlags: 0

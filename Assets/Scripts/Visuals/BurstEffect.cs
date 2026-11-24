@@ -19,15 +19,17 @@ namespace Game.Visuals
         /// <summary>그림 크기 그대로 1회 재생 (저주 시전 · 소환 연기). 풀에서 꺼냈으면 끝날 때 releaseToPool로 돌려보낸다.</summary>
         public void Play(Vector2 position, Action<BurstEffect> releaseToPool = null) => Play(position, artRadiusAtScale1, releaseToPool);
 
-        public void Play(Vector2 position, float radius, Action<BurstEffect> releaseToPool = null)
+        /// <param name="overrideSeconds">0보다 크면 프리팹 길이 대신 이 시간 동안 1회 재생 (혈풍선: 패턴 데이터의 경고 + 회전 시간에 맞춤)</param>
+        public void Play(Vector2 position, float radius, Action<BurstEffect> releaseToPool = null, float overrideSeconds = 0f)
         {
             release = releaseToPool;
             transform.position = position;
-            remaining = seconds;
+            float duration = overrideSeconds > 0f ? overrideSeconds : seconds;
+            remaining = duration;
             if (art != null)
             {
                 art.transform.localScale = Vector3.one * (radius / artRadiusAtScale1);
-                art.SetDuration(seconds);
+                art.SetDuration(duration);
             }
             gameObject.SetActive(false); // 쿨타임을 아주 짧게 조정해도 처음 프레임부터 다시 재생되게
             gameObject.SetActive(true);
