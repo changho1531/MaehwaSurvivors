@@ -25,4 +25,3 @@ MonoBehaviour:
   moveSpeed: 3
   radius: 1.5
   dizzySeconds: 1
-  spinDegreesPerSecond: 900

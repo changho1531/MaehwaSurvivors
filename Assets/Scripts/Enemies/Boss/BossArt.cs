@@ -3,8 +3,8 @@ using UnityEngine;
 namespace Game.Enemies.Boss
 {
     /// <summary>
-    /// 보스 그림(자식)만 움직이는 경고 동작 (8-C 연출: 떨림 · 웅크림 · 붉은 기운 · 회전). 몸통(물리 · 판정)은 건드리지 않는다.
-    /// 그림이 1장뿐이라 동작은 코드로 흔들기 · 크기 · 색 · 회전으로 표현한다 ※. 걷기 튀기(EnemyArtMotion)는 세로 위치만 쓰므로 겹치지 않는다.
+    /// 보스 그림(자식)만 움직이는 경고 동작 (8-C 연출: 떨림 · 웅크림 · 붉은 기운). 몸통(물리 · 판정)은 건드리지 않는다.
+    /// 그림이 1장뿐이라 동작은 코드로 흔들기 · 크기 · 색으로 표현한다 ※. 걷기 튀기(EnemyArtMotion)는 세로 위치만 쓰므로 겹치지 않는다.
     /// </summary>
     public sealed class BossArt
     {
@@ -41,12 +41,6 @@ namespace Game.Enemies.Boss
         {
             if (renderer != null)
                 renderer.color = Color.Lerp(baseColor, Red, Mathf.Clamp01(amount));
-        }
-
-        public void Spin(float degrees)
-        {
-            if (art != null)
-                art.localRotation = Quaternion.Euler(0f, 0f, degrees);
         }
 
         public void SetAlpha(float alpha)

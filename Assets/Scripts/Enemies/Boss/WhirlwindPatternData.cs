@@ -5,6 +5,7 @@ namespace Game.Enemies.Boss
 {
     /// <summary>
     /// 혈풍선 (8-C, 2페이즈): 회전하며 플레이어 쪽으로 밀고 들어온다. 주변 원 안은 계속 데미지, 끝나면 어지러움(큰 반격 기회).
+    /// 회전은 소용돌이 이펙트로만 보여 준다 — 보스 그림까지 돌리면 캐릭터가 뒤집혀 보여서.
     /// ※ 수치 예시
     /// </summary>
     [CreateAssetMenu(menuName = "Game/Boss Pattern/Whirlwind", fileName = "BossPattern_Whirlwind")]
@@ -15,7 +16,6 @@ namespace Game.Enemies.Boss
         [Min(0.1f)] public float radius = 1.5f;
         [Tooltip("끝나고 멈춰 있는 시간")]
         [Min(0f)] public float dizzySeconds = 1f;
-        [Min(0f)] public float spinDegreesPerSecond = 900f;
 
         void Reset()
         {
@@ -71,7 +71,6 @@ namespace Game.Enemies.Boss
             {
                 ctx.Body.linearVelocity = ctx.DirectionToPlayer * Data.moveSpeed;
                 FollowVortex(ctx);
-                ctx.Art.Spin(elapsed * Data.spinDegreesPerSecond);
                 ctx.Art.Glow(1f);
                 if (ctx.Player != null && ctx.Distance <= Data.radius)
                     ctx.HitPlayer(Data.damage * dt); // 초당 데미지
