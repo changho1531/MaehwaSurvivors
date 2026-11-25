@@ -55,9 +55,28 @@ namespace Game.Editor
             EditorGUILayout.LabelField("플레이어 · 무기 (F1~F5)", EditorStyles.boldLabel);
             if (GUILayout.Button("레벨업 (F1)")) keys.LevelUpNow();
             if (GUILayout.Button("무적 켜기/끄기 (F2)")) keys.ToggleInvincible();
-            if (GUILayout.Button("지정 무기 획득 (F3)")) keys.AcquireQuickWeapon();
             if (GUILayout.Button("보유 무기 최대 레벨 (F4)")) keys.MaxOwnedWeapons();
             if (GUILayout.Button("스폰 최대 켜기/끄기 (F5)")) keys.ToggleFastestSpawn();
+            DrawWeaponPicker(keys.Inventory);
+        }
+
+        // 카탈로그(레벨업 카드에 나오는 무기 목록)에서 골라 바로 획득. 이미 보유한 무기는 레벨만 보여 주고 잠근다.
+        static void DrawWeaponPicker(Game.Weapons.WeaponInventory inventory)
+        {
+            EditorGUILayout.LabelField("무기 획득 (F3 = 화산십이검)");
+            if (inventory == null || inventory.Catalog == null)
+            {
+                EditorGUILayout.HelpBox("WeaponInventory 또는 카탈로그가 연결되지 않았습니다.", MessageType.Warning);
+                return;
+            }
+            foreach (var data in inventory.Catalog.weapons)
+            {
+                if (data == null) continue;
+                int level = inventory.GetLevel(data);
+                using (new EditorGUI.DisabledScope(level > 0))
+                    if (GUILayout.Button(level > 0 ? $"{data.displayName}  (보유 Lv{level})" : data.displayName))
+                        inventory.Acquire(data);
+            }
         }
 
         static void DrawBoss()

@@ -25,6 +25,8 @@ namespace Game.UI
         [SerializeField] WeaponData quickAcquireWeapon;
         [SerializeField] Text label;
 
+        public WeaponInventory Inventory => inventory; // 개발자 모드 창의 무기 선택 획득용
+
         void Awake()
         {
             if (!Debug.isDebugBuild)
