@@ -361,6 +361,7 @@ namespace Game.Tests.PlayMode
             var vortex = FindEffect("Whirlwind_Boss");
             Assert.IsNotNull(vortex, "회전하는 동안 소용돌이 이펙트");
             Assert.Less(Vector2.Distance(vortex.transform.position, boss.GetComponent<Rigidbody2D>().position), 0.3f, "보스 발밑을 따라간다");
+            Assert.AreEqual(Quaternion.identity, boss.transform.Find("Art").localRotation, "회전은 소용돌이만, 보스 그림은 돌지 않는다");
             health.Invincible = false;
             float hp = health.CurrentHp;
             yield return WaitUntil(() => whirl.IsDizzy, 4f);
@@ -371,6 +372,19 @@ namespace Game.Tests.PlayMode
             yield return new WaitForFixedUpdate();
             Assert.Less(boss.GetComponent<Rigidbody2D>().linearVelocity.magnitude, 0.01f, "어지러움 동안 멈춤");
             Time.timeScale = 1f;
+        }
+
+        [UnityTest]
+        public IEnumerator B16_RequestPattern_IgnoresDistanceAndPhase()
+        {
+            yield return SpawnAt(new Vector2(1f, 0f)); // 1페이즈 · 가까움 → 평소엔 돌진 · 혈풍선 불가
+            boss.GetComponent<Collider2D>().enabled = false;
+            foreach (var p in behaviour.Patterns)
+                if (p is WhirlwindPattern)
+                    behaviour.RequestPattern(p);
+            yield return WaitUntil(() => behaviour.Current is WhirlwindPattern, 3f);
+            Assert.IsTrue(behaviour.Current is WhirlwindPattern, "지정한 패턴이 다음에 나온다");
+            Assert.AreEqual(1, behaviour.Phase);
         }
 
         [UnityTest]

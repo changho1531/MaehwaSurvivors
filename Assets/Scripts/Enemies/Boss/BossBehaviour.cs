@@ -50,6 +50,16 @@ namespace Game.Enemies.Boss
         /// <summary>테스트 · 시연용: 무작위 대신 이 값으로 고른다 (0~1). 음수면 무작위.</summary>
         public float FixedRoll { get; set; } = -1f;
 
+        BossPattern requested;
+
+        /// <summary>개발자 모드: 다음 패턴을 이것으로 (쿨타임 · 페이즈 · 거리 무시, 틈 생략). 진행 중인 패턴 · 전환은 끝난 뒤.</summary>
+        public void RequestPattern(BossPattern pattern)
+        {
+            requested = pattern;
+            gapRemaining = 0f;
+            retryRemaining = 0f;
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -87,6 +97,7 @@ namespace Game.Enemies.Boss
             pendingPhase2 = false;
             phase2Triggered = false;
             forceOpening = false;
+            requested = null;
             defeated = false;
             foreach (var pattern in patterns)
                 pattern.ResetCooldown();
@@ -173,12 +184,16 @@ namespace Game.Enemies.Boss
             if (!ScreenCheck.IsVisible(Body.position))
                 return;
 
-            var next = forceOpening && opening != null
-                ? opening // 2페이즈 첫 패턴은 거리와 상관없이 지면 강타 (페이즈가 바뀐 걸 바로 보여 줌)
-                : BossPatternSelector.Choose(patterns, ctx.Phase, ctx.Distance, last, FixedRoll >= 0f ? FixedRoll : UnityEngine.Random.value, buffer);
+            var next = requested
+                ?? (forceOpening && opening != null
+                    ? opening // 2페이즈 첫 패턴은 거리와 상관없이 지면 강타 (페이즈가 바뀐 걸 바로 보여 줌)
+                    : BossPatternSelector.Choose(patterns, ctx.Phase, ctx.Distance, last, FixedRoll >= 0f ? FixedRoll : UnityEngine.Random.value, buffer));
             if (next == null)
                 return;
-            forceOpening = false;
+            if (next == requested)
+                requested = null;
+            else
+                forceOpening = false;
             StartPattern(next);
         }
 
